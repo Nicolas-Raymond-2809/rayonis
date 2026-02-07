@@ -3,7 +3,7 @@ title: "First Vibe Coding Post"
 description: "Exploring the world of AI-assisted development with Astro and Python."
 date: 2023-10-25
 tags: ["Vibe Coding", "Astro", "AI"]
-image: "/images/blog/first-post.png"
+image: "/rayonis/images/blog/first-post.png"
 ---
 
 ## Welcome to Vibe Coding
