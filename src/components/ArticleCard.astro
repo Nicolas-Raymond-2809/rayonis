@@ -6,38 +6,13 @@ interface Props {
   tags: string[];
   type: 'pro' | 'academy' | 'blog';
   slug: string;
+  image?: string;
 }
 
-const { title, description, date, tags, type, slug } = Astro.props;
+const { title, description, date, tags, type, slug, image } = Astro.props;
 
-const isPro = type === 'pro';
-const isBlog = type === 'blog';
+// ... (existing code) ...
 
-let accentColor;
-if (isPro) {
-  accentColor = 'bg-rayonis-pro';
-} else if (isBlog) {
-  accentColor = 'bg-purple-400'; // Vibe Coding / Tech color
-} else {
-  accentColor = 'bg-rayonis-academy';
-}
-
-// Interpreting "no border-radius on Pro elements" means Academy elements might have it.
-// Standard Neo-Brutalist often uses hard edges, but I'll add a small radius for Academy to distinguish.
-// Blog can have a slight radius or be square. Let's make it slightly rounded but different.
-const borderRadius = isPro ? 'rounded-none' : 'rounded-2xl';
-
-let label;
-if (isPro) {
-  label = 'Entreprise';
-} else if (isBlog) {
-  label = 'Vibe Coding';
-} else {
-  label = 'Jeune';
-}
----
-
-<a href={`/rayonis/${type}/${slug}`} class={`block group relative h-full transition-transform active:translate-x-[2px] active:translate-y-[2px]`}>
   <article class={`
     h-full
     border-2 border-rayonis-text
@@ -48,11 +23,16 @@ if (isPro) {
     p-6
     hover:shadow-neo transition-shadow
   `}>
-    <!-- Category Label (Internal) -->
-    <div class="mb-4">
+    <!-- Category Label & Thumbnail -->
+    <div class="mb-4 flex justify-between items-start">
       <span class={`inline-block px-2 py-1 text-xs font-mono font-bold uppercase border border-rayonis-text ${accentColor} text-black`}>
         {label}
       </span>
+      {image && (
+          <div class="w-20 h-14 border-2 border-rayonis-text shadow-sm overflow-hidden bg-gray-100">
+             <img src={image} alt="" class="w-full h-full object-cover" />
+          </div>
+      )}
     </div>
 
     <div class="mb-2">

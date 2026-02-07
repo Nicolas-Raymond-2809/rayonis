@@ -65,6 +65,7 @@ const sortedPosts = blogPosts.sort((a, b) => b.data.date.valueOf() - a.data.date
                               tags={post.data.tags}
                               type="blog"
                               slug={post.slug}
+                              image={post.data.image}
                           />
                       </div>
                   ))}
