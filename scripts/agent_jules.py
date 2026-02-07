@@ -6,6 +6,8 @@ import subprocess
 import base64
 from datetime import datetime
 from dotenv import load_dotenv
+import io
+from PIL import Image
 import google.generativeai as genai
 from openai import OpenAI
 
@@ -124,11 +126,22 @@ def generate_image(prompt, slug):
         )
 
         image_data = base64.b64decode(response.data[0].b64_json)
-        image_filename = f"{slug}.png"
+        
+        # Load image into Pillow
+        image = Image.open(io.BytesIO(image_data))
+        
+        # Resize to max 1200px width
+        max_width = 1200
+        if image.width > max_width:
+            ratio = max_width / image.width
+            new_height = int(image.height * ratio)
+            image = image.resize((max_width, new_height), Image.Resampling.LANCZOS)
+            
+        # Save as WebP
+        image_filename = f"{slug}.webp"
         image_path = os.path.join(IMAGE_DIR, image_filename)
-
-        with open(image_path, "wb") as f:
-            f.write(image_data)
+        
+        image.save(image_path, "WEBP", quality=80, optimize=True)
 
         print(f"✅ Image saved to {image_path}")
         return f"/rayonis/images/blog/{image_filename}"
