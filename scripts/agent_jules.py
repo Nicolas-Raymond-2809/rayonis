@@ -102,7 +102,7 @@ def generate_image(prompt, slug):
             f.write(image_data)
 
         print(f"✅ Image saved to {image_path}")
-        return f"/images/blog/{image_filename}"
+        return f"/rayonis/images/blog/{image_filename}"
     except Exception as e:
         print(f"❌ Error generating image with DALL-E: {e}")
         return None
