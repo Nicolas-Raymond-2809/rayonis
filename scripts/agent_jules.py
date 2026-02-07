@@ -71,7 +71,7 @@ Tu dois répondre UNIQUEMENT avec un objet JSON valide suivant cette structure e
   "description": "Une méta-description pour le SEO (max 160 caractères) qui donne envie de cliquer.",
   "tags": ["Tag1", "Tag2", "Tag3"],
   "image_prompt": "Une description visuelle détaillée (en anglais) pour DALL-E 3. Style : Cyberpunk, Synthwave, Minimalist Tech ou Pixel Art. Pas de texte dans l'image.",
-  "markdown_content": "Le corps de l'article en Markdown.\\n\\n- Utilise ## pour les titres de section (H2).\\n- Utilise ### pour les sous-sections (H3).\\n- Utilise des listes à puces pour la lisibilité.\\n- Inclus des blocs de code avec la syntaxe ```language.\\n- NE METS PAS le titre H1 au début (le template s'en charge).\\n- NE METS PAS le Frontmatter (les tirets ---).\\n- Cite au moins 2 sources ou documentations officielles en bas d'article."
+  "markdown_content": "Le corps de l'article en Markdown.\\n\\n- IMPORTANT: Échappe bien tous les caractères spéciaux (guillemets, sauts de ligne).\\n- Utilise \\n pour les sauts de ligne DANS cette chaîne JSON.\\n- Utilise ## pour les titres..."
 }}
 """
 
@@ -95,19 +95,23 @@ Tu dois répondre UNIQUEMENT avec un objet JSON valide suivant cette structure e
     
     # 2. Try parsing directly
     try:
-        return json.loads(clean_text)
+        return json.loads(clean_text, strict=False)
     except json.JSONDecodeError:
         print("⚠️ Initial JSON parse failed, attempting repairs...")
         
         # 3. Fix common JSON errors using regex
         import re
+        
         # Escape backslashes that are not part of a valid escape sequence
-        # This matches a backslash NOT followed by ", \, /, b, f, n, r, t, or u
         clean_text = re.sub(r'\\(?![/\\bfnrtu"])', r'\\\\', clean_text)
+        
+        # Escape control characters (unescaped newlines/tabs) inside the string
+        # This is a bit aggressive but often necessary for LLM output
+        clean_text = clean_text.replace('\t', '\\t')
         
         # Try parsing again
         try:
-            return json.loads(clean_text)
+            return json.loads(clean_text, strict=False)
         except json.JSONDecodeError as e:
             print(f"❌ Failed to parse JSON after repairs: {e}")
             print(f"DEBUG: Response text was: {text_response[:500]}...") # Print first 500 chars for debug
