@@ -87,10 +87,15 @@ Tu dois répondre UNIQUEMENT avec un objet JSON valide suivant cette structure e
 }}
 """
 
+    # Configure generation to output JSON
+    generation_config = genai.GenerationConfig(
+        response_mime_type="application/json"
+    )
+
     max_retries = 3
     for attempt in range(max_retries):
         try:
-            response = model.generate_content(meta_prompt)
+            response = model.generate_content(meta_prompt, generation_config=generation_config)
             text_response = response.text
             break
         except Exception as e:
@@ -102,32 +107,13 @@ Tu dois répondre UNIQUEMENT avec un objet JSON valide suivant cette structure e
                 print(f"❌ Error generating content with Gemini after {max_retries} attempts: {e}")
                 return None
     
-    # 1. Clean Markdown code blocks
-    clean_text = text_response.replace("```json", "").replace("```", "").strip()
-    
-    # 2. Try parsing directly
+    # Parse the JSON response directly
     try:
-        return json.loads(clean_text, strict=False)
-    except json.JSONDecodeError:
-        print("⚠️ Initial JSON parse failed, attempting repairs...")
-        
-        # 3. Fix common JSON errors using regex
-        import re
-        
-        # Escape backslashes that are not part of a valid escape sequence
-        clean_text = re.sub(r'\\(?![/\\bfnrtu"])', r'\\\\', clean_text)
-        
-        # Escape control characters (unescaped newlines/tabs) inside the string
-        # This is a bit aggressive but often necessary for LLM output
-        clean_text = clean_text.replace('\t', '\\t')
-        
-        # Try parsing again
-        try:
-            return json.loads(clean_text, strict=False)
-        except json.JSONDecodeError as e:
-            print(f"❌ Failed to parse JSON after repairs: {e}")
-            print(f"DEBUG: Response text was: {text_response[:500]}...") # Print first 500 chars for debug
-            return None
+        return json.loads(text_response)
+    except json.JSONDecodeError as e:
+        print(f"❌ Failed to parse JSON from API (unexpected): {e}")
+        print(f"DEBUG: Response text was: {text_response[:500]}...") 
+        return None
 
 def generate_image(prompt, slug):
     """Generates an image using DALL-E 3 and saves it locally."""
@@ -174,7 +160,6 @@ def save_markdown(content_json, image_url):
     markdown = f"""---
 title: "{content_json['title']}"
 description: "{content_json['description']}"
-date: {today}
 date: {today}
 tags: {json.dumps(content_json['tags'])}
 category: "{content_json.get('category', 'Vibe Coding')}"
