@@ -21,35 +21,116 @@ const sortedPosts = blogPosts.sort((a, b) => b.data.date.valueOf() - a.data.date
     </div>
   </header>
 
-  <main class="max-w-6xl mx-auto px-6 py-12 min-h-screen">
-      <div class="mb-12">
-          <h1 class="text-4xl font-black mb-4">Vibe Coding & Automation</h1>
-          <p class="font-mono text-lg text-gray-600">Exploring the intersection of AI, Astro, and JAMstack.</p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {sortedPosts.map((post) => (
-              <ArticleCard
-                  title={post.data.title}
-                  description={post.data.description}
-                  date={post.data.date}
-                  tags={post.data.tags}
-                  type="blog"
-                  slug={post.slug}
-              />
-          ))}
-      </div>
-
-      {sortedPosts.length === 0 && (
-          <div class="text-center py-20">
-              <p class="font-mono text-xl text-gray-500">Coming soon...</p>
+  <main class="max-w-7xl mx-auto px-4 py-12 min-h-screen">
+      
+      <!-- Main Window Container -->
+      <div class="border-2 border-rayonis-text shadow-neo bg-gray-100 rounded-lg overflow-hidden flex flex-col">
+          
+          <!-- Window Header -->
+          <div class="bg-purple-600 text-white px-4 py-2 flex justify-between items-center border-b-2 border-rayonis-text select-none">
+              <div class="flex items-center gap-2">
+                  <span class="font-mono font-bold text-sm tracking-wider uppercase">Vibe Coding Filesystem</span>
+              </div>
+              <a href="/rayonis/" class="w-6 h-6 flex items-center justify-center bg-gray-300 border border-rayonis-text text-black font-bold text-xs hover:bg-red-500 hover:text-white transition-colors shadow-sm active:translate-y-[1px] active:shadow-none" aria-label="Close">
+                  X
+              </a>
           </div>
-      )}
+
+          <!-- Tabs Container -->
+          <div class="px-2 pt-2 flex gap-1 overflow-x-auto border-b-2 border-rayonis-text bg-gray-100 scrollbar-hide">
+              <button 
+                  class="tab-btn active px-4 py-2 font-mono text-sm font-bold border-t-2 border-x-2 border-rayonis-text bg-white rounded-t-lg -mb-[2px] z-10 relative transition-all"
+                  data-category="all">
+                  ALL_FILES
+              </button>
+              
+              {['Vibe Coding', 'Agentic Workflows', 'MCP & Context', 'Security', 'Interconnection', 'FinOps'].map((cat) => (
+                  <button 
+                      class="tab-btn px-4 py-2 font-mono text-sm font-bold border-t-2 border-x-2 border-rayonis-text bg-gray-200 text-gray-500 rounded-t-lg hover:bg-gray-300 transition-all"
+                      data-category={cat}>
+                      {cat.toUpperCase()}
+                  </button>
+              ))}
+          </div>
+
+          <!-- Window Content Area -->
+          <div class="bg-white p-6 md:p-8 min-h-[600px]">
+              <div id="posts-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {sortedPosts.map((post) => (
+                      <div class="post-item transition-all duration-300" data-category={post.data.category || 'Vibe Coding'}>
+                          <ArticleCard
+                              title={post.data.title}
+                              description={post.data.description}
+                              date={post.data.date}
+                              tags={post.data.tags}
+                              type="blog"
+                              slug={post.slug}
+                          />
+                      </div>
+                  ))}
+              </div>
+
+              <div id="empty-state" class="hidden h-full flex flex-col items-center justify-center py-20 opacity-0 transition-opacity duration-300">
+                  <p class="font-mono text-xl text-gray-400 mb-4">No files found in this directory.</p>
+                  <button onclick="document.querySelector('[data-category=all]').click()" class="px-4 py-2 font-mono font-bold border-2 border-rayonis-text bg-gray-200 hover:bg-white transition-colors">
+                      Return to Root
+                  </button>
+              </div>
+          </div>
+          
+           <!-- Window Status Bar -->
+          <div class="bg-gray-100 border-t-2 border-rayonis-text px-4 py-1 flex justify-between items-center text-xs font-mono text-gray-600">
+              <span>{sortedPosts.length} object(s)</span>
+              <span>Free Space: 0KB</span>
+          </div>
+      </div>
   </main>
 
-  <footer class="border-t-2 border-rayonis-text bg-white py-12 px-6 mt-12">
-      <div class="max-w-6xl mx-auto flex justify-between items-center font-mono text-sm">
-          <p>&copy; {new Date().getFullYear()} Rayonis. Tous droits réservés.</p>
-      </div>
-  </footer>
+<script>
+    const tabs = document.querySelectorAll('.tab-btn');
+    const posts = document.querySelectorAll('.post-item');
+    const emptyState = document.getElementById('empty-state');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            // 1. Update Tab Styles
+            tabs.forEach(t => {
+                t.classList.remove('active', 'bg-white', 'text-black', 'z-10', '-mb-[2px]');
+                t.classList.add('bg-gray-200', 'text-gray-500');
+            });
+            
+            tab.classList.add('active', 'bg-white', 'text-black', 'z-10', '-mb-[2px]');
+            tab.classList.remove('bg-gray-200', 'text-gray-500');
+
+            // 2. Filter Posts
+            const category = tab.getAttribute('data-category');
+            let visibleCount = 0;
+
+            posts.forEach(post => {
+                const postCategory = post.getAttribute('data-category');
+                // Simple partial match to handle slight variations e.g. "Interconnection" vs "Interconnection & Ecosystems"
+                // Or exact match if we are consistent.
+                const match = category === 'all' || postCategory === category || (category === 'Interconnection' && postCategory.includes('Interconnection')) || (category === 'Security' && postCategory.includes('Security'));
+                
+                if (match) {
+                    post.classList.remove('hidden');
+                    // Small delay for fade in effect if we wanted to add it, but block vs hidden is enough for now
+                    post.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    post.classList.add('hidden');
+                     post.style.display = 'none';
+                }
+            });
+
+            // 3. Empty State
+            if (visibleCount === 0) {
+                emptyState.classList.remove('hidden');
+                setTimeout(() => emptyState.classList.remove('opacity-0'), 10);
+            } else {
+                emptyState.classList.add('hidden', 'opacity-0');
+            }
+        });
+    });
+</script>
 </Layout>

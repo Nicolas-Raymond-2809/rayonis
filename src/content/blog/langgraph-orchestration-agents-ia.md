@@ -4,6 +4,7 @@ description: "Découvrez LangGraph, la solution pour orchestrer des agents IA. B
 date: 2026-02-07
 tags: ["LangGraph", "Agentic Workflows", "IA", "Python", "Orchestration"]
 image: "/rayonis/images/blog/langgraph-orchestration-agents-ia.webp"
+category: "Agentic Workflows"
 ---
 
 ## LangGraph: Le Chef d'Orchestre de vos Agents IA

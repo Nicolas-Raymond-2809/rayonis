@@ -4,6 +4,7 @@ description: "Intégrez Tailwind CSS à Astro pour un développement rapide et �
 date: 2026-02-07
 tags: ["Astro", "Tailwind CSS", "Vite", "Frontend"]
 image: "/rayonis/images/blog/tailwind-css-astro-vite-stylez-vite.webp"
+category: "Vibe Coding"
 ---
 
 ## Tailwind CSS et Astro: Un mariage parfait

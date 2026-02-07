@@ -4,6 +4,7 @@ description: "Automate your Astro site deployment with GitHub Actions! This guid
 date: 2026-02-07
 tags: ["Astro", "GitHub Actions", "CI/CD", "Automation", "JAMstack"]
 image: "/rayonis/images/blog/astro-github-actions-cicd.webp"
+category: "Interconnection"
 ---
 
 ## Supercharge Your Astro Site with GitHub Actions: A CI/CD Deep Dive

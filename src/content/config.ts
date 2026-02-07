@@ -27,6 +27,7 @@ const blogCollection = defineCollection({
 		description: z.string(),
 		date: z.date(),
 		tags: z.array(z.string()),
+		category: z.string().optional(), // Made optional for now to avoid breaking existing posts immediately
 		image: z.string().optional(),
 	}),
 });

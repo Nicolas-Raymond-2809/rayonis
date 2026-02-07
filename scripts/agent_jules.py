@@ -58,6 +58,11 @@ CONTEXTE (Articles existants à ne pas dupliquer) :
 RÈGLES ÉDITORIALES :
 - LONGUEUR : Entre 800 et 1500 mots.
 - TON : Professionnel, enthousiaste, orienté "Do It Yourself". Pas de jargon académique.
+- **PHILOSOPHIE VIBE CODING** : 
+    * Ne rentre PAS dans la complexité du code syntaxique. On n'est pas là pour apprendre le C++ mais pour bâtir.
+    * Privilégie l'**Architecture**, l'**Orchestration** et le **Prompting**.
+    * Montre *comment demander à l'IA* de coder pour nous, plutôt que de donner le code brut.
+    * Si tu donnes du code, fais-le court et explique la *logique* (le "Vibe") plutôt que la syntaxe.
 - IMPORTANT : DIVERSIFIE LES SUJETS. Ne parle pas systématiquement d'Astro. Alterne entre les 5 axes stratégiques de l'Architecte de Solutions Digitales :
     1. **Orchestration d'Agents (Agentic Workflows)** : LangGraph, CrewAI, AutoGen. Comment faire travailler plusieurs IA ensemble.
     2. **Model Context Protocol (MCP) & Context Engineering** : Structurer la donnée pour l'IA.
@@ -74,6 +79,7 @@ Tu dois répondre UNIQUEMENT avec un objet JSON valide suivant cette structure e
 {{
   "title": "Titre accrocheur (max 60 caractères)",
   "slug": "titre-optimise-seo-kebab-case",
+  "category": "Choisir UNE catégorie parmi : 'Vibe Coding', 'Agentic Workflows', 'MCP & Context', 'Security & Guardrails', 'Interconnection', 'FinOps & Performance'",
   "description": "Une méta-description pour le SEO (max 160 caractères) qui donne envie de cliquer.",
   "tags": ["Tag1", "Tag2", "Tag3"],
   "image_prompt": "Une description visuelle détaillée (en anglais) pour DALL-E 3. Style : Cyberpunk, Synthwave, Minimalist Tech ou Pixel Art. Pas de texte dans l'image.",
@@ -169,7 +175,9 @@ def save_markdown(content_json, image_url):
 title: "{content_json['title']}"
 description: "{content_json['description']}"
 date: {today}
+date: {today}
 tags: {json.dumps(content_json['tags'])}
+category: "{content_json.get('category', 'Vibe Coding')}"
 image: "{image_url}"
 ---
 

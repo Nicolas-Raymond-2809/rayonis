@@ -4,6 +4,7 @@ description: "Automatisez la création de contenu pour votre site Astro avec n8n
 date: 2026-02-07
 tags: ["Astro", "n8n", "OpenAI", "IA", "Automatisation", "Content Generation"]
 image: "/rayonis/images/blog/astro-n8n-openai-articles-ia.webp"
+category: "Agentic Workflows"
 ---
 
 ## Astro + n8n: Génération d'articles IA avec OpenAI

@@ -4,6 +4,7 @@ description: "Créez un workflow automatisé avec Astro et GPT-3 pour générer 
 date: 2026-02-07
 tags: ["Astro", "GPT-3", "IA", "Automation", "JAMstack", "Content Generation"]
 image: "/rayonis/images/blog/astro-gpt3-generer-articles-ia.webp"
+category: "Agentic Workflows"
 ---
 
 ## Astro + GPT-3 : L'avenir de la génération de contenu ?

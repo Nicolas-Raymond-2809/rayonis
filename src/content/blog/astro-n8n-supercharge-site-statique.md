@@ -4,6 +4,7 @@ description: "Découvre comment intégrer Astro et n8n pour automatiser la créa
 date: 2026-02-07
 tags: ["Astro", "n8n", "Automation", "JAMstack", "Content Management"]
 image: "/rayonis/images/blog/astro-n8n-supercharge-site-statique.png"
+category: "Vibe Coding"
 ---
 
 ## Astro et n8n: Une combinaison gagnante pour l'automatisation de contenu
