@@ -23,9 +23,9 @@ const allPosts = [
       </a>
 
       <div class="flex items-center gap-4 sm:gap-8">
-        <!-- Navigation Link for Vibe Coding Blog -->
-        <a href="/blog" class="hidden md:block font-mono font-bold text-sm text-purple-600 hover:underline">
-          VIBE CODING
+        <!-- Navigation Link for Vibe Coding Blog - Always visible -->
+        <a href="/blog" class="font-mono font-bold text-sm text-purple-600 hover:underline uppercase">
+          Vibe Coding
         </a>
 
         <!-- Toggle Switch -->
@@ -39,20 +39,13 @@ const allPosts = [
         </div>
 
         <a href="mailto:contact@rayonis.fr" class="hidden sm:block px-6 py-3 font-mono font-bold text-sm bg-white border-2 border-rayonis-text shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all active:bg-gray-50">
-          CONTACT
+          CONTACTER
         </a>
       </div>
     </div>
   </header>
 
   <main class="max-w-6xl mx-auto px-6 py-12 min-h-screen">
-      <!-- Mobile Vibe Coding Link -->
-      <div class="md:hidden mb-8 text-center">
-          <a href="/blog" class="font-mono font-bold text-sm text-purple-600 hover:underline">
-            → DECOUVRIR VIBE CODING
-          </a>
-      </div>
-
       <div id="posts-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {allPosts.map((post) => (
               <div class="post-item transition-opacity duration-300" data-type={post.type}>
