@@ -39,37 +39,58 @@ if (isPro) {
 
 <a href={`/rayonis/${type}/${slug}`} class={`block group relative h-full transition-transform active:translate-x-[2px] active:translate-y-[2px]`}>
   <article class={`
-    h-full p-6
+    h-full
     border-2 border-rayonis-text
     shadow-neo
     bg-white
     ${borderRadius}
+    overflow-hidden
     flex flex-col
   `}>
-    <div class={`absolute top-0 right-0 px-3 py-1 border-l-2 border-b-2 border-rayonis-text ${isPro ? '' : 'rounded-tr-2xl rounded-bl-xl'} ${accentColor} font-mono text-xs font-bold uppercase`}>
-      {label}
+    <!-- Window Title Bar -->
+    <div class={`
+      px-4 py-2
+      border-b-2 border-rayonis-text
+      ${accentColor}
+      flex justify-between items-center
+    `}>
+      <span class="font-mono text-xs font-bold uppercase tracking-wider text-black">
+        {label}
+      </span>
+      <!-- Decorative Window Controls -->
+      <div class="flex gap-2">
+         <div class="w-3 h-3 rounded-full border border-rayonis-text bg-white opacity-50"></div>
+         <div class="w-3 h-3 rounded-full border border-rayonis-text bg-black flex items-center justify-center" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" class="w-2 h-2 text-white">
+              <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+            </svg>
+         </div>
+      </div>
     </div>
 
-    <div class="mb-3">
-      <time datetime={date.toISOString()} class="font-mono text-sm text-gray-600">
-        {date.toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })}
-      </time>
-    </div>
+    <!-- Window Body -->
+    <div class="p-6 flex flex-col flex-grow">
+      <div class="mb-3">
+        <time datetime={date.toISOString()} class="font-mono text-sm text-gray-600">
+          {date.toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })}
+        </time>
+      </div>
 
-    <h2 class="text-2xl font-bold mb-3 leading-tight group-hover:text-gray-800">
-      {title}
-    </h2>
+      <h2 class="text-2xl font-bold mb-3 leading-tight group-hover:text-purple-700 transition-colors">
+        {title}
+      </h2>
 
-    <p class="text-gray-700 mb-6 flex-grow font-sans">
-      {description}
-    </p>
+      <p class="text-gray-700 mb-6 flex-grow font-sans line-clamp-3">
+        {description}
+      </p>
 
-    <div class="flex flex-wrap gap-2 mt-auto">
-      {tags.map((tag) => (
-        <span class={`px-2 py-1 text-xs font-mono border border-rayonis-text ${isPro ? 'bg-gray-50' : 'bg-yellow-50'} ${isPro ? 'rounded-none' : 'rounded-md'}`}>
-          #{tag}
-        </span>
-      ))}
+      <div class="flex flex-wrap gap-2 mt-auto pt-4 border-t-2 border-dashed border-gray-200">
+        {tags.map((tag) => (
+          <span class={`px-2 py-1 text-xs font-mono border border-rayonis-text ${isPro ? 'bg-gray-50' : 'bg-yellow-50'} ${isPro ? 'rounded-none' : 'rounded-md'}`}>
+            #{tag}
+          </span>
+        ))}
+      </div>
     </div>
   </article>
 </a>
