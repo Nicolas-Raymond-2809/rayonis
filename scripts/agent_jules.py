@@ -39,7 +39,7 @@ def get_existing_posts():
 
 def generate_content(existing_posts):
     """Generates blog post content using Google Gemini."""
-    model = genai.GenerativeModel('gemini-pro')
+    model = genai.GenerativeModel('models/gemini-2.0-flash')
 
     meta_prompt = f"""
 RÔLE :
