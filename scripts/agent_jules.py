@@ -58,7 +58,13 @@ CONTEXTE (Articles existants à ne pas dupliquer) :
 RÈGLES ÉDITORIALES :
 - LONGUEUR : Entre 800 et 1500 mots.
 - TON : Professionnel, enthousiaste, orienté "Do It Yourself". Pas de jargon académique.
-- SUJETS AUTORISÉS : Vibe Coding, Astro, Tailwind CSS, Python Scripts, Automatisation, IA Générative (API).
+- IMPORTANT : DIVERSIFIE LES SUJETS. Ne parle pas systématiquement d'Astro. Alterne entre les 5 axes stratégiques de l'Architecte de Solutions Digitales :
+    1. **Orchestration d'Agents (Agentic Workflows)** : LangGraph, CrewAI, AutoGen. Comment faire travailler plusieurs IA ensemble.
+    2. **Model Context Protocol (MCP) & Context Engineering** : Structurer la donnée pour l'IA.
+    3. **Guardrails & Sécurité** : NeMo Guardrails, validation automatique, sécurité du code généré.
+    4. **Interconnexion des Écosystèmes** : Hybride, Multi-Cloud (Vercel, Supabase, Ollama, Antigravity).
+    5. **FinOps & Performance IA** : Coûts, Prompt Caching, SLM (Small Language Models).
+- SUJETS AUTORISÉS : Vibe Coding, Astro, Tailwind CSS, Python Scripts, Automatisation, IA Générative (API), Agentic Workflows, MCP, Sécurité IA, FinOps.
 - SUJETS INTERDITS : Code bas niveau complexe (C++, Assembly), Administration système lourde, Politique.
 - FORMATAGE : Utilise le format Markdown standard.
 
@@ -181,8 +187,8 @@ def git_commit_push(slug):
     try:
         subprocess.run(["git", "add", "."], check=True)
         subprocess.run(["git", "commit", "-m", f"🤖 Jules: Nouvel article [{slug}]"], check=True)
-        # subprocess.run(["git", "push"], check=True) # Commented out for safety as per checklist
-        print("✅ Git commit successful (Push commented out for safety)")
+        subprocess.run(["git", "push"], check=True)
+        print("✅ Git commit and push successful!")
     except subprocess.CalledProcessError as e:
         print(f"❌ Git error: {e}")
 
