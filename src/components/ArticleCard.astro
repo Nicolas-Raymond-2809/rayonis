@@ -11,8 +11,31 @@ interface Props {
 
 const { title, description, date, tags, type, slug, image } = Astro.props;
 
-// ... (existing code) ...
+const isPro = type === 'pro';
+const isBlog = type === 'blog';
 
+let accentColor;
+if (isPro) {
+  accentColor = 'bg-rayonis-pro';
+} else if (isBlog) {
+  accentColor = 'bg-purple-400'; // Vibe Coding / Tech color
+} else {
+  accentColor = 'bg-rayonis-academy';
+}
+
+const borderRadius = isPro ? 'rounded-none' : 'rounded-2xl';
+
+let label;
+if (isPro) {
+  label = 'Entreprise';
+} else if (isBlog) {
+  label = 'Vibe Coding';
+} else {
+  label = 'Jeune';
+}
+---
+
+<a href={`/rayonis/${type}/${slug}`} class={`block group relative h-full transition-transform active:translate-x-[2px] active:translate-y-[2px]`}>
   <article class={`
     h-full
     border-2 border-rayonis-text
