@@ -1,0 +1,55 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  date: Date;
+  tags: string[];
+  type: 'pro' | 'academy';
+  slug: string;
+}
+
+const { title, description, date, tags, type, slug } = Astro.props;
+
+const isPro = type === 'pro';
+const accentColor = isPro ? 'bg-rayonis-pro' : 'bg-rayonis-academy';
+// Interpreting "no border-radius on Pro elements" means Academy elements might have it.
+// Standard Neo-Brutalist often uses hard edges, but I'll add a small radius for Academy to distinguish.
+const borderRadius = isPro ? 'rounded-none' : 'rounded-2xl';
+---
+
+<a href={`/${type}/${slug}`} class={`block group relative h-full transition-transform active:translate-x-[2px] active:translate-y-[2px]`}>
+  <article class={`
+    h-full p-6
+    border-2 border-rayonis-text
+    shadow-neo
+    bg-white
+    ${borderRadius}
+    flex flex-col
+  `}>
+    <div class={`absolute top-0 right-0 px-3 py-1 border-l-2 border-b-2 border-rayonis-text ${isPro ? '' : 'rounded-tr-2xl rounded-bl-xl'} ${accentColor} font-mono text-xs font-bold uppercase`}>
+      {type === 'pro' ? 'Entreprise' : 'Jeune'}
+    </div>
+
+    <div class="mb-3">
+      <time datetime={date.toISOString()} class="font-mono text-sm text-gray-600">
+        {date.toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })}
+      </time>
+    </div>
+
+    <h2 class="text-2xl font-bold mb-3 leading-tight group-hover:text-gray-800">
+      {title}
+    </h2>
+
+    <p class="text-gray-700 mb-6 flex-grow font-sans">
+      {description}
+    </p>
+
+    <div class="flex flex-wrap gap-2 mt-auto">
+      {tags.map((tag) => (
+        <span class={`px-2 py-1 text-xs font-mono border border-rayonis-text ${isPro ? 'bg-gray-50' : 'bg-yellow-50'} ${isPro ? 'rounded-none' : 'rounded-md'}`}>
+          #{tag}
+        </span>
+      ))}
+    </div>
+  </article>
+</a>

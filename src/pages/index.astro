@@ -1,0 +1,121 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import { getCollection } from 'astro:content';
+
+const proPosts = await getCollection('pro');
+const academyPosts = await getCollection('academy');
+
+const sortedProPosts = proPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const sortedAcademyPosts = academyPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const allPosts = [
+  ...sortedProPosts.map(post => ({ ...post, type: 'pro' })),
+  ...sortedAcademyPosts.map(post => ({ ...post, type: 'academy' })),
+];
+---
+
+<Layout title="Rayonis - Blog">
+  <header class="sticky top-0 z-50 bg-rayonis-bg/95 backdrop-blur border-b-2 border-rayonis-text py-4 px-6">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+      <a href="/" class="text-3xl font-black font-sans tracking-tighter hover:text-rayonis-pro transition-colors">
+        RAYONIS
+      </a>
+
+      <div class="flex items-center gap-4 sm:gap-8">
+        <!-- Toggle Switch -->
+        <div class="relative bg-white border-2 border-rayonis-text shadow-neo p-1 flex">
+            <button id="btn-pro" class="px-6 py-2 font-mono font-bold text-sm border-2 border-rayonis-text bg-rayonis-pro text-white transition-transform active:translate-y-0.5 active:translate-x-0.5">
+                ENTREPRISES
+            </button>
+            <button id="btn-academy" class="px-6 py-2 font-mono font-bold text-sm border-2 border-transparent text-gray-500 hover:bg-gray-50 transition-colors">
+                JEUNES
+            </button>
+        </div>
+
+        <a href="mailto:contact@rayonis.fr" class="hidden sm:block px-6 py-3 font-mono font-bold text-sm bg-white border-2 border-rayonis-text shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all active:bg-gray-50">
+          CONTACT
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 py-12 min-h-screen">
+      <div id="posts-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {allPosts.map((post) => (
+              <div class="post-item transition-opacity duration-300" data-type={post.type}>
+                  <ArticleCard
+                      title={post.data.title}
+                      description={post.data.description}
+                      date={post.data.date}
+                      tags={post.data.tags}
+                      type={post.type as 'pro' | 'academy'}
+                      slug={post.slug}
+                  />
+              </div>
+          ))}
+      </div>
+
+      <div id="empty-state" class="hidden text-center py-20">
+          <p class="font-mono text-xl text-gray-500">Aucun article trouvé.</p>
+      </div>
+  </main>
+
+  <footer class="border-t-2 border-rayonis-text bg-white py-12 px-6 mt-12">
+      <div class="max-w-6xl mx-auto flex justify-between items-center font-mono text-sm">
+          <p>&copy; {new Date().getFullYear()} Rayonis. Tous droits réservés.</p>
+          <a href="mailto:contact@rayonis.fr" class="sm:hidden underline">Contact</a>
+      </div>
+  </footer>
+</Layout>
+
+<script>
+    const btnPro = document.getElementById('btn-pro');
+    const btnAcademy = document.getElementById('btn-academy');
+    const posts = document.querySelectorAll('.post-item');
+    const emptyState = document.getElementById('empty-state');
+
+    function setFilter(type) {
+        // Update Buttons
+        if (type === 'pro') {
+            btnPro?.classList.add('bg-rayonis-pro', 'text-white', 'border-rayonis-text', 'shadow-sm');
+            btnPro?.classList.remove('bg-transparent', 'text-gray-500', 'border-transparent');
+
+            btnAcademy?.classList.remove('bg-rayonis-academy', 'text-black', 'border-rayonis-text', 'shadow-sm');
+            btnAcademy?.classList.add('bg-transparent', 'text-gray-500', 'border-transparent');
+        } else {
+            btnAcademy?.classList.add('bg-rayonis-academy', 'text-black', 'border-rayonis-text', 'shadow-sm');
+            btnAcademy?.classList.remove('bg-transparent', 'text-gray-500', 'border-transparent');
+
+            btnPro?.classList.remove('bg-rayonis-pro', 'text-white', 'border-rayonis-text', 'shadow-sm');
+            btnPro?.classList.add('bg-transparent', 'text-gray-500', 'border-transparent');
+        }
+
+        // Filter Posts
+        let visibleCount = 0;
+        posts.forEach((post) => {
+            if (post instanceof HTMLElement) {
+                if (post.dataset.type === type) {
+                    post.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    post.style.display = 'none';
+                }
+            }
+        });
+
+        if (emptyState) {
+             if (visibleCount === 0) {
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+            }
+        }
+    }
+
+    btnPro?.addEventListener('click', () => setFilter('pro'));
+    btnAcademy?.addEventListener('click', () => setFilter('academy'));
+
+    // Init
+    setFilter('pro');
+</script>
