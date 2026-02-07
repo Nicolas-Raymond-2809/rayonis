@@ -4,17 +4,37 @@ interface Props {
   description: string;
   date: Date;
   tags: string[];
-  type: 'pro' | 'academy';
+  type: 'pro' | 'academy' | 'blog';
   slug: string;
 }
 
 const { title, description, date, tags, type, slug } = Astro.props;
 
 const isPro = type === 'pro';
-const accentColor = isPro ? 'bg-rayonis-pro' : 'bg-rayonis-academy';
+const isBlog = type === 'blog';
+
+let accentColor;
+if (isPro) {
+  accentColor = 'bg-rayonis-pro';
+} else if (isBlog) {
+  accentColor = 'bg-purple-400'; // Vibe Coding / Tech color
+} else {
+  accentColor = 'bg-rayonis-academy';
+}
+
 // Interpreting "no border-radius on Pro elements" means Academy elements might have it.
 // Standard Neo-Brutalist often uses hard edges, but I'll add a small radius for Academy to distinguish.
+// Blog can have a slight radius or be square. Let's make it slightly rounded but different.
 const borderRadius = isPro ? 'rounded-none' : 'rounded-2xl';
+
+let label;
+if (isPro) {
+  label = 'Entreprise';
+} else if (isBlog) {
+  label = 'Vibe Coding';
+} else {
+  label = 'Jeune';
+}
 ---
 
 <a href={`/${type}/${slug}`} class={`block group relative h-full transition-transform active:translate-x-[2px] active:translate-y-[2px]`}>
@@ -27,7 +47,7 @@ const borderRadius = isPro ? 'rounded-none' : 'rounded-2xl';
     flex flex-col
   `}>
     <div class={`absolute top-0 right-0 px-3 py-1 border-l-2 border-b-2 border-rayonis-text ${isPro ? '' : 'rounded-tr-2xl rounded-bl-xl'} ${accentColor} font-mono text-xs font-bold uppercase`}>
-      {type === 'pro' ? 'Entreprise' : 'Jeune'}
+      {label}
     </div>
 
     <div class="mb-3">

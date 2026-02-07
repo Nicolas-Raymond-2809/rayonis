@@ -1,0 +1,55 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { getCollection } from 'astro:content';
+
+const blogPosts = await getCollection('blog');
+const sortedPosts = blogPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<Layout title="Rayonis - Vibe Coding Blog">
+  <header class="sticky top-0 z-50 bg-rayonis-bg/95 backdrop-blur border-b-2 border-rayonis-text py-4 px-6">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+      <a href="/" class="text-3xl font-black font-sans tracking-tighter hover:text-rayonis-pro transition-colors">
+        RAYONIS
+      </a>
+
+      <nav class="flex items-center gap-4 sm:gap-8">
+          <a href="/" class="font-mono font-bold text-sm hover:underline">HOME</a>
+          <a href="/blog" class="font-mono font-bold text-sm underline text-purple-600">VIBE CODING</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 py-12 min-h-screen">
+      <div class="mb-12">
+          <h1 class="text-4xl font-black mb-4">Vibe Coding & Automation</h1>
+          <p class="font-mono text-lg text-gray-600">Exploring the intersection of AI, Astro, and JAMstack.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {sortedPosts.map((post) => (
+              <ArticleCard
+                  title={post.data.title}
+                  description={post.data.description}
+                  date={post.data.date}
+                  tags={post.data.tags}
+                  type="blog"
+                  slug={post.slug}
+              />
+          ))}
+      </div>
+
+      {sortedPosts.length === 0 && (
+          <div class="text-center py-20">
+              <p class="font-mono text-xl text-gray-500">Coming soon...</p>
+          </div>
+      )}
+  </main>
+
+  <footer class="border-t-2 border-rayonis-text bg-white py-12 px-6 mt-12">
+      <div class="max-w-6xl mx-auto flex justify-between items-center font-mono text-sm">
+          <p>&copy; {new Date().getFullYear()} Rayonis. Tous droits réservés.</p>
+      </div>
+  </footer>
+</Layout>

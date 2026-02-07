@@ -1,0 +1,82 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const blogPosts = await getCollection('blog');
+  return blogPosts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+---
+
+<Layout title={`${post.data.title} - Rayonis Blog`}>
+  <header class="sticky top-0 z-50 bg-rayonis-bg/95 backdrop-blur border-b-2 border-rayonis-text py-4 px-6">
+    <div class="max-w-4xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+      <a href="/" class="text-3xl font-black font-sans tracking-tighter hover:text-rayonis-pro transition-colors">
+        RAYONIS
+      </a>
+
+      <nav class="flex items-center gap-4 sm:gap-8 font-mono font-bold text-sm">
+          <a href="/" class="hover:underline">HOME</a>
+          <a href="/blog" class="hover:underline text-purple-600">VIBE CODING</a>
+      </nav>
+    </div>
+  </header>
+
+  <article class="max-w-3xl mx-auto px-6 py-12 min-h-screen">
+    <div class="mb-8 text-center">
+        <span class="inline-block px-3 py-1 mb-4 text-xs font-mono font-bold uppercase bg-purple-400 border-2 border-rayonis-text shadow-sm rounded-md">
+            Vibe Coding
+        </span>
+        <h1 class="text-4xl md:text-5xl font-black mb-4 leading-tight">{post.data.title}</h1>
+        <div class="flex justify-center items-center gap-4 font-mono text-sm text-gray-600">
+            <time datetime={post.data.date.toISOString()}>
+                {post.data.date.toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })}
+            </time>
+             <span>•</span>
+            <div class="flex gap-2">
+                {post.data.tags.map(tag => (
+                    <span class="text-purple-600">#{tag}</span>
+                ))}
+            </div>
+        </div>
+    </div>
+
+    {post.data.image && (
+        <div class="mb-10 border-2 border-rayonis-text shadow-neo rounded-xl overflow-hidden">
+            <img
+                src={post.data.image}
+                alt={post.data.title}
+                class="w-full h-auto object-cover aspect-video"
+            />
+        </div>
+    )}
+
+    <div class="prose prose-lg prose-slate max-w-none font-sans
+        prose-headings:font-black prose-headings:font-sans
+        prose-h2:text-3xl prose-h2:mt-10 prose-h2:mb-6 prose-h2:border-b-2 prose-h2:border-gray-200 prose-h2:pb-2
+        prose-code:font-mono prose-code:text-sm prose-code:bg-gray-100 prose-code:px-1 prose-code:py-0.5 prose-code:rounded
+        prose-pre:bg-gray-900 prose-pre:border-2 prose-pre:border-rayonis-text prose-pre:shadow-sm
+        prose-a:text-purple-600 prose-a:font-bold prose-a:no-underline hover:prose-a:underline
+    ">
+        <Content />
+    </div>
+
+    <div class="mt-16 pt-8 border-t-2 border-gray-200">
+        <a href="/blog" class="inline-flex items-center gap-2 font-mono font-bold hover:text-purple-600 transition-colors">
+            ← Retour aux articles
+        </a>
+    </div>
+  </article>
+
+  <footer class="border-t-2 border-rayonis-text bg-white py-12 px-6 mt-12">
+      <div class="max-w-4xl mx-auto flex justify-between items-center font-mono text-sm">
+          <p>&copy; {new Date().getFullYear()} Rayonis. Tous droits réservés.</p>
+      </div>
+  </footer>
+</Layout>

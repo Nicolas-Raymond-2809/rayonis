@@ -23,6 +23,11 @@ const allPosts = [
       </a>
 
       <div class="flex items-center gap-4 sm:gap-8">
+        <!-- Navigation Link for Vibe Coding Blog -->
+        <a href="/blog" class="hidden md:block font-mono font-bold text-sm text-purple-600 hover:underline">
+          VIBE CODING
+        </a>
+
         <!-- Toggle Switch -->
         <div class="relative bg-white border-2 border-rayonis-text shadow-neo p-1 flex">
             <button id="btn-pro" class="px-6 py-2 font-mono font-bold text-sm border-2 border-rayonis-text bg-rayonis-pro text-white transition-transform active:translate-y-0.5 active:translate-x-0.5">
@@ -41,6 +46,13 @@ const allPosts = [
   </header>
 
   <main class="max-w-6xl mx-auto px-6 py-12 min-h-screen">
+      <!-- Mobile Vibe Coding Link -->
+      <div class="md:hidden mb-8 text-center">
+          <a href="/blog" class="font-mono font-bold text-sm text-purple-600 hover:underline">
+            → DECOUVRIR VIBE CODING
+          </a>
+      </div>
+
       <div id="posts-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {allPosts.map((post) => (
               <div class="post-item transition-opacity duration-300" data-type={post.type}>
