@@ -39,7 +39,7 @@ def get_existing_posts():
 
 def generate_content(existing_posts):
     """Generates blog post content using Google Gemini."""
-    model = genai.GenerativeModel('gemini-pro')
+    model = genai.GenerativeModel('gemini-2.0-flash')
 
     meta_prompt = f"""
 RÔLE :
@@ -73,14 +73,43 @@ Tu dois répondre UNIQUEMENT avec un objet JSON valide suivant cette structure e
 }}
 """
 
+    max_retries = 3
+    for attempt in range(max_retries):
+        try:
+            response = model.generate_content(meta_prompt)
+            text_response = response.text
+            break
+        except Exception as e:
+            if attempt < max_retries - 1:
+                wait_time = 2 ** attempt
+                print(f"⚠️ Error generation content (Attempt {attempt+1}/{max_retries}): {e}. Retrying in {wait_time}s...")
+                time.sleep(wait_time)
+            else:
+                print(f"❌ Error generating content with Gemini after {max_retries} attempts: {e}")
+                return None
+    
+    # 1. Clean Markdown code blocks
+    clean_text = text_response.replace("```json", "").replace("```", "").strip()
+    
+    # 2. Try parsing directly
     try:
-        response = model.generate_content(meta_prompt)
-        # Clean up response if it contains markdown code blocks
-        text_response = response.text.replace("```json", "").replace("```", "").strip()
-        return json.loads(text_response)
-    except Exception as e:
-        print(f"❌ Error generating content with Gemini: {e}")
-        return None
+        return json.loads(clean_text)
+    except json.JSONDecodeError:
+        print("⚠️ Initial JSON parse failed, attempting repairs...")
+        
+        # 3. Fix common JSON errors using regex
+        import re
+        # Escape backslashes that are not part of a valid escape sequence
+        # This matches a backslash NOT followed by ", \, /, b, f, n, r, t, or u
+        clean_text = re.sub(r'\\(?![/\\bfnrtu"])', r'\\\\', clean_text)
+        
+        # Try parsing again
+        try:
+            return json.loads(clean_text)
+        except json.JSONDecodeError as e:
+            print(f"❌ Failed to parse JSON after repairs: {e}")
+            print(f"DEBUG: Response text was: {text_response[:500]}...") # Print first 500 chars for debug
+            return None
 
 def generate_image(prompt, slug):
     """Generates an image using DALL-E 3 and saves it locally."""
