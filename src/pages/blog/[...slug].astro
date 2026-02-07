@@ -41,12 +41,9 @@ const { Content } = await post.render();
             
             <!-- Close Button (Returns to Blog) -->
             <a href="/rayonis/blog/" 
-               class="w-8 h-8 flex items-center justify-center border-2 border-rayonis-text bg-white hover:bg-red-500 hover:text-white transition-all shadow-sm active:translate-y-0.5 active:shadow-none rounded"
+               class="w-6 h-6 flex items-center justify-center bg-gray-300 border border-rayonis-text text-black font-bold text-xs hover:bg-red-500 hover:text-white transition-colors shadow-sm active:translate-y-[1px] active:shadow-none"
                aria-label="Fermer et retour au blog">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
+                X
             </a>
         </div>
 
@@ -80,10 +77,13 @@ const { Content } = await post.render();
                 </div>
             )}
 
-            <div class="prose prose-lg prose-slate max-w-none font-sans
-                prose-headings:font-black prose-headings:font-sans
+            <div class="prose prose-lg prose-gray max-w-prose mx-auto font-sans leading-relaxed
+                prose-headings:font-black prose-headings:font-sans prose-headings:text-black
                 prose-h2:text-3xl prose-h2:mt-10 prose-h2:mb-6 prose-h2:border-b-2 prose-h2:border-gray-200 prose-h2:pb-2
-                prose-code:font-mono prose-code:text-sm prose-code:bg-gray-100 prose-code:px-1 prose-code:py-0.5 prose-code:rounded
+                prose-p:text-gray-800 prose-p:leading-8
+                prose-li:text-gray-800
+                prose-strong:text-black prose-strong:font-bold
+                prose-code:font-mono prose-code:text-sm prose-code:bg-gray-100 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-purple-700
                 prose-pre:bg-gray-900 prose-pre:border-2 prose-pre:border-rayonis-text prose-pre:shadow-sm
                 prose-a:text-purple-600 prose-a:font-bold prose-a:no-underline hover:prose-a:underline
             ">
