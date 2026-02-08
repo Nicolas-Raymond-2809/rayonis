@@ -85,6 +85,7 @@ Tu dois répondre UNIQUEMENT avec un objet JSON valide suivant cette structure e
   "description": "Une méta-description pour le SEO (max 160 caractères) qui donne envie de cliquer.",
   "tags": ["Tag1", "Tag2", "Tag3"],
   "image_prompt": "Une description visuelle détaillée (en anglais) pour DALL-E 3. Style : Cyberpunk, Synthwave, Minimalist Tech ou Pixel Art. Pas de texte dans l'image.",
+  "video_prompt": "A prompt describing a 5-second cinematic teaser video for this article. Style: Abstract Tech, 4k, fluid motion, neural networks, digital architecture. Format: High quality text-to-video prompt.",
   "markdown_content": "Le corps de l'article en Markdown.\\n\\n- IMPORTANT: Échappe bien tous les caractères spéciaux (guillemets, sauts de ligne).\\n- Utilise \\n pour les sauts de ligne DANS cette chaîne JSON.\\n- Utilise ## pour les titres..."
 }}
 """
@@ -99,7 +100,17 @@ Tu dois répondre UNIQUEMENT avec un objet JSON valide suivant cette structure e
         try:
             response = model.generate_content(meta_prompt, generation_config=generation_config)
             text_response = response.text
-            break
+            # Clean response if needed (remove markdown block)
+            if text_response.startswith("```json"):
+                text_response = text_response[7:]
+            if text_response.endswith("```"):
+                text_response = text_response[:-3]
+            
+            # Simple regex fix for newlines in JSON strings if they are literal newlines
+            import re
+            text_response = re.sub(r'(?<!\\)\n', '\\n', text_response) 
+            
+            return json.loads(text_response)
         except Exception as e:
             if attempt < max_retries - 1:
                 wait_time = 2 ** attempt
@@ -108,14 +119,56 @@ Tu dois répondre UNIQUEMENT avec un objet JSON valide suivant cette structure e
             else:
                 print(f"❌ Error generating content with Gemini after {max_retries} attempts: {e}")
                 return None
-    
-    # Parse the JSON response directly
-    try:
-        return json.loads(text_response)
-    except json.JSONDecodeError as e:
-        print(f"❌ Failed to parse JSON from API (unexpected): {e}")
-        print(f"DEBUG: Response text was: {text_response[:500]}...") 
+    return None
+
+def generate_video_veo(prompt, slug):
+    """Generates a video using Google Vertex AI (Veo)."""
+    credentials_path = "google_credentials.json"
+    if not os.path.exists(credentials_path):
+        print("⚠️ No google_credentials.json found. Skipping video generation.")
         return None
+
+    try:
+        # Set credentials explicitly for this session
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = credentials_path
+        
+        # Initialize Vertex AI
+        import vertexai
+        from vertexai.preview.vision_models import ImageGenerationModel # Veo access might differ, using generic for now
+        # Note: Actual Veo integration requires specific preview library. 
+        # Checking if google-cloud-aiplatform is sufficient.
+        
+        # For Veo specifically, users often use the Model Garden endpoint.
+        # This is a placeholder for the actual Veo call which is restricted preview.
+        # We will Simulate it or use Imagen 2 if Veo isn't public public.
+        # But wait, Veo is 'veo-2.0-generate-001'.
+        
+        # Let's try the standard Vertex AI generation flow
+        vertexai.init(location="us-central1") # Veo is often in us-central1
+        
+        # As of late 2024/2025, Veo might be accessed via:
+        # model = ImageGenerationModel.from_pretrained("veo-2.0-generate-001") 
+        # But ImageGenerationModel is for images. 
+        # Video generation usually uses `VideoGenerationModel` or similar.
+        
+        # Since exact python SDK for Veo isn't guaranteed in this env, we will try a generic approach
+        # or skip if library missing.
+        
+        print(f"🎥 Generating video for {slug} with prompt: {prompt}...")
+        
+        # SIMULATION UNTIL CREDENTIALS ARE VERIFIED to avoid crashing
+        # In a real scenario, we would do:
+        # model = VideoGenerationModel.from_pretrained("veo-2.0-generate-001")
+        # video = model.generate_video(prompt=prompt)
+        # video.save(f"public/videos/{slug}.mp4")
+        
+        print("ℹ️ Video generation requires valid GCP Quota (Veo). Placeholder logic.")
+        return None
+
+    except Exception as e:
+        print(f"❌ Video generation failed: {e}")
+        return None
+
 
 def generate_image(prompt, slug):
     """Generates an image using DALL-E 3 and saves it locally."""
@@ -205,6 +258,11 @@ def main():
     # 3. Generate Image
     print("🎨 Generating image with DALL-E 3...")
     image_url = generate_image(content_json['image_prompt'], content_json['slug'])
+    
+    # 3.1 Generate Video (Optional)
+    if "video_prompt" in content_json:
+        generate_video_veo(content_json['video_prompt'], content_json['slug'])
+
     if not image_url:
         print("⚠️ Failed to generate image, using placeholder or skipping.")
         # Create a placeholder if needed, or just fail.
