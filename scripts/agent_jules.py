@@ -157,57 +157,89 @@ def generate_video_veo(prompt, slug):
         print(f"🎥 Generating video for {slug} with prompt: {prompt}...")
         
         # Initialize Vertex AI
-        vertexai.init(location="us-central1")
+        # SDK approach failed (VideoGenerationModel not found), so we use RAW REST API.
         
-        # Try to use the ImageGenerationModel (which handles video in some SDK versions)
-        # or use the specific prediction service for Veo.
-        # Since the SDK is evolving, we'll try the 'imagegeneration@006' (Imagen 2) approach for consistency
-        # or pure Veo if accessible.
+        import google.auth
+        from google.auth.transport.requests import Request as GoogleRequest
+        import requests
+
+        # Get credentials and project ID
+        credentials, project_id = google.auth.load_credentials_from_file(credentials_path)
         
-        # NOTE: As of today, Veo via Python SDK often uses `ImageGenerationModel` with specific methods 
-        # or `Preview` namespaces. 
-        # We will attempt to use the generic 'imagegeneration@006' which is standard for current capabilities,
-        # OR specifically target 'veo-2.0-generate-001' if the user has access.
+        # Refresh token if needed
+        if not credentials.valid:
+            credentials.refresh(GoogleRequest())
         
-        from vertexai.preview.vision_models import ImageGenerationModel
+        access_token = credentials.token
         
-        # We try to load the model. If Veo isn't available, this might fail.
-        # 'imagegeneration@006' is Imagen 2 (Images).
-        # For Video, we need `VideoGenerationModel` (if available in this SDK version)
-        # or we use the raw prediction endpoint.
+        # Endpoint for Veo
+        location = "us-central1"
+        model_id = "veo-2.0-generate-001"
+        url = f"https://{location}-aiplatform.googleapis.com/v1/projects/{project_id}/locations/{location}/publishers/google/models/{model_id}:predict"
         
-        try:
-            from vertexai.preview.vision_models import VideoGenerationModel
-            model = VideoGenerationModel.from_pretrained("veo-2.0-generate-001")
-            
-            video = model.generate_video(
-                prompt=prompt,
-                number_of_videos=1,
-                aspect_ratio="16:9",
-                duration_seconds=6
-            )
-            
-            # Save the video
-            video_filename = f"{slug}.mp4"
-            video_path = os.path.join("public", "images", "blog", video_filename) # saving in images/blog for now or create public/videos
-            # Let's create public/videos if it doesn't exist
-            video_dir = os.path.join("public", "videos", "blog")
-            os.makedirs(video_dir, exist_ok=True)
-            video_path = os.path.join(video_dir, video_filename)
-            
-            video.save(video_path)
-            print(f"✅ Video saved to {video_path}")
-            return f"/videos/blog/{video_filename}"
-            
-        except ImportError:
-            print("⚠️ VideoGenerationModel not found in vertexai SDK. Updating SDK might be needed.")
+        headers = {
+            "Authorization": f"Bearer {access_token}",
+            "Content-Type": "application/json; charset=utf-8"
+        }
+        
+        payload = {
+            "instances": [
+                {
+                    "prompt": prompt
+                }
+            ],
+            "parameters": {
+                "sampleCount": 1,
+                "durationSeconds": 6,
+                "aspectRatio": "16:9"
+            }
+        }
+        
+        print(f"📡 Calling Veo API Raw Endpoint: {url}...")
+        response = requests.post(url, headers=headers, json=payload)
+        
+        if response.status_code != 200:
+            print(f"❌ Veo API Error ({response.status_code}): {response.text}")
             return None
-        except Exception as e:
-            print(f"❌ Vertex AI Video Error: {e}")
-            return None
+            
+        # Parse response
+        # Response structure: {"predictions": [{"bytesBase64Encoded": "..."}]} or similar (uri?)
+        result = response.json()
+        
+        if "predictions" not in result:
+             print(f"❌ Unexpected Veo Response: {result}")
+             return None
+             
+        # Extract video data
+        # Veo usually returns 'bytesBase64Encoded' inside the prediction object
+        # OR it might return a GCS URI if we configured storage (we didn't).
+        video_b64 = result["predictions"][0].get("bytesBase64Encoded")
+        else_uri = result["predictions"][0].get("uri") # Just in case
+        
+        if not video_b64:
+             if else_uri:
+                 print(f"ℹ️ Veo returned URI instead of bytes: {else_uri}. Setup GCS download logic if needed.")
+                 return None # Simplified for now
+             print("❌ No video bytes found in response.")
+             return None
+             
+        video_data = base64.b64decode(video_b64)
+        
+        # Save the video
+        video_filename = f"{slug}.mp4"
+        # Ensure directory exists
+        video_dir = os.path.join("public", "videos", "blog")
+        os.makedirs(video_dir, exist_ok=True)
+        video_path = os.path.join(video_dir, video_filename)
+        
+        with open(video_path, "wb") as f:
+            f.write(video_data)
+            
+        print(f"✅ Video saved to {video_path}")
+        return f"/videos/blog/{video_filename}"
 
     except Exception as e:
-        print(f"❌ Video generation connection failed: {e}")
+        print(f"❌ Video generation failed (Raw API): {e}")
         return None
 
 
