@@ -3,7 +3,7 @@ title: "Supercharge Astro avec l'IA : Générez des articles avec GPT-3!"
 description: "Créez un workflow automatisé avec Astro et GPT-3 pour générer du contenu de blog de qualité. Un guide étape par étape pour booster votre productivité !"
 date: 2026-02-07
 tags: ["Astro", "GPT-3", "IA", "Automation", "JAMstack", "Content Generation"]
-image: "/rayonis/images/blog/astro-gpt3-generer-articles-ia.webp"
+image: "/images/blog/astro-gpt3-generer-articles-ia.webp"
 category: "Agentic Workflows"
 ---
 

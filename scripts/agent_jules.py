@@ -146,7 +146,7 @@ def generate_image(prompt, slug):
         image.save(image_path, "WEBP", quality=80, optimize=True)
 
         print(f"✅ Image saved to {image_path}")
-        return f"/rayonis/images/blog/{image_filename}"
+        return f"/images/blog/{image_filename}"
     except Exception as e:
         print(f"❌ Error generating image with DALL-E: {e}")
         return None

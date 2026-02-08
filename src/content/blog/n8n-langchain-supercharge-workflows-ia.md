@@ -4,7 +4,7 @@ description: "Découvrez comment combiner n8n et Langchain pour créer des workf
 date: 2026-02-08
 tags: ["n8n", "Langchain", "IA", "Automatisation", "Workflow"]
 category: "Agentic Workflows"
-image: "/rayonis/images/blog/n8n-langchain-supercharge-workflows-ia.webp"
+image: "/images/blog/n8n-langchain-supercharge-workflows-ia.webp"
 ---
 
 ## n8n & Langchain: Le Duo Dynamique de l'Automatisation IA

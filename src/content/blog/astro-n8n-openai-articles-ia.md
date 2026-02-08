@@ -3,7 +3,7 @@ title: "Astro + n8n: Génération d'articles IA avec OpenAI"
 description: "Automatisez la création de contenu pour votre site Astro avec n8n et l'API OpenAI.  Un workflow simple pour un blog dynamique et toujours à jour."
 date: 2026-02-07
 tags: ["Astro", "n8n", "OpenAI", "IA", "Automatisation", "Content Generation"]
-image: "/rayonis/images/blog/astro-n8n-openai-articles-ia.webp"
+image: "/images/blog/astro-n8n-openai-articles-ia.webp"
 category: "Agentic Workflows"
 ---
 

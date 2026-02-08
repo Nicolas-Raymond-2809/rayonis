@@ -3,7 +3,7 @@ title: "Unlock Productivity: Astro + GitHub Actions for Seamless CI/CD"
 description: "Automate your Astro site deployment with GitHub Actions! This guide provides a step-by-step walkthrough for efficient continuous integration and continuous delivery."
 date: 2026-02-07
 tags: ["Astro", "GitHub Actions", "CI/CD", "Automation", "JAMstack"]
-image: "/rayonis/images/blog/astro-github-actions-cicd.webp"
+image: "/images/blog/astro-github-actions-cicd.webp"
 category: "Interconnection"
 ---
 

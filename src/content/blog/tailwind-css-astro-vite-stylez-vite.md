@@ -3,7 +3,7 @@ title: "Tailwind CSS dans Astro: Stylez Vite, Stylez vite!"
 description: "Intégrez Tailwind CSS à Astro pour un développement rapide et élégant. Configuration simple, composants stylés et performances optimisées."
 date: 2026-02-07
 tags: ["Astro", "Tailwind CSS", "Vite", "Frontend"]
-image: "/rayonis/images/blog/tailwind-css-astro-vite-stylez-vite.webp"
+image: "/images/blog/tailwind-css-astro-vite-stylez-vite.webp"
 category: "Vibe Coding"
 ---
 

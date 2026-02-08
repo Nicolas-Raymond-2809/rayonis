@@ -17,13 +17,13 @@ const { Content } = await post.render();
 <Layout title={`${post.data.title} - Rayonis Blog`}>
   <header class="sticky top-0 z-50 bg-rayonis-bg/95 backdrop-blur border-b-2 border-rayonis-text py-4 px-6">
     <div class="max-w-4xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
-      <a href="/rayonis/" class="text-3xl font-black font-sans tracking-tighter hover:text-rayonis-pro transition-colors">
+      <a href="/" class="text-3xl font-black font-sans tracking-tighter hover:text-rayonis-pro transition-colors">
         RAYONIS
       </a>
 
       <nav class="flex items-center gap-4 sm:gap-8 font-mono font-bold text-sm">
-          <a href="/rayonis/" class="hover:underline">HOME</a>
-          <a href="/rayonis/blog/" class="hover:underline text-purple-600">VIBE CODING BLOG</a>
+          <a href="/" class="hover:underline">HOME</a>
+          <a href="/blog/" class="hover:underline text-purple-600">VIBE CODING BLOG</a>
       </nav>
     </div>
   </header>
@@ -40,9 +40,9 @@ const { Content } = await post.render();
             </div>
             
             <!-- Close Button (Returns to Blog) -->
-            <a href="/rayonis/blog/" 
+            <a href="/blog/" 
                class="w-6 h-6 flex items-center justify-center bg-gray-300 border border-rayonis-text text-black font-bold text-xs hover:bg-red-500 hover:text-white transition-colors shadow-sm active:translate-y-[1px] active:shadow-none"
-               aria-label="Fermer et retour au blog">
+               aria-label="Close">
                 X
             </a>
         </div>

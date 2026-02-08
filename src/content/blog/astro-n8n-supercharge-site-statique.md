@@ -3,7 +3,7 @@ title: "Astro + n8n: Supercharge ton site statique!"
 description: "Découvre comment intégrer Astro et n8n pour automatiser la création de contenu et booster ton site statique. Le futur du contenu est ici!"
 date: 2026-02-07
 tags: ["Astro", "n8n", "Automation", "JAMstack", "Content Management"]
-image: "/rayonis/images/blog/astro-n8n-supercharge-site-statique.png"
+image: "/images/blog/astro-n8n-supercharge-site-statique.png"
 category: "Vibe Coding"
 ---
 
