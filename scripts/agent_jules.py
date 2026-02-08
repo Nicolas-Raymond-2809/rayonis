@@ -163,8 +163,11 @@ def generate_video_veo(prompt, slug):
         from google.auth.transport.requests import Request as GoogleRequest
         import requests
 
-        # Get credentials and project ID
-        credentials, project_id = google.auth.load_credentials_from_file(credentials_path)
+        # Get credentials and project ID with explicit Cloud Platform scope
+        credentials, project_id = google.auth.load_credentials_from_file(
+            credentials_path,
+            scopes=["https://www.googleapis.com/auth/cloud-platform"]
+        )
         
         # Refresh token if needed
         if not credentials.valid:
