@@ -1,0 +1,218 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Étude de Cas : Architecture Zero Touch - Rayonis">
+  <header class="sticky top-0 z-50 bg-rayonis-bg/95 backdrop-blur border-b-2 border-rayonis-text py-4 px-6">
+    <div class="max-w-4xl mx-auto flex justify-between items-center">
+      <a href="/rayonis/" class="text-3xl font-black font-sans tracking-tighter hover:text-rayonis-pro transition-colors">
+        RAYONIS
+      </a>
+      <a href="/rayonis/blog/" class="font-mono font-bold text-sm text-purple-600 hover:underline uppercase">
+        Retour au Blog
+      </a>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-6 py-12">
+    
+    <!-- HEADER -->
+    <div class="mb-16 text-center">
+        <span class="inline-block px-3 py-1 bg-black text-white font-mono font-bold text-xs uppercase mb-4 transform -rotate-2">
+            Architecture Zero Touch
+        </span>
+        <h1 class="text-4xl md:text-6xl font-black mb-6 leading-tight">
+            Comment ce blog se gère <span class="text-purple-600 bg-purple-100 px-2">tout seul</span> ?
+        </h1>
+        <p class="text-xl text-gray-700 max-w-2xl mx-auto font-sans leading-relaxed">
+            Ce blog n'est pas écrit par un humain au quotidien. C'est un système autonome qui rédige, illustre, code et déploie un article chaque matin, sans intervention humaine.
+        </p>
+    </div>
+
+    <!-- 1. CONCEPT -->
+    <section class="mb-16 border-2 border-rayonis-text p-8 bg-white shadow-neo">
+        <h2 class="text-3xl font-black mb-6 flex items-center gap-3">
+            🤖 Le Concept "Zero Touch"
+        </h2>
+        <div class="prose prose-lg prose-gray max-w-none">
+            <p>
+                Bienvenue dans l'ère du <strong>Vibe Coding</strong>. Ici, je ne suis pas l'écrivain, je suis l'<strong>architecte</strong>.
+            </p>
+            <p>
+                Mon rôle n'est plus de taper chaque ligne de code ou de texte, mais de concevoir les "briques" intelligentes (IA, Scripts, API) qui travaillent pour moi. C'est une démonstration vivante qu'avec la bonne architecture, une seule personne peut produire autant qu'une équipe.
+            </p>
+        </div>
+    </section>
+
+    <!-- 2. POURQUOI -->
+    <section class="mb-16 grid md:grid-cols-3 gap-6">
+        <div class="bg-cyan-50 border-2 border-rayonis-text p-6">
+            <div class="text-4xl mb-4">🚀</div>
+            <h3 class="font-black text-xl mb-2">Upskilling Forcé</h3>
+            <p class="text-sm font-mono text-gray-600">
+                L'agent IA m'oblige à découvrir de nouveaux sujets. Je suis le premier lecteur de mon propre blog !
+            </p>
+        </div>
+        <div class="bg-yellow-50 border-2 border-rayonis-text p-6">
+            <div class="text-4xl mb-4">💼</div>
+            <h3 class="font-black text-xl mb-2">Vitrine Réelle</h3>
+            <p class="text-sm font-mono text-gray-600">
+                Une preuve concrète que l'automatisation fonctionne pour les TPE/PME. Coûts réduits, productivité maximale.
+            </p>
+        </div>
+        <div class="bg-purple-50 border-2 border-rayonis-text p-6">
+            <div class="text-4xl mb-4">🧪</div>
+            <h3 class="font-black text-xl mb-2">Expérimentation</h3>
+            <p class="text-sm font-mono text-gray-600">
+                Tester les limites du modèle "Humain Manager / IA Exécutant" au quotidien.
+            </p>
+        </div>
+    </section>
+
+    <!-- 3. STACK TECHNIQUE -->
+    <section class="mb-16">
+        <h2 class="text-3xl font-black mb-8 border-b-2 border-rayonis-text pb-2">🛠️ La Stack Technique</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+            
+            <div class="p-4 border-2 border-rayonis-text bg-white hover:bg-gray-50 transition-colors">
+                <div class="font-black text-4xl mb-2 text-blue-500">G</div>
+                <h3 class="font-bold">Gemini Pro</h3>
+                <p class="text-xs font-mono text-gray-500 mt-1">Le Cerveau (Texte)</p>
+            </div>
+
+            <div class="p-4 border-2 border-rayonis-text bg-white hover:bg-gray-50 transition-colors">
+                <div class="font-black text-4xl mb-2 text-green-500">D</div>
+                <h3 class="font-bold">DALL-E 3</h3>
+                <p class="text-xs font-mono text-gray-500 mt-1">L'Artiste (Visuel)</p>
+            </div>
+
+            <div class="p-4 border-2 border-rayonis-text bg-white hover:bg-gray-50 transition-colors">
+                <div class="font-black text-4xl mb-2 text-orange-500">A</div>
+                <h3 class="font-bold">Astro</h3>
+                <p class="text-xs font-mono text-gray-500 mt-1">Le Squelette (Site)</p>
+            </div>
+
+             <div class="p-4 border-2 border-rayonis-text bg-white hover:bg-gray-50 transition-colors">
+                <div class="font-black text-4xl mb-2 text-yellow-500">Py</div>
+                <h3 class="font-bold">Python</h3>
+                <p class="text-xs font-mono text-gray-500 mt-1">L'Orchestrateur</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. WORKFLOW GITOPS -->
+    <section class="mb-16 bg-gray-900 text-white p-8 border-2 border-rayonis-text shadow-neo relative overflow-hidden">
+        <div class="absolute top-0 right-0 p-4 opacity-10 text-9xl font-black z-0">GIT</div>
+        <h2 class="text-3xl font-black mb-8 relative z-10 text-cyan-400">🔄 Le Workflow GitOps</h2>
+        
+        <div class="relative z-10 space-y-6 font-mono text-sm">
+            <div class="flex items-start gap-4">
+                <span class="bg-cyan-500 text-black font-bold px-2 py-1">1. SCAN</span>
+                <p>Le script scanne le dossier <code>src/content/blog/</code> pour éviter les doublons.</p>
+            </div>
+            <div class="border-l-2 border-gray-700 h-6 ml-6"></div>
+            
+            <div class="flex items-start gap-4">
+                <span class="bg-purple-500 text-white font-bold px-2 py-1">2. DRAFT</span>
+                <p>Gemini rédige l'article et retourne un <strong>JSON strict</strong>.</p>
+            </div>
+            <div class="border-l-2 border-gray-700 h-6 ml-6"></div>
+
+            <div class="flex items-start gap-4">
+                <span class="bg-pink-500 text-white font-bold px-2 py-1">3. ASSETS</span>
+                <p>DALL-E 3 génère l'image "Pixel Art/Cyberpunk". Conversion WebP automatique.</p>
+            </div>
+            <div class="border-l-2 border-gray-700 h-6 ml-6"></div>
+
+            <div class="flex items-start gap-4">
+                <span class="bg-yellow-500 text-black font-bold px-2 py-1">4. BUILD</span>
+                <p>Le script assemble le Markdown + Frontmatter (titre, date, image).</p>
+            </div>
+             <div class="border-l-2 border-gray-700 h-6 ml-6"></div>
+
+            <div class="flex items-start gap-4">
+                <span class="bg-green-500 text-black font-bold px-2 py-1">5. DEPLOY</span>
+                <p>Git Push automatique. GitHub Actions détecte le commit et déploie le site.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. TRANSPARENCE -->
+    <section class="mb-16 grid md:grid-cols-2 gap-8">
+        <div>
+            <h2 class="text-2xl font-black mb-4">🛡️ Sécurité & Secrets</h2>
+            <p class="text-gray-700 mb-4">
+                Ce projet est Open Source, mais mes clés API restent privées.
+            </p>
+            <ul class="list-disc list-inside space-y-2 font-mono text-sm bg-gray-100 p-4 border-2 border-rayonis-text">
+                <li>Fichier <code>.env</code> contenant <code>GEMINI_API_KEY</code></li>
+                <li>Exclu via <code>.gitignore</code></li>
+                <li>Budget capé sur l'API OpenAI</li>
+            </ul>
+        </div>
+        <div>
+            <h2 class="text-2xl font-black mb-4">💸 Les Coûts Réels</h2>
+            <p class="text-gray-700 mb-4">
+                L'automatisation intelligente ne coûte pas cher.
+            </p>
+             <div class="bg-green-50 p-4 border-2 border-rayonis-text">
+                <div class="flex justify-between border-b border-gray-300 pb-2 mb-2">
+                    <span>Hébergement (GitHub)</span>
+                    <span class="font-bold">0 €</span>
+                </div>
+                <div class="flex justify-between border-b border-gray-300 pb-2 mb-2">
+                    <span>Gemini Pro (Texte)</span>
+                    <span class="font-bold">~0 € (Free Tier)</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>DALL-E 3 (Images)</span>
+                    <span class="font-bold">~1.20 $ / mois</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. META PROMPT -->
+    <section class="mb-16">
+         <h2 class="text-3xl font-black mb-6">🧠 La Recette Secrète (Méta-Prompt)</h2>
+         <p class="mb-4 text-gray-700">Voici comment je donne une personnalité à "Jules", l'agent rédacteur :</p>
+         <div class="bg-gray-900 overflow-x-auto border-2 border-rayonis-text shadow-neo p-4">
+<pre class="text-green-400 font-mono text-xs leading-relaxed">
+RÔLE :
+Tu es "Jules", une IA experte en Architecture de Solutions Digitales, spécialisée 
+dans le "Vibe Coding" et la JAMstack.
+
+TES OBJECTIFS :
+1. Produire un tutoriel de haute qualité.
+2. Vulgariser l'usage de l'IA (montrer *comment* demander).
+
+PHILOSOPHIE VIBE CODING : 
+* Ne rentre PAS dans la complexité du code syntaxique.
+* Privilégie l'Architecture et l'Orchestration.
+* Montre comment l'IA code pour nous.
+</pre>
+         </div>
+    </section>
+
+    <!-- CONCLUSION -->
+    <div class="bg-rayonis-pro text-white p-12 text-center border-2 border-rayonis-text shadow-neo">
+        <h2 class="text-4xl font-black mb-6">Envie de construire votre propre système ?</h2>
+        <p class="text-xl mb-8 max-w-2xl mx-auto">
+            Le code de ce blog est entièrement disponible. Copiez-le, améliorez-le, faites-le vôtre.
+        </p>
+        <div class="flex justify-center gap-4 flex-col sm:flex-row">
+            <a href="https://github.com/Nicolas-Raymond-2809/Rayonis" target="_blank" class="px-8 py-4 bg-black text-white font-mono font-bold text-lg border-2 border-transparent hover:bg-gray-800 transition-all shadow-neo hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]">
+                Voir le Code sur GitHub
+            </a>
+            <a href="mailto:contact@rayonis.fr" class="px-8 py-4 bg-white text-black font-mono font-bold text-lg border-2 border-black hover:bg-gray-100 transition-all shadow-neo hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]">
+                Me contacter pour un projet
+            </a>
+        </div>
+    </div>
+
+  </main>
+
+  <footer class="border-t-2 border-rayonis-text bg-white py-12 px-6 mt-12 text-center">
+      <p class="font-mono text-sm">&copy; {new Date().getFullYear()} Rayonis. Architecture Zero Touch.</p>
+  </footer>
+</Layout>
