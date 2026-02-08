@@ -175,10 +175,11 @@ def generate_video_veo(prompt, slug):
         
         access_token = credentials.token
         
-        # Endpoint for Veo
+        # Endpoint for Veo (Long Running Operation)
         location = "us-central1"
         model_id = "veo-2.0-generate-001"
-        url = f"https://{location}-aiplatform.googleapis.com/v1/projects/{project_id}/locations/{location}/publishers/google/models/{model_id}:predict"
+        # Correct endpoint for LRO is :predictLongRunning
+        url = f"https://{location}-aiplatform.googleapis.com/v1/projects/{project_id}/locations/{location}/publishers/google/models/{model_id}:predictLongRunning"
         
         headers = {
             "Authorization": f"Bearer {access_token}",
@@ -198,35 +199,99 @@ def generate_video_veo(prompt, slug):
             }
         }
         
-        print(f"📡 Calling Veo API Raw Endpoint: {url}...")
+        print(f"📡 Calling Veo API (LongRunning): {url}...")
         response = requests.post(url, headers=headers, json=payload)
         
         if response.status_code != 200:
             print(f"❌ Veo API Error ({response.status_code}): {response.text}")
             return None
+
+        # LRO Handling
+        operation = response.json()
+        operation_name = operation.get("name")
+        if not operation_name:
+            print(f"❌ No operation name returned: {operation}")
+            return None
             
-        # Parse response
-        # Response structure: {"predictions": [{"bytesBase64Encoded": "..."}]} or similar (uri?)
-        result = response.json()
+        print(f"⏳ Video generation started. Operation: {operation_name}")
+        print("⏳ Waiting for video completion (this may take ~10-20 seconds)...")
         
-        if "predictions" not in result:
-             print(f"❌ Unexpected Veo Response: {result}")
-             return None
-             
-        # Extract video data
-        # Veo usually returns 'bytesBase64Encoded' inside the prediction object
-        # OR it might return a GCS URI if we configured storage (we didn't).
-        video_b64 = result["predictions"][0].get("bytesBase64Encoded")
-        else_uri = result["predictions"][0].get("uri") # Just in case
+        # Poll for completion
+        import time
+        start_time = time.time()
+        timeout = 600 # 10 minutes timeout
         
-        if not video_b64:
-             if else_uri:
-                 print(f"ℹ️ Veo returned URI instead of bytes: {else_uri}. Setup GCS download logic if needed.")
-                 return None # Simplified for now
-             print("❌ No video bytes found in response.")
-             return None
-             
-        video_data = base64.b64decode(video_b64)
+        while True:
+            if time.time() - start_time > timeout:
+                print("❌ Video generation timed out.")
+                return None
+                
+            # Check operation status
+            # Operation name is full path, usually we can just GET it.
+            # But the 'name' field in LRO response usually needs the base endpoint + name.
+            # Actually, the 'name' is often "projects/.../locations/.../operations/..."
+            # So we can just construct the URL:
+            # https://us-central1-aiplatform.googleapis.com/v1/{operation_name}
+            
+            op_url = f"https://{location}-aiplatform.googleapis.com/v1/{operation_name}"
+            op_response = requests.get(op_url, headers=headers)
+            
+            if op_response.status_code != 200:
+                 print(f"⚠️ Error polling operation: {op_response.text}")
+                 time.sleep(5)
+                 continue
+                 
+            op_data = op_response.json()
+            
+            if "error" in op_data:
+                print(f"❌ Operation failed: {op_data['error']}")
+                return None
+            
+            if "done" in op_data and op_data["done"]:
+                # Finished!
+                if "response" not in op_data:
+                     # Sometimes errors are inside 'error' field even if done=True
+                     if "error" in op_data: # sending simplified logic
+                          print(f"❌ Operation done with error: {op_data['error']}")
+                          return None
+                     print(f"❌ Operation done but no response found: {op_data.keys()}")
+                     return None
+                
+                # Success!
+                # Predictions are usually in op_data['response']['result'] or similar for Custom Jobs,
+                # BUT for Veo PredictLongRunning, it mimics the direct Predict response inside 'response'.
+                # It likely has 'predictions' field.
+                
+                # Careful: The 'response' field in LRO is a generic Any, usually a dict.
+                # Let's inspect it safely.
+                final_response = op_data["response"]
+                
+                # Actually, some APIs nest it as {"response": {"@type": "...", "predictions": [...]}}
+                # Let's look for 'predictions'
+                predictions = final_response.get("predictions")
+                if not predictions:
+                     # Maybe it's directly the list? Unlikely.
+                     print(f"❌ No predictions in final response: {final_response.keys()}")
+                     return None
+                
+                video_b64 = predictions[0].get("bytesBase64Encoded")
+                uri = predictions[0].get("uri")
+                
+                if video_b64:
+                    video_data = base64.b64decode(video_b64)
+                    break 
+                elif uri:
+                     print(f"ℹ️ Video saved to URI: {uri}. (Downloading not implemented yet)")
+                     return None
+                else:
+                     print("❌ No video content found.")
+                     return None
+
+            # Not done yet
+            print(".", end="", flush=True)
+            time.sleep(5)
+            
+        print("\n")
         
         # Save the video
         video_filename = f"{slug}.mp4"
