@@ -4,13 +4,25 @@ import Layout from '../layouts/Layout.astro';
 
 <Layout title="Étude de Cas : Architecture Zero Touch - Rayonis">
   <header class="sticky top-0 z-50 bg-rayonis-bg/95 backdrop-blur border-b-2 border-rayonis-text py-4 px-6">
-    <div class="max-w-4xl mx-auto flex justify-between items-center">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
       <a href="/rayonis/" class="text-3xl font-black font-sans tracking-tighter hover:text-rayonis-pro transition-colors">
         RAYONIS
       </a>
-      <a href="/rayonis/blog/" class="font-mono font-bold text-sm text-purple-600 hover:underline uppercase">
-        Retour au Blog
-      </a>
+
+      <div class="flex flex-col sm:flex-row items-center gap-4 sm:gap-8">
+        <!-- Active link style for current page -->
+        <a href="/rayonis/etude-de-cas-zero-touch/" class="font-mono font-bold text-sm text-black underline uppercase text-center sm:text-left">
+          Architecture Zero Touch
+        </a>
+
+        <a href="/rayonis/blog/" class="font-mono font-bold text-sm text-purple-600 hover:underline uppercase text-center sm:text-left">
+          VIBE CODING BLOG
+        </a>
+        
+        <a href="mailto:contact@rayonis.fr" class="hidden sm:block px-6 py-3 font-mono font-bold text-sm bg-white border-2 border-rayonis-text shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all active:bg-gray-50">
+          CONTACTER
+        </a>
+      </div>
     </div>
   </header>
 

@@ -9,15 +9,25 @@ const sortedPosts = blogPosts.sort((a, b) => b.data.date.valueOf() - a.data.date
 
 <Layout title="Rayonis - Vibe Coding Blog">
   <header class="sticky top-0 z-50 bg-rayonis-bg/95 backdrop-blur border-b-2 border-rayonis-text py-4 px-6">
-    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
       <a href="/rayonis/" class="text-3xl font-black font-sans tracking-tighter hover:text-rayonis-pro transition-colors">
         RAYONIS
       </a>
 
-      <nav class="flex items-center gap-4 sm:gap-8">
-          <a href="/rayonis/" class="font-mono font-bold text-sm hover:underline">HOME</a>
-          <a href="/rayonis/blog/" class="font-mono font-bold text-sm underline text-purple-600">VIBE CODING BLOG</a>
-      </nav>
+      <div class="flex flex-col sm:flex-row items-center gap-4 sm:gap-8">
+        <a href="/rayonis/etude-de-cas-zero-touch/" class="font-mono font-bold text-sm text-gray-600 hover:text-black hover:underline uppercase text-center sm:text-left">
+          Architecture Zero Touch
+        </a>
+
+        <!-- Active link style for current page -->
+        <a href="/rayonis/blog/" class="font-mono font-bold text-sm text-purple-800 underline uppercase text-center sm:text-left">
+          VIBE CODING BLOG
+        </a>
+
+        <a href="mailto:contact@rayonis.fr" class="hidden sm:block px-6 py-3 font-mono font-bold text-sm bg-white border-2 border-rayonis-text shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all active:bg-gray-50">
+          CONTACTER
+        </a>
+      </div>
     </div>
   </header>
 
