@@ -156,155 +156,113 @@ def generate_video_veo(prompt, slug):
         
         print(f"🎥 Generating video for {slug} with prompt: {prompt}...")
         
-        # Initialize Vertex AI
-        # SDK approach failed (VideoGenerationModel not found), so we use RAW REST API.
+        # Initialize Vertex AI using GAPIC client (v1beta1) for LRO support
+        # This avoids manual polling implementation errors (400/404).
         
+        from google.cloud import aiplatform_v1beta1
+        from google.cloud.aiplatform_v1beta1.types import content
         import google.auth
-        from google.auth.transport.requests import Request as GoogleRequest
-        import requests
-
-        # Get credentials and project ID with explicit Cloud Platform scope
+        
+        # Get credentials
         credentials, project_id = google.auth.load_credentials_from_file(
             credentials_path,
             scopes=["https://www.googleapis.com/auth/cloud-platform"]
         )
+
+        # Client options for us-central1
+        client_options = {"api_endpoint": "us-central1-aiplatform.googleapis.com"}
+        client = aiplatform_v1beta1.PredictionServiceClient(
+            credentials=credentials,
+            client_options=client_options
+        )
         
-        # Refresh token if needed
-        if not credentials.valid:
-            credentials.refresh(GoogleRequest())
-        
-        access_token = credentials.token
-        
-        # Endpoint for Veo (Long Running Operation)
+        # Endpoint resource name
         location = "us-central1"
         model_id = "veo-2.0-generate-001"
-        # Correct endpoint for LRO is :predictLongRunning
-        url = f"https://{location}-aiplatform.googleapis.com/v1/projects/{project_id}/locations/{location}/publishers/google/models/{model_id}:predictLongRunning"
+        endpoint = f"projects/{project_id}/locations/{location}/publishers/google/models/{model_id}"
         
-        headers = {
-            "Authorization": f"Bearer {access_token}",
-            "Content-Type": "application/json; charset=utf-8"
+        # Prepare request
+        # Veo expects specific instance structure
+        instance = {"prompt": prompt}
+        parameters = {
+            "sampleCount": 1,
+            "durationSeconds": 6,
+            "aspectRatio": "16:9"
         }
         
-        payload = {
-            "instances": [
-                {
-                    "prompt": prompt
-                }
-            ],
-            "parameters": {
-                "sampleCount": 1,
-                "durationSeconds": 6,
-                "aspectRatio": "16:9"
-            }
-        }
+        print(f"📡 Calling Veo API (GAPIC v1beta1) for {slug}...")
         
-        print(f"📡 Calling Veo API (LongRunning): {url}...")
-        response = requests.post(url, headers=headers, json=payload)
-        
-        if response.status_code != 200:
-            print(f"❌ Veo API Error ({response.status_code}): {response.text}")
-            return None
-
-        # LRO Handling
-        operation = response.json()
-        operation_name = operation.get("name")
-        if not operation_name:
-            print(f"❌ No operation name returned: {operation}")
-            return None
+        try:
+            # Call predict_long_running
+            operation = client.predict_long_running(
+                endpoint=endpoint,
+                instances=[instance],
+                parameters=parameters
+            )
             
-        print(f"⏳ Video generation started. Operation: {operation_name}")
-        print("⏳ Waiting for video completion (this may take ~10-20 seconds)...")
-        
-        # Poll for completion
-        import time
-        start_time = time.time()
-        timeout = 600 # 10 minutes timeout
-        
-        while True:
-            if time.time() - start_time > timeout:
-                print("❌ Video generation timed out.")
+            print(f"⏳ Video generation started. Operation Name: {operation.operation.name}")
+            print("⏳ Waiting for video completion (GAPIC handles polling)...")
+            
+            # Wait for result (blocks until done)
+            response = operation.result(timeout=600)
+            
+            # Check for video in response
+            # Response is a PredictResponse protobuf
+            if not response.predictions:
+                print("❌ No predictions returned.")
                 return None
                 
-            # Check operation status
-            # Operation name is full path, usually we can just GET it.
-            # But the 'name' field in LRO response usually needs the base endpoint + name.
-            # Actually, the 'name' is often "projects/.../locations/.../operations/..."
-            # So we can just construct the URL:
-            # https://us-central1-aiplatform.googleapis.com/v1/{operation_name}
+            # predictions is a list of google.protobuf.struct_pb2.Value or dict
+            # We need to extract bytesBase64Encoded
+            prediction = response.predictions[0]
             
-            op_url = f"https://{location}-aiplatform.googleapis.com/v1/{operation_name}"
-            op_response = requests.get(op_url, headers=headers)
+            # prediction might be a dict-like object or Struct
+            # In GAPIC python, likely a Map/Struct.
+            # Let's try to access as dict first if it's deserialized, or structure
             
-            if op_response.status_code != 200:
-                 print(f"⚠️ Error polling operation: {op_response.text}")
-                 time.sleep(5)
-                 continue
+            video_b64 = None
+            if hasattr(prediction, "get"):
+                 video_b64 = prediction.get("bytesBase64Encoded")
+                 if not video_b64:
+                     # Check URI
+                     uri = prediction.get("uri")
+                     if uri:
+                         print(f"ℹ️ Video saved to URI: {uri} (Downloading not implemented)")
+                         return None
+            else:
+                 # It might be a Struct object, we need to convert or access fields
+                 # Usually treated as dict in newer google-cloud libraries
+                 pass
+            
+            # Fallback for Struct access if subscription behavior differs
+            if not video_b64:
+                # If it's a proto Struct, we might need to cast
+                try:
+                    video_b64 = prediction['bytesBase64Encoded']
+                except:
+                    pass
+            
+            if not video_b64:
+                 print(f"❌ Could not extract video bytes from response: {prediction}")
+                 return None
                  
-            op_data = op_response.json()
+            video_data = base64.b64decode(video_b64)
             
-            if "error" in op_data:
-                print(f"❌ Operation failed: {op_data['error']}")
-                return None
+            # Save the video
+            video_filename = f"{slug}.mp4"
+            video_dir = os.path.join("public", "videos", "blog")
+            os.makedirs(video_dir, exist_ok=True)
+            video_path = os.path.join(video_dir, video_filename)
             
-            if "done" in op_data and op_data["done"]:
-                # Finished!
-                if "response" not in op_data:
-                     # Sometimes errors are inside 'error' field even if done=True
-                     if "error" in op_data: # sending simplified logic
-                          print(f"❌ Operation done with error: {op_data['error']}")
-                          return None
-                     print(f"❌ Operation done but no response found: {op_data.keys()}")
-                     return None
+            with open(video_path, "wb") as f:
+                f.write(video_data)
                 
-                # Success!
-                # Predictions are usually in op_data['response']['result'] or similar for Custom Jobs,
-                # BUT for Veo PredictLongRunning, it mimics the direct Predict response inside 'response'.
-                # It likely has 'predictions' field.
-                
-                # Careful: The 'response' field in LRO is a generic Any, usually a dict.
-                # Let's inspect it safely.
-                final_response = op_data["response"]
-                
-                # Actually, some APIs nest it as {"response": {"@type": "...", "predictions": [...]}}
-                # Let's look for 'predictions'
-                predictions = final_response.get("predictions")
-                if not predictions:
-                     # Maybe it's directly the list? Unlikely.
-                     print(f"❌ No predictions in final response: {final_response.keys()}")
-                     return None
-                
-                video_b64 = predictions[0].get("bytesBase64Encoded")
-                uri = predictions[0].get("uri")
-                
-                if video_b64:
-                    video_data = base64.b64decode(video_b64)
-                    break 
-                elif uri:
-                     print(f"ℹ️ Video saved to URI: {uri}. (Downloading not implemented yet)")
-                     return None
-                else:
-                     print("❌ No video content found.")
-                     return None
-
-            # Not done yet
-            print(".", end="", flush=True)
-            time.sleep(5)
+            print(f"✅ Video saved to {video_path}")
+            return f"/videos/blog/{video_filename}"
             
-        print("\n")
-        
-        # Save the video
-        video_filename = f"{slug}.mp4"
-        # Ensure directory exists
-        video_dir = os.path.join("public", "videos", "blog")
-        os.makedirs(video_dir, exist_ok=True)
-        video_path = os.path.join(video_dir, video_filename)
-        
-        with open(video_path, "wb") as f:
-            f.write(video_data)
-            
-        print(f"✅ Video saved to {video_path}")
-        return f"/videos/blog/{video_filename}"
+        except Exception as e:
+            print(f"❌ GAPIC API Error: {e}")
+            return None
 
     except Exception as e:
         print(f"❌ Video generation failed (Raw API): {e}")
