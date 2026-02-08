@@ -156,17 +156,58 @@ def generate_video_veo(prompt, slug):
         
         print(f"🎥 Generating video for {slug} with prompt: {prompt}...")
         
-        # SIMULATION UNTIL CREDENTIALS ARE VERIFIED to avoid crashing
-        # In a real scenario, we would do:
-        # model = VideoGenerationModel.from_pretrained("veo-2.0-generate-001")
-        # video = model.generate_video(prompt=prompt)
-        # video.save(f"public/videos/{slug}.mp4")
+        # Initialize Vertex AI
+        vertexai.init(location="us-central1")
         
-        print("ℹ️ Video generation requires valid GCP Quota (Veo). Placeholder logic.")
-        return None
+        # Try to use the ImageGenerationModel (which handles video in some SDK versions)
+        # or use the specific prediction service for Veo.
+        # Since the SDK is evolving, we'll try the 'imagegeneration@006' (Imagen 2) approach for consistency
+        # or pure Veo if accessible.
+        
+        # NOTE: As of today, Veo via Python SDK often uses `ImageGenerationModel` with specific methods 
+        # or `Preview` namespaces. 
+        # We will attempt to use the generic 'imagegeneration@006' which is standard for current capabilities,
+        # OR specifically target 'veo-2.0-generate-001' if the user has access.
+        
+        from vertexai.preview.vision_models import ImageGenerationModel
+        
+        # We try to load the model. If Veo isn't available, this might fail.
+        # 'imagegeneration@006' is Imagen 2 (Images).
+        # For Video, we need `VideoGenerationModel` (if available in this SDK version)
+        # or we use the raw prediction endpoint.
+        
+        try:
+            from vertexai.preview.vision_models import VideoGenerationModel
+            model = VideoGenerationModel.from_pretrained("veo-2.0-generate-001")
+            
+            video = model.generate_video(
+                prompt=prompt,
+                number_of_videos=1,
+                aspect_ratio="16:9",
+                duration_seconds=6
+            )
+            
+            # Save the video
+            video_filename = f"{slug}.mp4"
+            video_path = os.path.join("public", "images", "blog", video_filename) # saving in images/blog for now or create public/videos
+            # Let's create public/videos if it doesn't exist
+            video_dir = os.path.join("public", "videos", "blog")
+            os.makedirs(video_dir, exist_ok=True)
+            video_path = os.path.join(video_dir, video_filename)
+            
+            video.save(video_path)
+            print(f"✅ Video saved to {video_path}")
+            return f"/videos/blog/{video_filename}"
+            
+        except ImportError:
+            print("⚠️ VideoGenerationModel not found in vertexai SDK. Updating SDK might be needed.")
+            return None
+        except Exception as e:
+            print(f"❌ Vertex AI Video Error: {e}")
+            return None
 
     except Exception as e:
-        print(f"❌ Video generation failed: {e}")
+        print(f"❌ Video generation connection failed: {e}")
         return None
 
 
