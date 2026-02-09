@@ -140,10 +140,63 @@ Tu dois répondre UNIQUEMENT avec un objet JSON valide suivant cette structure e
             else:
                 print(f"❌ Error generating content with Gemini after {max_retries} attempts: {e}")
                 return None
-    return None
 
+def generate_video_veo(prompt, slug):
+    """Generates a video using Gemini (Veo) via google-genai SDK."""
+    print(f"🎥 Generating video with Veo (veo-2.0-generate-001)...")
+    
+    try:
+        from google import genai
+        from google.genai import types
+        
+        client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+        
+        # Veo 2.0 model
+        model = "veo-2.0-generate-001"
+        
+        # Call generate_videos
+        response = client.models.generate_videos(
+            model=model,
+            prompt=prompt,
+            config=types.GenerateVideosConfig(
+                number_of_videos=1,
+            )
+        )
+        
+        # Extract video data
+        video_data = None
+        
+        # Check generated_videos attribute (standard for this SDK)
+        if hasattr(response, "generated_videos"):
+            for vid in response.generated_videos:
+                if vid.video and vid.video.video_bytes:
+                    video_data = vid.video.video_bytes
+                    break
+        
+        # Fallback inspection if structure differs
+        if not video_data and hasattr(response, "video"):
+             if response.video.video_bytes:
+                 video_data = response.video.video_bytes
 
+        if not video_data:
+             print(f"❌ No video data returned. Response: {response}")
+             return None
 
+        # Save the video
+        video_filename = f"{slug}.mp4"
+        video_dir = os.path.join("public", "videos", "blog")
+        os.makedirs(video_dir, exist_ok=True)
+        video_path = os.path.join(video_dir, video_filename)
+        
+        with open(video_path, "wb") as f:
+            f.write(video_data)
+            
+        print(f"✅ Video saved to {video_path}")
+        return f"/videos/blog/{video_filename}"
+        
+    except Exception as e:
+        print(f"❌ Error generating video with Veo: {e}")
+        return None
 
 def generate_image(prompt, slug):
     """Generates an image using Gemini (Imagen 3) and saves it locally."""
@@ -272,6 +325,10 @@ def main():
 
     print(f"✨ Title: {content_json['title']}")
 
+    # 3.1 Generate Video (Veo)
+    if "video_prompt" in content_json:
+        generate_video_veo(content_json['video_prompt'], content_json['slug'])
+    
     # 3. Generate Image
     print("🎨 Generating image with Gemini...")
     image_url = generate_image(content_json['image_prompt'], content_json['slug'])
