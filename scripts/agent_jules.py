@@ -279,20 +279,59 @@ def generate_video_veo(prompt, slug):
 
 
 def generate_image(prompt, slug):
-    """Generates an image using DALL-E 3 and saves it locally."""
+    """Generates an image using Gemini (Imagen 3) and saves it locally."""
+    print(f"🎨 Generating image with Gemini (gemini-3-pro-image-preview)...")
+    
     try:
-        response = openai_client.images.generate(
-            model="dall-e-3",
-            prompt=prompt,
-            size="1792x1024",
-            quality="standard",
-            n=1,
-            response_format="b64_json" # Use b64_json to save directly
+        from google import genai
+        from google.genai import types
+        
+        client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
+        
+        model = "gemini-3-pro-image-preview" 
+        
+        contents = [
+            types.Content(
+                role="user",
+                parts=[
+                    types.Part.from_text(text=prompt),
+                ],
+            ),
+        ]
+        
+        generate_content_config = types.GenerateContentConfig(
+            image_config=types.ImageConfig(
+                aspect_ratio="16:9", # Blog standard
+                image_size="1K", # Standard
+                person_generation="allow_adult", # Or "filter_all" ? Default is fine.
+            ),
+            response_modalities=["IMAGE"],
         )
 
-        image_data = base64.b64decode(response.data[0].b64_json)
+        image_data = None
         
-        # Load image into Pillow
+        # The user provided snippet uses stream. Valid for preview models.
+        for chunk in client.models.generate_content_stream(
+            model=model,
+            contents=contents,
+            config=generate_content_config,
+        ):
+            if not chunk.parts:
+                continue
+                
+            if chunk.parts[0].inline_data and chunk.parts[0].inline_data.data:
+                image_data = chunk.parts[0].inline_data.data
+                break # We only need one image
+            else:
+                 # If text is returned (e.g. error or refusal)
+                 if chunk.text:
+                     print(f"⚠️ Gemini Image Message: {chunk.text}")
+
+        if not image_data:
+             print("❌ No image data received from Gemini.")
+             return None
+
+        # Load image into Pillow for processing (Resize + Convert to WebP)
         image = Image.open(io.BytesIO(image_data))
         
         # Resize to max 1200px width
@@ -310,8 +349,12 @@ def generate_image(prompt, slug):
 
         print(f"✅ Image saved to {image_path}")
         return f"/images/blog/{image_filename}"
+        
+    except ImportError:
+         print("❌ google-genai library missing. Run `pip install google-genai`.")
+         return None
     except Exception as e:
-        print(f"❌ Error generating image with DALL-E: {e}")
+        print(f"❌ Error generating image with Gemini: {e}")
         return None
 
 def save_markdown(content_json, image_url):
@@ -364,7 +407,7 @@ def main():
     print(f"✨ Title: {content_json['title']}")
 
     # 3. Generate Image
-    print("🎨 Generating image with DALL-E 3...")
+    print("🎨 Generating image with Gemini...")
     image_url = generate_image(content_json['image_prompt'], content_json['slug'])
     
     # 3.1 Generate Video (Optional)
