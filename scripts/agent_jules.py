@@ -201,15 +201,14 @@ def generate_video_veo(prompt, slug):
         
         access_token = credentials.token
         
-        # Endpoint for Veo (Synchronous Prediction via v1beta1)
-        # LRO polling was problematic (400/404 errors on operation resources).
-        # We attempt synchronous generation which avoids polling.
+        # Endpoint for Veo (LRO via v1beta1)
+        # Synchronous failed (429), strict LRO required.
         location = "us-central1"
         model_id = "veo-2.0-generate-001"
         base_url = f"https://{location}-aiplatform.googleapis.com/v1beta1"
         
-        # Publisher Model Endpoint for Synchronous Prediction
-        url = f"{base_url}/projects/{project_id}/locations/{location}/publishers/google/models/{model_id}:predict"
+        # Publisher Model Endpoint
+        url = f"{base_url}/projects/{project_id}/locations/{location}/publishers/google/models/{model_id}:predictLongRunning"
         
         headers = {
             "Authorization": f"Bearer {access_token}",
@@ -229,47 +228,105 @@ def generate_video_veo(prompt, slug):
             }
         }
         
-        print(f"📡 Calling Veo API (Synchronous v1beta1): {url}...")
+        print(f"📡 Calling Veo API (LRO v1beta1): {url}...")
         # verify=False to bypass SSL errors
-        # Increased timeout to 120s as video generation is slow
-        try:
-            response = requests.post(url, headers=headers, json=payload, verify=False, timeout=120)
-        except requests.exceptions.Timeout:
-            print("❌ Video generation timed out (Synchronous).")
-            return None
-        except Exception as e:
-            print(f"❌ Connection Error: {e}")
-            return None
+        response = requests.post(url, headers=headers, json=payload, verify=False)
         
         if response.status_code != 200:
             print(f"❌ Veo API Error ({response.status_code}): {response.text}")
             return None
 
-        # Handle Synchronous Response
-        response_json = response.json()
+        # LRO Handling
+        operation = response.json()
+        operation_name = operation.get("name")
+        if not operation_name:
+            print(f"❌ No operation name returned: {operation}")
+            return None
+            
+        print(f"⏳ Video generation started. Operation: {operation_name}")
+        print("⏳ Waiting for video completion (this may take ~1-2 minutes)...")
         
-        predictions = response_json.get("predictions")
-        if not predictions:
-             print(f"❌ No predictions returned: {response_json.keys()}")
-             if "error" in response_json:
-                 print(f"❌ Error details: {response_json['error']}")
-             return None
+        # Poll for completion via ListOperations
+        # Direct polling failed (400/404), so we List and matching ID.
+        import time
+        start_time = time.time()
+        timeout = 600 # 10 minutes timeout
         
-        # Check first prediction
-        pred = predictions[0]
-        video_b64 = pred.get("bytesBase64Encoded")
-        uri = pred.get("uri")
+        poll_url = f"{base_url}/projects/{project_id}/locations/{location}/operations"
         
-        video_data = None
-        if video_b64:
-            video_data = base64.b64decode(video_b64)
-        elif uri:
-             print(f"ℹ️ Video saved to URI: {uri} (Downloading not implemented)")
-             return None
-        else:
-             print("❌ No video content found.")
-             return None
-
+        last_status_len = 0
+        
+        while True:
+            if time.time() - start_time > timeout:
+                print("❌ Video generation timed out.")
+                return None
+            
+            # Print dot for progress
+            print(".", end="", flush=True)
+            
+            # List operations
+            list_resp = requests.get(poll_url, headers=headers, verify=False)
+            
+            if list_resp.status_code != 200:
+                 # If list fails, we are blind. Wait and retry.
+                 time.sleep(5)
+                 continue
+            
+            ops = list_resp.json().get("operations", [])
+            target_op = None
+            
+            for op in ops:
+                if op.get("name") == operation_name:
+                    target_op = op
+                    break
+            
+            if not target_op:
+                # Operation not found in list yet? Or Name mismatch?
+                # Try matching by ID suffix
+                op_id = operation_name.split("/")[-1]
+                for op in ops:
+                    if op.get("name", "").endswith(op_id):
+                        target_op = op
+                        break
+            
+            if target_op:
+                if "error" in target_op:
+                    print(f"\n❌ Operation failed: {target_op['error']}")
+                    return None
+                
+                if target_op.get("done", False):
+                    print("\n✨ Generation Complete!")
+                    op_data = target_op
+                    
+                    if "response" not in op_data:
+                         if "error" in op_data:
+                             print(f"❌ Operation done with error: {op_data['error']}")
+                             return None
+                         print(f"❌ Operation done but no response found.")
+                         return None
+                    
+                    final_response = op_data["response"]
+                    predictions = final_response.get("predictions")
+                    if not predictions:
+                         print(f"❌ No predictions in final response.")
+                         return None
+                    
+                    video_b64 = predictions[0].get("bytesBase64Encoded")
+                    uri = predictions[0].get("uri")
+                    
+                    if video_b64:
+                        video_data = base64.b64decode(video_b64)
+                        break 
+                    elif uri:
+                         print(f"ℹ️ Video saved to URI: {uri} (Downloading not implemented)")
+                         return None
+                    else:
+                         print("❌ No video content found.")
+                         return None
+            
+            # Not done or not found yet
+            time.sleep(5)
+            
         # Save the video
         video_filename = f"{slug}.mp4"
         video_dir = os.path.join("public", "videos", "blog")
