@@ -1,0 +1,47 @@
+=== client.files ===
+['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__firstlineno__', '__format__', '__ge__', '__getattribute__', '__getstate__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__static_attributes__', '__str__', '__subclasshook__', '__weakref__', '_api_client', '_create', '_list', '_register_files', 'delete', 'download', 'get', 'list', 'register_files', 'upload', 'vertexai']
+
+Has separate download method
+Help on method download in module google.genai.files:
+
+download(
+    *,
+    file: Union[str, google.genai.types.File, google.genai.types.Video, google.genai.types.GeneratedVideo],
+    config: Union[google.genai.types.DownloadFileConfig, google.genai.types.DownloadFileConfigDict, NoneType] = None
+) -> bytes method of google.genai.files.Files instance
+    Downloads a file's data from storage.
+
+    Files created by `upload` can't be downloaded. You can tell which files are
+    downloadable by checking the `source` or `download_uri` property.
+
+    Note: This method returns the data as bytes. For `Video` and
+    `GeneratedVideo` objects there is an additional side effect, that it also
+    sets the `video_bytes` property on the `Video` object.
+
+    Args:
+      file (str): A file name, uri, or file object. Identifying which file to
+        download.
+      config (DownloadFileConfigOrDict): Optional, configuration for the get
+        method.
+
+    Returns:
+      File: The file data as bytes.
+
+    Usage:
+
+    .. code-block:: python
+
+      for file client.files.list():
+        if file.download_uri is not None:
+          break
+      else:
+        raise ValueError('No files found with a `download_uri`.')
+      data = client.files.download(file=file)
+      # data = client.files.download(file=file.name)
+      # data = client.files.download(file=file.download_uri)
+
+      video = types.Video(uri=file.uri)
+      video_bytes = client.files.download(file=video)
+      video.video_bytes
+
+None

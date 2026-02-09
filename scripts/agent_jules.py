@@ -179,32 +179,41 @@ def generate_video_veo(prompt, slug):
         
         video_data = None
         
+        # Helper to extract or download video
+        def get_video_bytes(vid_obj):
+            if vid_obj.video_bytes:
+                return vid_obj.video_bytes
+            if vid_obj.uri:
+                print(f"⬇️ Downloading video from URI: {vid_obj.uri}...")
+                try:
+                    return client.files.download(file=vid_obj.uri)
+                except Exception as down_e:
+                    print(f"⚠️ Download failed: {down_e}")
+            return None
+
         # Check generated_videos attribute (standard for this SDK)
         if hasattr(response, "generated_videos"):
             for vid in response.generated_videos:
-                if vid.video and vid.video.video_bytes:
-                    video_data = vid.video.video_bytes
-                    break
+                if vid.video:
+                    video_data = get_video_bytes(vid.video)
+                    if video_data: break
         
         # Fallback inspection if structure differs
         if not video_data and hasattr(response, "video"):
-             if response.video.video_bytes:
-                 video_data = response.video.video_bytes
+             video_data = get_video_bytes(response.video)
 
         if not video_data:
              # Try checking top-level if result isn't nested as expected
-             print(f"⚠️ Inspecting raw result: {response}")
              if hasattr(operation, "response") and operation.response:
-                  # sometimes it's in .response
                   response = operation.response
                   if hasattr(response, "generated_videos"):
                         for vid in response.generated_videos:
-                            if vid.video and vid.video.video_bytes:
-                                video_data = vid.video.video_bytes
-                                break
+                            if vid.video:
+                                video_data = get_video_bytes(vid.video)
+                                if video_data: break
 
         if not video_data:
-             print(f"❌ No video data returned in result.")
+             print(f"❌ No video data returned/downloaded. Result: {response}")
              return None
 
         # Save the video
