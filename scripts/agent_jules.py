@@ -177,167 +177,98 @@ def generate_video_veo(prompt, slug):
         
         print(f"🎥 Generating video for {slug} with prompt: {prompt}...")
         
-        # Initialize Vertex AI
-        # GAPIC client failed (predict_long_running missing), so we revert to REST.
-        # We also disable SSL verification (verify=False) to handle local cert issues.
+        # Initialize Vertex AI using GAPIC client (v1beta1) for LRO support
+        # This is the robust way to handle Veo's Operation polling.
+        # We wrap this in a try/except to ensure the blog post is saved even if video fails.
         
-        import google.auth
-        from google.auth.transport.requests import Request as GoogleRequest
-        import requests
-        import urllib3
-        
-        # Suppress insecure request warnings
-        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+        try:
+            from google.cloud import aiplatform_v1beta1
+            import google.auth
+            
+            # Get credentials
+            credentials, project_id = google.auth.load_credentials_from_file(
+                credentials_path,
+                scopes=["https://www.googleapis.com/auth/cloud-platform"]
+            )
 
-        # Get credentials and project ID
-        credentials, project_id = google.auth.load_credentials_from_file(
-            credentials_path,
-            scopes=["https://www.googleapis.com/auth/cloud-platform"]
-        )
-        
-        # Refresh token if needed
-        if not credentials.valid:
-            credentials.refresh(GoogleRequest())
-        
-        access_token = credentials.token
-        
-        # Endpoint for Veo (LRO via v1beta1)
-        # Synchronous failed (429), strict LRO required.
-        location = "us-central1"
-        model_id = "veo-2.0-generate-001"
-        base_url = f"https://{location}-aiplatform.googleapis.com/v1beta1"
-        
-        # Publisher Model Endpoint
-        url = f"{base_url}/projects/{project_id}/locations/{location}/publishers/google/models/{model_id}:predictLongRunning"
-        
-        headers = {
-            "Authorization": f"Bearer {access_token}",
-            "Content-Type": "application/json; charset=utf-8"
-        }
-        
-        payload = {
-            "instances": [
-                {
-                    "prompt": prompt
-                }
-            ],
-            "parameters": {
+            # Client options for us-central1
+            client_options = {"api_endpoint": "us-central1-aiplatform.googleapis.com"}
+            client = aiplatform_v1beta1.PredictionServiceClient(
+                credentials=credentials,
+                client_options=client_options
+            )
+            
+            # Endpoint resource name
+            location = "us-central1"
+            model_id = "veo-2.0-generate-001"
+            endpoint = f"projects/{project_id}/locations/{location}/publishers/google/models/{model_id}"
+            
+            # Prepare request
+            instance = {"prompt": prompt}
+            parameters = {
                 "sampleCount": 1,
                 "durationSeconds": 6,
                 "aspectRatio": "16:9"
             }
-        }
-        
-        print(f"📡 Calling Veo API (LRO v1beta1): {url}...")
-        # verify=False to bypass SSL errors
-        response = requests.post(url, headers=headers, json=payload, verify=False)
-        
-        if response.status_code != 200:
-            print(f"❌ Veo API Error ({response.status_code}): {response.text}")
-            return None
-
-        # LRO Handling
-        operation = response.json()
-        operation_name = operation.get("name")
-        if not operation_name:
-            print(f"❌ No operation name returned: {operation}")
-            return None
             
-        print(f"⏳ Video generation started. Operation: {operation_name}")
-        print("⏳ Waiting for video completion (this may take ~1-2 minutes)...")
-        
-        # Poll for completion via ListOperations
-        # Direct polling failed (400/404), so we List and matching ID.
-        import time
-        start_time = time.time()
-        timeout = 600 # 10 minutes timeout
-        
-        poll_url = f"{base_url}/projects/{project_id}/locations/{location}/operations"
-        
-        last_status_len = 0
-        
-        while True:
-            if time.time() - start_time > timeout:
-                print("❌ Video generation timed out.")
+            print(f"📡 Calling Veo API (GAPIC v1beta1) for {slug}...")
+            
+            # Call predict_long_running
+            operation = client.predict_long_running(
+                endpoint=endpoint,
+                instances=[instance],
+                parameters=parameters
+            )
+            
+            print(f"⏳ Video generation started. Operation Name: {operation.operation.name}")
+            print("⏳ Waiting for video completion (max 3 mins)...")
+            
+            # Wait for result (blocks until done)
+            # Timeout set to 180s to prevent infinite hanging
+            response = operation.result(timeout=180)
+            
+            # Check for video in response
+            if not response.predictions:
+                print("❌ No predictions returned.")
                 return None
-            
-            # Print dot for progress
-            print(".", end="", flush=True)
-            
-            # List operations
-            list_resp = requests.get(poll_url, headers=headers, verify=False)
-            
-            if list_resp.status_code != 200:
-                 # If list fails, we are blind. Wait and retry.
-                 time.sleep(5)
-                 continue
-            
-            ops = list_resp.json().get("operations", [])
-            target_op = None
-            
-            for op in ops:
-                if op.get("name") == operation_name:
-                    target_op = op
-                    break
-            
-            if not target_op:
-                # Operation not found in list yet? Or Name mismatch?
-                # Try matching by ID suffix
-                op_id = operation_name.split("/")[-1]
-                for op in ops:
-                    if op.get("name", "").endswith(op_id):
-                        target_op = op
-                        break
-            
-            if target_op:
-                if "error" in target_op:
-                    print(f"\n❌ Operation failed: {target_op['error']}")
-                    return None
                 
-                if target_op.get("done", False):
-                    print("\n✨ Generation Complete!")
-                    op_data = target_op
-                    
-                    if "response" not in op_data:
-                         if "error" in op_data:
-                             print(f"❌ Operation done with error: {op_data['error']}")
-                             return None
-                         print(f"❌ Operation done but no response found.")
-                         return None
-                    
-                    final_response = op_data["response"]
-                    predictions = final_response.get("predictions")
-                    if not predictions:
-                         print(f"❌ No predictions in final response.")
-                         return None
-                    
-                    video_b64 = predictions[0].get("bytesBase64Encoded")
-                    uri = predictions[0].get("uri")
-                    
-                    if video_b64:
-                        video_data = base64.b64decode(video_b64)
-                        break 
-                    elif uri:
-                         print(f"ℹ️ Video saved to URI: {uri} (Downloading not implemented)")
-                         return None
-                    else:
-                         print("❌ No video content found.")
-                         return None
+            prediction = response.predictions[0]
             
-            # Not done or not found yet
-            time.sleep(5)
+            # Extract video bytes
+            video_b64 = None
+            if hasattr(prediction, "get"): # Dict-like
+                 video_b64 = prediction.get("bytesBase64Encoded")
+            else: # Proto-like (Struct)
+                 try:
+                     video_b64 = prediction['bytesBase64Encoded']
+                 except:
+                     pass
             
-        # Save the video
-        video_filename = f"{slug}.mp4"
-        video_dir = os.path.join("public", "videos", "blog")
-        os.makedirs(video_dir, exist_ok=True)
-        video_path = os.path.join(video_dir, video_filename)
-        
-        with open(video_path, "wb") as f:
-            f.write(video_data)
+            if not video_b64:
+                 print(f"❌ Could not extract video bytes. Response may be empty.")
+                 return None
+                 
+            video_data = base64.b64decode(video_b64)
             
-        print(f"✅ Video saved to {video_path}")
-        return f"/videos/blog/{video_filename}"
+            # Save the video
+            video_filename = f"{slug}.mp4"
+            video_dir = os.path.join("public", "videos", "blog")
+            os.makedirs(video_dir, exist_ok=True)
+            video_path = os.path.join(video_dir, video_filename)
+            
+            with open(video_path, "wb") as f:
+                f.write(video_data)
+                
+            print(f"✅ Video saved to {video_path}")
+            return f"/videos/blog/{video_filename}"
+            
+        except ImportError:
+             print("❌ google-cloud-aiplatform library missing or incompatible.")
+             return None
+        except Exception as e:
+            print(f"❌ Video generation failed: {e}")
+            print("⚠️ Continuing without video...")
+            return None
             
         # Cleanup GAPIC imports from previous attempts if any
         # (This block replaces the keys parts)
