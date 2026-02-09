@@ -155,7 +155,7 @@ def generate_video_veo(prompt, slug):
         model = "veo-2.0-generate-001"
         
         # Call generate_videos
-        response = client.models.generate_videos(
+        operation = client.models.generate_videos(
             model=model,
             prompt=prompt,
             config=types.GenerateVideosConfig(
@@ -163,7 +163,20 @@ def generate_video_veo(prompt, slug):
             )
         )
         
-        # Extract video data
+        print(f"⏳ Video generation started. Operation: {operation.name}")
+        
+        # Poll for completion
+        while not operation.done:
+            time.sleep(10)
+            operation = client.operations.get(operation)
+            print(".", end="", flush=True)
+            
+        print("\n✅ Operation complete.")
+        
+        # Extract video data from the completed operation result
+        # The result is typically in operation.result which might be a GenerateVideosResponse
+        response = operation.result
+        
         video_data = None
         
         # Check generated_videos attribute (standard for this SDK)
@@ -179,7 +192,19 @@ def generate_video_veo(prompt, slug):
                  video_data = response.video.video_bytes
 
         if not video_data:
-             print(f"❌ No video data returned. Response: {response}")
+             # Try checking top-level if result isn't nested as expected
+             print(f"⚠️ Inspecting raw result: {response}")
+             if hasattr(operation, "response") and operation.response:
+                  # sometimes it's in .response
+                  response = operation.response
+                  if hasattr(response, "generated_videos"):
+                        for vid in response.generated_videos:
+                            if vid.video and vid.video.video_bytes:
+                                video_data = vid.video.video_bytes
+                                break
+
+        if not video_data:
+             print(f"❌ No video data returned in result.")
              return None
 
         # Save the video
