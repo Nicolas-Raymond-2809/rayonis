@@ -201,13 +201,15 @@ def generate_video_veo(prompt, slug):
         
         access_token = credentials.token
         
-        # Endpoint for Veo (Long Running Operation via v1beta1)
+        # Endpoint for Veo (Synchronous Prediction via v1beta1)
+        # LRO polling was problematic (400/404 errors on operation resources).
+        # We attempt synchronous generation which avoids polling.
         location = "us-central1"
         model_id = "veo-2.0-generate-001"
         base_url = f"https://{location}-aiplatform.googleapis.com/v1beta1"
         
-        # Publisher Model Endpoint for Prediction
-        url = f"{base_url}/projects/{project_id}/locations/{location}/publishers/google/models/{model_id}:predictLongRunning"
+        # Publisher Model Endpoint for Synchronous Prediction
+        url = f"{base_url}/projects/{project_id}/locations/{location}/publishers/google/models/{model_id}:predict"
         
         headers = {
             "Authorization": f"Bearer {access_token}",
@@ -227,100 +229,47 @@ def generate_video_veo(prompt, slug):
             }
         }
         
-        print(f"📡 Calling Veo API (REST v1beta1): {url}...")
+        print(f"📡 Calling Veo API (Synchronous v1beta1): {url}...")
         # verify=False to bypass SSL errors
-        response = requests.post(url, headers=headers, json=payload, verify=False)
+        # Increased timeout to 120s as video generation is slow
+        try:
+            response = requests.post(url, headers=headers, json=payload, verify=False, timeout=120)
+        except requests.exceptions.Timeout:
+            print("❌ Video generation timed out (Synchronous).")
+            return None
+        except Exception as e:
+            print(f"❌ Connection Error: {e}")
+            return None
         
         if response.status_code != 200:
             print(f"❌ Veo API Error ({response.status_code}): {response.text}")
             return None
 
-        # LRO Handling
-        operation = response.json()
-        operation_name = operation.get("name")
-        if not operation_name:
-            print(f"❌ No operation name returned: {operation}")
-            return None
-            
-        print(f"⏳ Video generation started. Operation: {operation_name}")
-        print("⏳ Waiting for video completion (this may take ~1-2 minutes)...")
+        # Handle Synchronous Response
+        response_json = response.json()
         
-        # Poll for completion
-        import time
-        start_time = time.time()
-        timeout = 600 # 10 minutes timeout
+        predictions = response_json.get("predictions")
+        if not predictions:
+             print(f"❌ No predictions returned: {response_json.keys()}")
+             if "error" in response_json:
+                 print(f"❌ Error details: {response_json['error']}")
+             return None
         
-        while True:
-            if time.time() - start_time > timeout:
-                print("❌ Video generation timed out.")
-                return None
-                
-            # Construct Polling URL (v1beta1 Global Operations)
-            # Format: .../v1beta1/projects/{project}/locations/{location}/operations/{op_id}
-            
-            parts = operation_name.split("/")
-            if "operations" in parts:
-                op_id = parts[-1]
-                op_project = parts[1] # "projects/{project}/..."
-                op_url = f"https://{location}-aiplatform.googleapis.com/v1beta1/projects/{op_project}/locations/{location}/operations/{op_id}"
-            else:
-                op_url = f"{base_url}/{operation_name}"
-            
-            # print(f"🔍 Polling: {op_url} ...") # Reduced verbosity
-            print(".", end="", flush=True)
-            
-            op_response = requests.get(op_url, headers=headers, verify=False)
-            
-            if op_response.status_code != 200:
-                 # print(f"⚠️ Error polling: {op_response.text}") # Reduced verbosity
-                 time.sleep(5)
-                 continue
-                 
-            op_data = op_response.json()
-            
-            if "error" in op_data:
-                print(f"\n❌ Operation failed: {op_data['error']}")
-                return None
-            
-            if "done" in op_data and op_data["done"]:
-                print("\n✨ Generation Complete!")
-                
-                # Extract response
-                if "response" not in op_data:
-                     if "error" in op_data:
-                          print(f"❌ Operation done with error: {op_data['error']}")
-                          return None
-                     print(f"❌ Operation done but no response found.")
-                     return None
-                
-                final_response = op_data["response"]
-                # Look for predictions
-                # v1beta1 usually returns a list under 'predictions' or similar wrapping
-                # Let's handle both dict and list
-                
-                predictions = final_response.get("predictions")
-                if not predictions:
-                     # Check if final_response IS the prediction (rare)
-                     print(f"❌ No predictions in final response: {final_response.keys()}")
-                     return None
-                
-                # Check first prediction
-                pred = predictions[0]
-                video_b64 = pred.get("bytesBase64Encoded")
-                uri = pred.get("uri")
-                
-                if video_b64:
-                    video_data = base64.b64decode(video_b64)
-                    break 
-                elif uri:
-                     print(f"ℹ️ Video saved to URI: {uri} (Downloading not implemented)")
-                     return None
-                else:
-                     print("❌ No video content found.")
-                     return None
+        # Check first prediction
+        pred = predictions[0]
+        video_b64 = pred.get("bytesBase64Encoded")
+        uri = pred.get("uri")
+        
+        video_data = None
+        if video_b64:
+            video_data = base64.b64decode(video_b64)
+        elif uri:
+             print(f"ℹ️ Video saved to URI: {uri} (Downloading not implemented)")
+             return None
+        else:
+             print("❌ No video content found.")
+             return None
 
-            time.sleep(5)
-            
         # Save the video
         video_filename = f"{slug}.mp4"
         video_dir = os.path.join("public", "videos", "blog")
