@@ -142,140 +142,7 @@ Tu dois répondre UNIQUEMENT avec un objet JSON valide suivant cette structure e
                 return None
     return None
 
-def generate_video_veo(prompt, slug):
-    """Generates a video using Google Vertex AI (Veo)."""
-    credentials_path = "google_credentials.json"
-    if not os.path.exists(credentials_path):
-        print("⚠️ No google_credentials.json found. Skipping video generation.")
-        return None
 
-    try:
-        # Set credentials explicitly for this session
-        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = credentials_path
-        
-        # Initialize Vertex AI
-        import vertexai
-        from vertexai.preview.vision_models import ImageGenerationModel # Veo access might differ, using generic for now
-        # Note: Actual Veo integration requires specific preview library. 
-        # Checking if google-cloud-aiplatform is sufficient.
-        
-        # For Veo specifically, users often use the Model Garden endpoint.
-        # This is a placeholder for the actual Veo call which is restricted preview.
-        # We will Simulate it or use Imagen 2 if Veo isn't public public.
-        # But wait, Veo is 'veo-2.0-generate-001'.
-        
-        # Let's try the standard Vertex AI generation flow
-        vertexai.init(location="us-central1") # Veo is often in us-central1
-        
-        # As of late 2024/2025, Veo might be accessed via:
-        # model = ImageGenerationModel.from_pretrained("veo-2.0-generate-001") 
-        # But ImageGenerationModel is for images. 
-        # Video generation usually uses `VideoGenerationModel` or similar.
-        
-        # Since exact python SDK for Veo isn't guaranteed in this env, we will try a generic approach
-        # or skip if library missing.
-        
-        print(f"🎥 Generating video for {slug} with prompt: {prompt}...")
-        
-        # Initialize Vertex AI using GAPIC client (v1beta1) for LRO support
-        # This is the robust way to handle Veo's Operation polling.
-        # We wrap this in a try/except to ensure the blog post is saved even if video fails.
-        
-        try:
-            from google.cloud import aiplatform_v1beta1
-            import google.auth
-            
-            # Get credentials
-            credentials, project_id = google.auth.load_credentials_from_file(
-                credentials_path,
-                scopes=["https://www.googleapis.com/auth/cloud-platform"]
-            )
-
-            # Client options for us-central1
-            client_options = {"api_endpoint": "us-central1-aiplatform.googleapis.com"}
-            client = aiplatform_v1beta1.PredictionServiceClient(
-                credentials=credentials,
-                client_options=client_options
-            )
-            
-            # Endpoint resource name
-            location = "us-central1"
-            model_id = "veo-2.0-generate-001"
-            endpoint = f"projects/{project_id}/locations/{location}/publishers/google/models/{model_id}"
-            
-            # Prepare request
-            instance = {"prompt": prompt}
-            parameters = {
-                "sampleCount": 1,
-                "durationSeconds": 6,
-                "aspectRatio": "16:9"
-            }
-            
-            print(f"📡 Calling Veo API (GAPIC v1beta1) for {slug}...")
-            
-            # Call predict_long_running
-            operation = client.predict_long_running(
-                endpoint=endpoint,
-                instances=[instance],
-                parameters=parameters
-            )
-            
-            print(f"⏳ Video generation started. Operation Name: {operation.operation.name}")
-            print("⏳ Waiting for video completion (max 3 mins)...")
-            
-            # Wait for result (blocks until done)
-            # Timeout set to 180s to prevent infinite hanging
-            response = operation.result(timeout=180)
-            
-            # Check for video in response
-            if not response.predictions:
-                print("❌ No predictions returned.")
-                return None
-                
-            prediction = response.predictions[0]
-            
-            # Extract video bytes
-            video_b64 = None
-            if hasattr(prediction, "get"): # Dict-like
-                 video_b64 = prediction.get("bytesBase64Encoded")
-            else: # Proto-like (Struct)
-                 try:
-                     video_b64 = prediction['bytesBase64Encoded']
-                 except:
-                     pass
-            
-            if not video_b64:
-                 print(f"❌ Could not extract video bytes. Response may be empty.")
-                 return None
-                 
-            video_data = base64.b64decode(video_b64)
-            
-            # Save the video
-            video_filename = f"{slug}.mp4"
-            video_dir = os.path.join("public", "videos", "blog")
-            os.makedirs(video_dir, exist_ok=True)
-            video_path = os.path.join(video_dir, video_filename)
-            
-            with open(video_path, "wb") as f:
-                f.write(video_data)
-                
-            print(f"✅ Video saved to {video_path}")
-            return f"/videos/blog/{video_filename}"
-            
-        except ImportError:
-             print("❌ google-cloud-aiplatform library missing or incompatible.")
-             return None
-        except Exception as e:
-            print(f"❌ Video generation failed: {e}")
-            print("⚠️ Continuing without video...")
-            return None
-            
-        # Cleanup GAPIC imports from previous attempts if any
-        # (This block replaces the keys parts)
-
-    except Exception as e:
-        print(f"❌ Video generation failed (Raw API): {e}")
-        return None
 
 
 def generate_image(prompt, slug):
@@ -303,7 +170,6 @@ def generate_image(prompt, slug):
             image_config=types.ImageConfig(
                 aspect_ratio="16:9", # Blog standard
                 image_size="1K", # Standard
-                person_generation="allow_adult", # Or "filter_all" ? Default is fine.
             ),
             response_modalities=["IMAGE"],
         )
@@ -410,10 +276,6 @@ def main():
     print("🎨 Generating image with Gemini...")
     image_url = generate_image(content_json['image_prompt'], content_json['slug'])
     
-    # 3.1 Generate Video (Optional)
-    if "video_prompt" in content_json:
-        generate_video_veo(content_json['video_prompt'], content_json['slug'])
-
     if not image_url:
         print("⚠️ Failed to generate image, using placeholder or skipping.")
         # Create a placeholder if needed, or just fail.
