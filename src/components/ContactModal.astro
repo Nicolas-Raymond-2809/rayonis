@@ -1,31 +1,192 @@
-<script>
-  // Open n8n form in a popup window
-  document.addEventListener('DOMContentLoaded', () => {
-    const triggers = document.querySelectorAll('[data-contact-modal]');
-    const formUrl = 'https://rayonis.app.n8n.cloud/form/7027c65c-ab47-4823-80b8-f9132c7866cb';
+<!-- Contact Modal Component -->
+<div id="contact-modal" class="contact-modal-overlay hidden">
+  <div class="contact-modal-container">
+    <div class="contact-modal-header">
+      <h2 class="contact-modal-title">Contactez Rayonis</h2>
+      <button id="close-modal" class="contact-modal-close" aria-label="Fermer">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+    <div class="contact-modal-body">
+      <iframe 
+        src="https://docs.google.com/forms/d/e/1FAIpQLSfxkF3wv-HSTQ9P_H7n1uozIdU2PVdI2tYy7y0-Lk24AwX7MQ/viewform?embedded=true" 
+        width="100%" 
+        height="1398" 
+        frameborder="0" 
+        marginheight="0" 
+        marginwidth="0"
+        title="Formulaire de contact Rayonis"
+      >Chargement…</iframe>
+    </div>
+  </div>
+</div>
 
+<style>
+  .contact-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    padding: 20px;
+  }
+
+  .contact-modal-overlay.show {
+    opacity: 1;
+  }
+
+  .contact-modal-overlay.hidden {
+    display: none;
+  }
+
+  .contact-modal-container {
+    background: white;
+    border: 2px solid #000;
+    box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.2);
+    max-width: 700px;
+    width: 100%;
+    max-height: 85vh;
+    overflow: hidden;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .contact-modal-overlay.show .contact-modal-container {
+    transform: scale(1);
+  }
+
+  .contact-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 2px solid #000;
+    background: #2dd4bf;
+    flex-shrink: 0;
+  }
+
+  .contact-modal-title {
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    font-size: 1.25rem;
+    margin: 0;
+    color: #000;
+  }
+
+  .contact-modal-close {
+    background: white;
+    border: 2px solid #000;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .contact-modal-close:hover {
+    background: #000;
+    color: white;
+    transform: translate(2px, 2px);
+  }
+
+  .contact-modal-body {
+    overflow-y: auto;
+    overflow-x: hidden;
+    flex: 1;
+    background: white;
+  }
+
+  .contact-modal-body iframe {
+    display: block;
+    width: 100%;
+    border: none;
+    min-height: 600px;
+  }
+
+  @media (max-width: 768px) {
+    .contact-modal-overlay {
+      padding: 10px;
+    }
+
+    .contact-modal-container {
+      max-width: 100%;
+      max-height: 90vh;
+    }
+
+    .contact-modal-header {
+      padding: 1rem;
+    }
+
+    .contact-modal-title {
+      font-size: 1rem;
+    }
+
+    .contact-modal-close {
+      width: 36px;
+      height: 36px;
+    }
+  }
+</style>
+
+<script>
+  // Open modal
+  document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('contact-modal');
+    const closeButton = document.getElementById('close-modal');
+    const triggers = document.querySelectorAll('[data-contact-modal]');
+
+    // Open modal when clicking contact buttons
     triggers.forEach(trigger => {
       trigger.addEventListener('click', (e) => {
         e.preventDefault();
-        
-        // Calculate centered popup position
-        const width = 600;
-        const height = 700;
-        const left = (window.screen.width - width) / 2;
-        const top = (window.screen.height - height) / 2;
-        
-        // Open popup window
-        const popup = window.open(
-          formUrl,
-          'ContactRayonis',
-          `width=${width},height=${height},left=${left},top=${top},toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes`
-        );
-        
-        // Focus the popup window
-        if (popup) {
-          popup.focus();
-        }
+        modal?.classList.remove('hidden');
+        setTimeout(() => {
+          modal?.classList.add('show');
+        }, 10);
+        document.body.style.overflow = 'hidden';
       });
     });
+
+    // Close modal on close button
+    closeButton?.addEventListener('click', () => {
+      closeModal();
+    });
+
+    // Close modal on overlay click
+    modal?.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
+
+    // Close modal on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal?.classList.contains('show')) {
+        closeModal();
+      }
+    });
+
+    function closeModal() {
+      modal?.classList.remove('show');
+      setTimeout(() => {
+        modal?.classList.add('hidden');
+        document.body.style.overflow = '';
+      }, 300);
+    }
   });
 </script>
