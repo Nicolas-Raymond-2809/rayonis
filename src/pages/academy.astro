@@ -1,0 +1,314 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ContactModal from '../components/ContactModal.astro';
+---
+
+<Layout title="STIAM Academy - Formation Code, Robotique & IA pour Jeunes | Rayonis">
+  <header class="sticky top-0 z-50 bg-rayonis-bg/95 backdrop-blur border-b-2 border-rayonis-text py-4 px-6">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+      <a href="/" class="hover:opacity-80 transition-opacity">
+        <img src="/images/logo_STIAM.png" alt="RAYONIS STIAM" class="h-[5.5rem] w-auto" />
+      </a>
+
+      <div class="flex flex-col sm:flex-row items-center gap-4 sm:gap-8">
+        <a href="/" class="font-mono font-bold text-sm text-gray-600 hover:text-black hover:underline uppercase">
+          ACCUEIL
+        </a>
+
+        <a href="/blog/" class="font-mono font-bold text-sm text-purple-600 hover:underline uppercase">
+          VIBE CODING BLOG
+        </a>
+
+        <a href="#" data-contact-modal class="hidden sm:block px-6 py-3 font-mono font-bold text-sm bg-rayonis-spike text-black border-2 border-rayonis-text shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all">
+          ESSAI GRATUIT
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO SECTION "MAKER MODE" -->
+    <section class="relative overflow-hidden bg-gradient-to-br from-rayonis-bg via-white to-yellow-50 py-20 lg:py-32 border-b-2 border-rayonis-text">
+      <!-- Background Pattern -->
+      <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle, #000 1px, transparent 1px); background-size: 40px 40px;"></div>
+      
+      <div class="relative max-w-7xl mx-auto px-6 text-center">
+        <div class="inline-block px-4 py-2 mb-6 bg-rayonis-spike border-2 border-black font-mono font-bold text-xs uppercase shadow-neo rotate-2">
+          🎮 The Maker Lab
+        </div>
+        
+        <h1 class="text-5xl md:text-7xl font-black mb-6 leading-tight">
+          Ne joue plus <span class="bg-rayonis-creeper text-white px-2">au jeu</span>.<br />
+          <span class="bg-rayonis-spike px-2">Construis-le</span>.
+        </h1>
+        
+        <p class="text-xl md:text-2xl text-gray-700 max-w-3xl mx-auto mb-12 font-sans leading-relaxed">
+          École de <strong>Code</strong>, <strong>Robotique</strong> & <strong>IA</strong> à Vernon pour les 8-18 ans.
+        </p>
+        
+        <div class="flex flex-col sm:flex-row gap-6 justify-center">
+          <a href="#" data-contact-modal class="inline-block px-10 py-5 bg-rayonis-spike text-black font-mono font-bold text-lg border-4 border-black shadow-neo-lg hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-neo transition-all uppercase">
+            [ COURS D'ESSAI GRATUIT ]
+          </a>
+          <a href="#filieres" class="inline-block px-10 py-5 bg-white text-black font-mono font-bold text-lg border-4 border-black hover:bg-gray-50 transition-all shadow-neo-lg hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-neo uppercase">
+            [ DÉCOUVRIR LES FILIÈRES ]
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- STIAM EXPLANATION -->
+    <section class="max-w-7xl mx-auto px-6 py-20 lg:py-32">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl md:text-5xl font-black mb-6">C'est quoi le STIAM ?</h2>
+        <p class="text-xl text-gray-700 max-w-3xl mx-auto font-sans">
+          Pas juste de l'informatique. Une méthode complète pour créer, innover et comprendre la tech.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-12">
+        <!-- S -->
+        <div class="bg-blue-400 border-4 border-black p-6 text-center hover:rotate-2 transition-transform shadow-neo">
+          <div class="text-5xl font-black mb-2">S</div>
+          <div class="font-mono text-xs font-bold">SCIENCES</div>
+        </div>
+
+        <!-- T -->
+        <div class="bg-orange-400 border-4 border-black p-6 text-center hover:rotate-2 transition-transform shadow-neo">
+          <div class="text-5xl font-black mb-2">T</div>
+          <div class="font-mono text-xs font-bold">TECHNOLOGIE</div>
+        </div>
+
+        <!-- I -->
+        <div class="bg-red-400 border-4 border-black p-6 text-center hover:rotate-2 transition-transform shadow-neo">
+          <div class="text-5xl font-black mb-2">I</div>
+          <div class="font-mono text-xs font-bold">INGÉNIERIE</div>
+        </div>
+
+        <!-- A -->
+        <div class="bg-rayonis-magenta text-white border-4 border-black p-6 text-center hover:scale-110 transition-transform shadow-neo-lg col-span-2 md:col-span-1">
+          <div class="text-5xl font-black mb-2">A</div>
+          <div class="font-mono text-xs font-bold">ARTS</div>
+        </div>
+
+        <!-- M -->
+        <div class="bg-green-400 border-4 border-black p-6 text-center hover:rotate-2 transition-transform shadow-neo col-span-2 md:col-span-1">
+          <div class="text-5xl font-black mb-2">M</div>
+          <div class="font-mono text-xs font-bold">MATHÉMATIQUES</div>
+        </div>
+      </div>
+
+      <div class="bg-rayonis-magenta/10 border-4 border-rayonis-magenta p-8 max-w-2xl mx-auto">
+        <h3 class="font-black text-2xl mb-4 flex items-center gap-3">
+          🎨 Pourquoi les Arts ?
+        </h3>
+        <p class="text-gray-800 leading-relaxed font-sans">
+          Pour innover, <strong>la technique ne suffit pas</strong>. Il faut de la <strong>créativité</strong> et du <strong>design</strong>. Chez Rayonis, on crée des jeux, des robots et des IA qui ont du style !
+        </p>
+      </div>
+    </section>
+
+    <!-- LES 3 FILIÈRES -->
+    <section id="filieres" class="bg-gray-100 border-y-4 border-rayonis-text py-20 lg:py-32">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16">
+          <h2 class="text-4xl md:text-5xl font-black mb-6">Choisis Ta Filière</h2>
+          <p class="text-xl text-gray-700 font-sans">3 univers, 1 objectif : devenir un créateur tech.</p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8">
+          <!-- FILIÈRE 1: PROGRAMMATION & GAMING -->
+          <div class="bg-white border-4 border-black shadow-neo-lg hover:-translate-y-2 transition-transform flex flex-col">
+            <div class="bg-rayonis-creeper p-6 border-b-4 border-black">
+              <div class="text-4xl mb-3">🎮</div>
+              <h3 class="font-black text-2xl">Programmation & Gaming</h3>
+              <p class="font-mono text-xs mt-2 opacity-75">POUR CRÉATEURS DE JEUX</p>
+            </div>
+            
+            <div class="p-6 flex-grow">
+              <div class="flex flex-wrap gap-2 mb-6">
+                <span class="px-3 py-1 bg-black text-white font-mono text-xs border-2 border-black">MINECRAFT</span>
+                <span class="px-3 py-1 bg-black text-white font-mono text-xs border-2 border-black">ROBLOX</span>
+                <span class="px-3 py-1 bg-black text-white font-mono text-xs border-2 border-black">PYTHON</span>
+              </div>
+              
+              <p class="text-gray-700 leading-relaxed mb-6 font-sans">
+                Apprendre la <strong>logique algorithmique</strong> (boucles, conditions, variables) dans leurs univers préférés. Créer des mods, des mini-jeux et comprendre comment les vrais jeux sont faits.
+              </p>
+              
+              <div class="flex gap-2 mt-auto">
+                <span class="px-3 py-1 border-2 border-black font-mono text-xs bg-rayonis-spike">8-12 ANS</span>
+                <span class="px-3 py-1 border-2 border-black font-mono text-xs bg-rayonis-spike">13-18 ANS</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- FILIÈRE 2: ROBOTIQUE & INGÉNIERIE -->
+          <div class="bg-white border-4 border-black shadow-neo-lg hover:-translate-y-2 transition-transform flex flex-col md:-mt-4">
+            <div class="bg-rayonis-spike p-6 border-b-4 border-black">
+              <div class="text-4xl mb-3">🤖</div>
+              <h3 class="font-black text-2xl">Robotique & Ingénierie</h3>
+              <p class="font-mono text-xs mt-2 opacity-75">LE CODE QUI TOUCHE LE RÉEL</p>
+            </div>
+            
+            <div class="p-6 flex-grow">
+              <div class="flex flex-wrap gap-2 mb-6">
+                <span class="px-3 py-1 bg-black text-white font-mono text-xs border-2 border-black">LEGO SPIKE</span>
+                <span class="px-3 py-1 bg-black text-white font-mono text-xs border-2 border-black">CAPTEURS</span>
+                <span class="px-3 py-1 bg-black text-white font-mono text-xs border-2 border-black">MOTEURS</span>
+              </div>
+              
+              <p class="text-gray-700 leading-relaxed mb-6 font-sans">
+                Construire des <strong>robots physiques</strong> pour comprendre la mécanique et sortir du tout-écran. Programme des véhicules autonomes, des bras robotiques et des machines intelligentes.
+              </p>
+              
+              <div class="flex gap-2 mt-auto">
+                <span class="px-3 py-1 border-2 border-black font-mono text-xs bg-rayonis-spike">8-12 ANS</span>
+                <span class="px-3 py-1 border-2 border-black font-mono text-xs bg-rayonis-spike">13-18 ANS</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- FILIÈRE 3: IA & CULTURE NUMÉRIQUE -->
+          <div class="bg-white border-4 border-black shadow-neo-lg hover:-translate-y-2 transition-transform flex flex-col">
+            <div class="bg-rayonis-magenta text-white p-6 border-b-4 border-black">
+              <div class="text-4xl mb-3">🧠</div>
+              <h3 class="font-black text-2xl">IA & Culture Numérique</h3>
+              <p class="font-mono text-xs mt-2 opacity-75">COMPRENDRE POUR NE PAS ÊTRE REMPLACÉ</p>
+            </div>
+            
+            <div class="p-6 flex-grow">
+              <div class="flex flex-wrap gap-2 mb-6">
+                <span class="px-3 py-1 bg-black text-white font-mono text-xs border-2 border-black">CHATGPT</span>
+                <span class="px-3 py-1 bg-black text-white font-mono text-xs border-2 border-black">ÉTHIQUE</span>
+                <span class="px-3 py-1 bg-black text-white font-mono text-xs border-2 border-black">PROMPT</span>
+              </div>
+              
+              <p class="text-gray-700 leading-relaxed mb-6 font-sans">
+                Apprendre à utiliser l'IA comme un <strong>super-tuteur</strong>, pas une antisèche. Comprendre les dangers (deepfakes, données) et les opportunités. Créer ses propres chatbots.
+              </p>
+              
+              <div class="flex gap-2 mt-auto">
+                <span class="px-3 py-1 border-2 border-black font-mono text-xs bg-rayonis-magenta text-white">13-18 ANS</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FORMAT & TARIFS -->
+    <section class="max-w-5xl mx-auto px-6 py-20 lg:py-32">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl md:text-5xl font-black mb-6">Comment Ça Marche ?</h2>
+      </div>
+
+      <div class="bg-white border-4 border-black shadow-neo-lg p-8 md:p-12 font-mono">
+        <div class="grid md:grid-cols-2 gap-8 mb-8">
+          <div>
+            <h3 class="font-black text-xl mb-4">📦 L'Unité : Le Chapitre</h3>
+            <p class="text-sm leading-relaxed">
+              <strong>10 heures</strong> = 5 séances de 2h<br />
+              Chaque chapitre = 1 projet complet
+            </p>
+          </div>
+
+          <div>
+            <h3 class="font-black text-xl mb-4">📅 Les Formats</h3>
+            <p class="text-sm leading-relaxed">
+              <strong>Hebdo</strong> : Mercredi ou Samedi<br />
+              <strong>Stage Vacances</strong> : Bootcamp intensif (5 jours)
+            </p>
+          </div>
+        </div>
+
+        <div class="border-t-2 border-black pt-8">
+          <h3 class="font-black text-xl mb-4">🎉 L'Événement : L'XPosition</h3>
+          <p class="text-sm leading-relaxed mb-6">
+            À la fin de chaque chapitre, les parents viennent voir les projets finis au FabLab Rayonis !
+          </p>
+          
+          <div class="bg-rayonis-spike border-4 border-black p-6 text-center">
+            <div class="text-2xl font-black mb-2">Intéressé ?</div>
+            <div class="text-sm mb-4">Discutons ensemble du format qui convient le mieux à votre enfant.</div>
+            <a href="#" data-contact-modal class="inline-block mt-2 px-6 py-3 bg-black text-white border-2 border-black font-bold text-sm hover:bg-gray-800 transition-colors">
+              ME CONTACTER
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RÉASSURANCE FABLAB -->
+    <section class="bg-rayonis-validation/10 border-y-4 border-rayonis-validation py-20">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16">
+          <h2 class="text-4xl md:text-5xl font-black mb-6">Le FabLab Rayonis</h2>
+          <p class="text-xl text-gray-700 max-w-2xl mx-auto font-sans">
+            Un lieu dédié, du matériel pro et un encadrement expert.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-12 items-center">
+          <div class="bg-white border-4 border-black p-8 shadow-neo-lg">
+            <div class="flex items-center gap-4 mb-6">
+              <div class="w-20 h-20 bg-rayonis-pro border-4 border-black flex items-center justify-center text-3xl">
+                👨‍🏫
+              </div>
+              <div>
+                <h3 class="font-black text-2xl">Nicolas Raymond</h3>
+                <p class="font-mono text-xs text-gray-600">RÉFÉRENT PÉDAGOGIQUE</p>
+              </div>
+            </div>
+            <p class="text-gray-700 leading-relaxed font-sans mb-4">
+              Architecte de Solutions Digitales et formateur expert en pédagogie active. Plus de 10 ans d'expérience dans l'enseignement de la tech aux jeunes.
+            </p>
+            <div class="flex flex-wrap gap-2">
+              <span class="px-3 py-1 bg-rayonis-validation text-white font-mono text-xs border-2 border-black">Pédagogie Active</span>
+              <span class="px-3 py-1 bg-rayonis-validation text-white font-mono text-xs border-2 border-black">Suivi Individualisé</span>
+            </div>
+          </div>
+
+          <div>
+            <div class="bg-gray-300 border-4 border-black aspect-video flex items-center justify-center shadow-neo-lg mb-4">
+              <div class="text-6xl">🏭</div>
+            </div>
+            <p class="text-center font-mono text-sm text-gray-600">
+              📍 Vernon, Normandie<br />
+              🖥️ PC Gaming + Lego Spike Prime + Imprimante 3D
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section class="max-w-4xl mx-auto px-6 py-20 text-center">
+      <h2 class="text-4xl md:text-5xl font-black mb-6">Prêt à Devenir un Maker ?</h2>
+      <p class="text-xl text-gray-700 mb-8 font-sans">
+        Réserve ton cours d'essai <strong>100% gratuit</strong> et sans engagement.
+      </p>
+      <a href="#" data-contact-modal class="inline-block px-12 py-6 bg-rayonis-spike text-black font-mono font-bold text-xl border-4 border-black shadow-neo-lg hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-neo transition-all uppercase">
+        [ JE RÉSERVE MON ESSAI ]
+      </a>
+    </section>
+  </main>
+
+  <footer class="border-t-4 border-rayonis-text bg-white py-12 px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex flex-col md:flex-row justify-between items-center gap-6 mb-6">
+        <p class="font-mono text-sm">&copy; {new Date().getFullYear()} Rayonis STIAM Academy. Tous droits réservés.</p>
+        <div class="flex gap-6 font-mono text-sm">
+          <a href="/blog/" class="hover:underline">Blog Vibe Coding</a>
+          <a href="#" data-contact-modal class="hover:underline">Contact</a>
+        </div>
+      </div>
+      <div class="text-xs text-gray-500 text-center border-t border-gray-200 pt-4">
+        * Minecraft Education Edition est une marque déposée de Microsoft Corporation.<br />
+        * Roblox est une marque déposée de Roblox Corporation.
+      </div>
+    </div>
+  </footer>
+
+  <ContactModal />
+</Layout>
