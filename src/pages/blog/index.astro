@@ -126,7 +126,7 @@ const sortedPosts = blogPosts.sort((a, b) => b.data.date.valueOf() - a.data.date
                 const postCategory = post.getAttribute('data-category');
                 // Simple partial match to handle slight variations e.g. "Interconnection" vs "Interconnection & Ecosystems"
                 // Or exact match if we are consistent.
-                const match = category === 'all' || postCategory === category || (category === 'Interconnection' && postCategory.includes('Interconnection')) || (category === 'Security' && postCategory.includes('Security'));
+                const match = category === 'all' || postCategory === category || (category === 'Interconnection' && postCategory.includes('Interconnection')) || (category === 'Security' && postCategory.includes('Security')) || (category === 'FinOps' && postCategory.includes('FinOps'));
                 
                 if (match) {
                     post.classList.remove('hidden');
