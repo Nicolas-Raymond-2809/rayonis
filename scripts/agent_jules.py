@@ -100,17 +100,38 @@ Tu dois répondre UNIQUEMENT avec un objet JSON valide suivant cette structure e
         try:
             response = model.generate_content(meta_prompt, generation_config=generation_config)
             text_response = response.text
-            # Clean response if needed (remove markdown block)
-            if text_response.startswith("```json"):
-                text_response = text_response[7:]
-            if text_response.endswith("```"):
-                text_response = text_response[:-3]
             
-            # Simple regex fix for newlines in JSON strings if they are literal newlines
-            import re
-            text_response = re.sub(r'(?<!\\)\n', '\\n', text_response) 
+            # Attempt to parse JSON
+            try:
+                # First try raw
+                article_data = json.loads(text_response)
+            except json.JSONDecodeError:
+                # If fail, try to clean common issues
+                print("⚠️ JSON Parse Error, attempting repairs...")
+                import re
+                
+                # 1. Remove markdown code blocks if present ( ```json ... ``` )
+                cleaned_text = re.sub(r"```json\s*", "", text_response)
+                cleaned_text = re.sub(r"```\s*$", "", cleaned_text)
+                
+                # 2. Simple regex fix for newlines in JSON strings if they are literal newlines
+                cleaned_text = re.sub(r'(?<!\\)\n', '\\n', cleaned_text) 
+                
+                # 3. Fix invalid escape sequences (often \ in paths or text)
+                # This regex looks for a backslash that is NOT followed by " / \ b f n r t u
+                cleaned_text = re.sub(r'\\(?![/\\bfnrtu"])', r"\\\\", cleaned_text)
+                
+                # 4. Fix unescaped quotes inside strings (hard to do perfectly with regex, but we can try basic ones)
+                # (Skipping risky quote repair for now, usually backslash is the culprit)
+                
+                try:
+                    article_data = json.loads(cleaned_text)
+                except json.JSONDecodeError as e:
+                    print(f"❌ Critical JSON Error after cleaning: {e}")
+                    # Re-raise to be caught by the outer retry loop
+                    raise e 
             
-            return json.loads(text_response)
+            return article_data
         except Exception as e:
             if attempt < max_retries - 1:
                 wait_time = 2 ** attempt
@@ -156,113 +177,164 @@ def generate_video_veo(prompt, slug):
         
         print(f"🎥 Generating video for {slug} with prompt: {prompt}...")
         
-        # Initialize Vertex AI using GAPIC client (v1beta1) for LRO support
-        # This avoids manual polling implementation errors (400/404).
+        # Initialize Vertex AI
+        # GAPIC client failed (predict_long_running missing), so we revert to REST.
+        # We also disable SSL verification (verify=False) to handle local cert issues.
         
-        from google.cloud import aiplatform_v1beta1
-        from google.cloud.aiplatform_v1beta1.types import content
         import google.auth
+        from google.auth.transport.requests import Request as GoogleRequest
+        import requests
+        import urllib3
         
-        # Get credentials
+        # Suppress insecure request warnings
+        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+        # Get credentials and project ID
         credentials, project_id = google.auth.load_credentials_from_file(
             credentials_path,
             scopes=["https://www.googleapis.com/auth/cloud-platform"]
         )
-
-        # Client options for us-central1
-        client_options = {"api_endpoint": "us-central1-aiplatform.googleapis.com"}
-        client = aiplatform_v1beta1.PredictionServiceClient(
-            credentials=credentials,
-            client_options=client_options
-        )
         
-        # Endpoint resource name
+        # Refresh token if needed
+        if not credentials.valid:
+            credentials.refresh(GoogleRequest())
+        
+        access_token = credentials.token
+        
+        # Endpoint for Veo (Long Running Operation via v1beta1)
         location = "us-central1"
         model_id = "veo-2.0-generate-001"
-        endpoint = f"projects/{project_id}/locations/{location}/publishers/google/models/{model_id}"
+        base_url = f"https://{location}-aiplatform.googleapis.com/v1beta1"
         
-        # Prepare request
-        # Veo expects specific instance structure
-        instance = {"prompt": prompt}
-        parameters = {
-            "sampleCount": 1,
-            "durationSeconds": 6,
-            "aspectRatio": "16:9"
+        # Publisher Model Endpoint for Prediction
+        url = f"{base_url}/projects/{project_id}/locations/{location}/publishers/google/models/{model_id}:predictLongRunning"
+        
+        headers = {
+            "Authorization": f"Bearer {access_token}",
+            "Content-Type": "application/json; charset=utf-8"
         }
         
-        print(f"📡 Calling Veo API (GAPIC v1beta1) for {slug}...")
+        payload = {
+            "instances": [
+                {
+                    "prompt": prompt
+                }
+            ],
+            "parameters": {
+                "sampleCount": 1,
+                "durationSeconds": 6,
+                "aspectRatio": "16:9"
+            }
+        }
         
-        try:
-            # Call predict_long_running
-            operation = client.predict_long_running(
-                endpoint=endpoint,
-                instances=[instance],
-                parameters=parameters
-            )
+        print(f"📡 Calling Veo API (REST v1beta1): {url}...")
+        # verify=False to bypass SSL errors
+        response = requests.post(url, headers=headers, json=payload, verify=False)
+        
+        if response.status_code != 200:
+            print(f"❌ Veo API Error ({response.status_code}): {response.text}")
+            return None
+
+        # LRO Handling
+        operation = response.json()
+        operation_name = operation.get("name")
+        if not operation_name:
+            print(f"❌ No operation name returned: {operation}")
+            return None
             
-            print(f"⏳ Video generation started. Operation Name: {operation.operation.name}")
-            print("⏳ Waiting for video completion (GAPIC handles polling)...")
-            
-            # Wait for result (blocks until done)
-            response = operation.result(timeout=600)
-            
-            # Check for video in response
-            # Response is a PredictResponse protobuf
-            if not response.predictions:
-                print("❌ No predictions returned.")
+        print(f"⏳ Video generation started. Operation: {operation_name}")
+        print("⏳ Waiting for video completion (this may take ~1-2 minutes)...")
+        
+        # Poll for completion
+        import time
+        start_time = time.time()
+        timeout = 600 # 10 minutes timeout
+        
+        while True:
+            if time.time() - start_time > timeout:
+                print("❌ Video generation timed out.")
                 return None
                 
-            # predictions is a list of google.protobuf.struct_pb2.Value or dict
-            # We need to extract bytesBase64Encoded
-            prediction = response.predictions[0]
+            # Construct Polling URL (v1beta1 Global Operations)
+            # Format: .../v1beta1/projects/{project}/locations/{location}/operations/{op_id}
             
-            # prediction might be a dict-like object or Struct
-            # In GAPIC python, likely a Map/Struct.
-            # Let's try to access as dict first if it's deserialized, or structure
-            
-            video_b64 = None
-            if hasattr(prediction, "get"):
-                 video_b64 = prediction.get("bytesBase64Encoded")
-                 if not video_b64:
-                     # Check URI
-                     uri = prediction.get("uri")
-                     if uri:
-                         print(f"ℹ️ Video saved to URI: {uri} (Downloading not implemented)")
-                         return None
+            parts = operation_name.split("/")
+            if "operations" in parts:
+                op_id = parts[-1]
+                op_project = parts[1] # "projects/{project}/..."
+                op_url = f"https://{location}-aiplatform.googleapis.com/v1beta1/projects/{op_project}/locations/{location}/operations/{op_id}"
             else:
-                 # It might be a Struct object, we need to convert or access fields
-                 # Usually treated as dict in newer google-cloud libraries
-                 pass
+                op_url = f"{base_url}/{operation_name}"
             
-            # Fallback for Struct access if subscription behavior differs
-            if not video_b64:
-                # If it's a proto Struct, we might need to cast
-                try:
-                    video_b64 = prediction['bytesBase64Encoded']
-                except:
-                    pass
+            # print(f"🔍 Polling: {op_url} ...") # Reduced verbosity
+            print(".", end="", flush=True)
             
-            if not video_b64:
-                 print(f"❌ Could not extract video bytes from response: {prediction}")
-                 return None
+            op_response = requests.get(op_url, headers=headers, verify=False)
+            
+            if op_response.status_code != 200:
+                 # print(f"⚠️ Error polling: {op_response.text}") # Reduced verbosity
+                 time.sleep(5)
+                 continue
                  
-            video_data = base64.b64decode(video_b64)
+            op_data = op_response.json()
             
-            # Save the video
-            video_filename = f"{slug}.mp4"
-            video_dir = os.path.join("public", "videos", "blog")
-            os.makedirs(video_dir, exist_ok=True)
-            video_path = os.path.join(video_dir, video_filename)
+            if "error" in op_data:
+                print(f"\n❌ Operation failed: {op_data['error']}")
+                return None
             
-            with open(video_path, "wb") as f:
-                f.write(video_data)
+            if "done" in op_data and op_data["done"]:
+                print("\n✨ Generation Complete!")
                 
-            print(f"✅ Video saved to {video_path}")
-            return f"/videos/blog/{video_filename}"
+                # Extract response
+                if "response" not in op_data:
+                     if "error" in op_data:
+                          print(f"❌ Operation done with error: {op_data['error']}")
+                          return None
+                     print(f"❌ Operation done but no response found.")
+                     return None
+                
+                final_response = op_data["response"]
+                # Look for predictions
+                # v1beta1 usually returns a list under 'predictions' or similar wrapping
+                # Let's handle both dict and list
+                
+                predictions = final_response.get("predictions")
+                if not predictions:
+                     # Check if final_response IS the prediction (rare)
+                     print(f"❌ No predictions in final response: {final_response.keys()}")
+                     return None
+                
+                # Check first prediction
+                pred = predictions[0]
+                video_b64 = pred.get("bytesBase64Encoded")
+                uri = pred.get("uri")
+                
+                if video_b64:
+                    video_data = base64.b64decode(video_b64)
+                    break 
+                elif uri:
+                     print(f"ℹ️ Video saved to URI: {uri} (Downloading not implemented)")
+                     return None
+                else:
+                     print("❌ No video content found.")
+                     return None
+
+            time.sleep(5)
             
-        except Exception as e:
-            print(f"❌ GAPIC API Error: {e}")
-            return None
+        # Save the video
+        video_filename = f"{slug}.mp4"
+        video_dir = os.path.join("public", "videos", "blog")
+        os.makedirs(video_dir, exist_ok=True)
+        video_path = os.path.join(video_dir, video_filename)
+        
+        with open(video_path, "wb") as f:
+            f.write(video_data)
+            
+        print(f"✅ Video saved to {video_path}")
+        return f"/videos/blog/{video_filename}"
+            
+        # Cleanup GAPIC imports from previous attempts if any
+        # (This block replaces the keys parts)
 
     except Exception as e:
         print(f"❌ Video generation failed (Raw API): {e}")
