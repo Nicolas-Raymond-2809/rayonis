@@ -359,9 +359,59 @@ def main():
 
     print(f"✨ Title: {content_json['title']}")
 
-    # 3.1 Generate Video (Veo)
+
+    # 3.1 Generate Video (Veo) - Interactive Check
     if "video_prompt" in content_json:
-        generate_video_veo(content_json['video_prompt'], content_json['slug'])
+        print(f"\n🎥 Proposition de vidéo : {content_json['video_prompt']}")
+        print("❓ Voulez-vous générer la vidéo ? (oui/non) [Défaut: Non dans 10s]")
+        
+        user_response = None
+        try:
+            # Windows-specific timeout input
+            import msvcrt
+            
+            start_time = time.time()
+            input_str = ""
+            print("> ", end="", flush=True)
+            
+            while True:
+                # Check for timeout
+                if time.time() - start_time > 10:
+                    print("\n⏱️ Délai écoulé. Pas de vidéo.")
+                    user_response = None
+                    break
+                
+                # Check for key press
+                if msvcrt.kbhit():
+                    char = msvcrt.getwche() # Get char and echo
+                    if char == '\r' or char == '\n': # Enter
+                        print() # Newline
+                        user_response = input_str.lower().strip()
+                        break
+                    elif char == '\x08': # Backspace handling
+                        if len(input_str) > 0:
+                            input_str = input_str[:-1]
+                            # Visual backspace is hard in raw CLI without libraries like readline
+                            # but getwche handles some echo. 
+                            # For simple "oui/non", let's trust the user types correctly or accepts re-typing.
+                            # Actually getwche backspace just prints weird char often.
+                            # Let's keep it simple.
+                            pass 
+                    else:
+                        input_str += char
+                
+                time.sleep(0.05)
+                
+        except ImportError:
+            # Fallback for non-Windows (or if msvcrt fails) - No timeout implemented for simplicity -> Default No
+            print("⚠️ msrvrt non disponible, passage automatique (Non).")
+            user_response = None
+
+        if user_response in ["oui", "yes", "y", "o"]:
+            generate_video_veo(content_json['video_prompt'], content_json['slug'])
+        else:
+            print("⏭️ Génération vidéo ignorée.")
+
     
     # 3. Generate Image
     print("🎨 Generating image with Gemini...")
