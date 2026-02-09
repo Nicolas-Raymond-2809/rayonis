@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
+import ContactModal from '../../components/ContactModal.astro';
 import { getCollection } from 'astro:content';
 
 const blogPosts = await getCollection('blog');
@@ -24,7 +25,7 @@ const sortedPosts = blogPosts.sort((a, b) => b.data.date.valueOf() - a.data.date
           VIBE CODING BLOG
         </a>
 
-        <a href="mailto:contact@rayonis.fr" class="hidden sm:block px-6 py-3 font-mono font-bold text-sm bg-white border-2 border-rayonis-text shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all active:bg-gray-50">
+        <a href="#" data-contact-modal class="hidden sm:block px-6 py-3 font-mono font-bold text-sm bg-white border-2 border-rayonis-text shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all active:bg-gray-50">
           CONTACTER
         </a>
       </div>
@@ -144,4 +145,6 @@ const sortedPosts = blogPosts.sort((a, b) => b.data.date.valueOf() - a.data.date
         });
     });
 </script>
+
+<ContactModal />
 </Layout>

@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import ContactModal from '../components/ContactModal.astro';
 ---
 
 <Layout title="Rayonis - Architecte de Solutions Digitales">
@@ -18,7 +19,7 @@ import Layout from '../layouts/Layout.astro';
           VIBE CODING BLOG
         </a>
 
-        <a href="mailto:contact@rayonis.fr" class="hidden sm:block px-6 py-3 font-mono font-bold text-sm bg-white border-2 border-rayonis-text shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all active:bg-gray-50">
+        <a href="#" data-contact-modal class="hidden sm:block px-6 py-3 font-mono font-bold text-sm bg-white border-2 border-rayonis-text shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all active:bg-gray-50">
           CONTACTER
         </a>
       </div>
@@ -35,7 +36,7 @@ import Layout from '../layouts/Layout.astro';
             Ne vous contentez pas d'utiliser l'IA. Concevez des systèmes autonomes, sécurisés et rentables grâce au <strong>Vibe Coding</strong> et à l'orchestration d'agents.
         </p>
         <div class="flex flex-col sm:flex-row gap-6">
-            <a href="mailto:contact@rayonis.fr" class="px-8 py-4 bg-black text-white font-mono font-bold text-lg border-2 border-transparent hover:bg-gray-800 transition-all shadow-neo hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]">
+            <a href="#" data-contact-modal class="px-8 py-4 bg-black text-white font-mono font-bold text-lg border-2 border-transparent hover:bg-gray-800 transition-all shadow-neo hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]">
                 Réserver mon diagnostic (Gratuit)
             </a>
             <a href="/blog/" class="px-8 py-4 bg-white text-black font-mono font-bold text-lg border-2 border-rayonis-text hover:bg-gray-50 transition-all shadow-neo hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]">
@@ -229,7 +230,7 @@ import Layout from '../layouts/Layout.astro';
         </div>
 
         <div class="mt-16 text-center">
-             <a href="mailto:contact@rayonis.fr" class="inline-block px-8 py-4 bg-rayonis-text text-white font-mono font-bold text-lg border-2 border-transparent hover:bg-gray-800 transition-all shadow-neo hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]">
+             <a href="#" data-contact-modal class="inline-block px-8 py-4 bg-rayonis-text text-white font-mono font-bold text-lg border-2 border-transparent hover:bg-gray-800 transition-all shadow-neo hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]">
                 Demander un catalogue personnalisé
             </a>
         </div>
@@ -241,8 +242,10 @@ import Layout from '../layouts/Layout.astro';
           <p>&copy; {new Date().getFullYear()} Rayonis. Architecte de Solutions Digitales.</p>
           <div class="flex gap-6">
             <a href="/blog/" class="hover:underline">Blog Vibe Coding</a>
-            <a href="mailto:contact@rayonis.fr" class="hover:underline">Contact</a>
+            <a href="#" data-contact-modal class="hover:underline">Contact</a>
           </div>
       </div>
   </footer>
+  
+  <ContactModal />
 </Layout>
