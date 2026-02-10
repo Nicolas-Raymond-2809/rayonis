@@ -93,18 +93,19 @@ Tu dois répondre UNIQUEMENT avec un objet JSON valide suivant cette structure e
   "category": "Choisir UNE catégorie parmi : 'Vibe Coding', 'Agentic Workflows', 'MCP & Context', 'Security & Guardrails', 'Interconnection', 'FinOps & Performance'",
   "description": "Une méta-description pour le SEO (max 160 caractères) qui donne envie de cliquer.",
   "tags": ["Tag1", "Tag2", "Tag3"],
+  "tags": ["Tag1", "Tag2", "Tag3"],
   "image_prompt": "Une description visuelle détaillée (en anglais) pour DALL-E 3. Style : Cyberpunk, Synthwave, Minimalist Tech ou Pixel Art. Pas de texte dans l'image.",
-  "video_prompt": "A prompt describing a 5-second cinematic teaser video for this article. Style: Abstract Tech, 4k, fluid motion, neural networks, digital architecture. Format: High quality text-to-video prompt.",
   "markdown_content": "Le corps de l'article en Markdown.\\n\\n- IMPORTANT: Échappe bien tous les caractères spéciaux (guillemets, sauts de ligne).\\n- Utilise \\n pour les sauts de ligne DANS cette chaîne JSON.\\n- Utilise ## pour les titres..."
 }}
 """
 
 
-    max_retries = 3
+    max_retries = 5
     for attempt in range(max_retries):
         try:
+# ... (API call)
             response = client.models.generate_content(
-                model='gemini-2.0-flash',
+                model='gemini-2.5-flash',
                 contents=meta_prompt,
                 config=types.GenerateContentConfig(
                     response_mime_type="application/json"
@@ -145,103 +146,13 @@ Tu dois répondre UNIQUEMENT avec un objet JSON valide suivant cette structure e
             return article_data
         except Exception as e:
             if attempt < max_retries - 1:
-                wait_time = 2 ** attempt
+                wait_time = (2 ** attempt) * 2 # Increase backoff factor
                 print(f"⚠️ Error generation content (Attempt {attempt+1}/{max_retries}): {e}. Retrying in {wait_time}s...")
                 time.sleep(wait_time)
             else:
                 print(f"❌ Error generating content with Gemini after {max_retries} attempts: {e}")
                 return None
 
-def generate_video_veo(prompt, slug):
-    """Generates a video using Gemini (Veo) via google-genai SDK."""
-    print(f"🎥 Generating video with Veo (veo-2.0-generate-001)...")
-    
-    try:
-        from google import genai
-        from google.genai import types
-        
-        client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
-        
-        # Veo 2.0 model
-        model = "veo-2.0-generate-001"
-        
-        # Call generate_videos
-        operation = client.models.generate_videos(
-            model=model,
-            prompt=prompt,
-            config=types.GenerateVideosConfig(
-                number_of_videos=1,
-            )
-        )
-        
-        print(f"⏳ Video generation started. Operation: {operation.name}")
-        
-        # Poll for completion
-        while not operation.done:
-            time.sleep(10)
-            operation = client.operations.get(operation)
-            print(".", end="", flush=True)
-            
-        print("\n✅ Operation complete.")
-        
-        # Extract video data from the completed operation result
-        # The result is typically in operation.result which might be a GenerateVideosResponse
-        response = operation.result
-        
-        video_data = None
-        
-        # Helper to extract or download video
-        def get_video_bytes(vid_obj):
-            if vid_obj.video_bytes:
-                return vid_obj.video_bytes
-            if vid_obj.uri:
-                print(f"⬇️ Downloading video from URI: {vid_obj.uri}...")
-                try:
-                    return client.files.download(file=vid_obj.uri)
-                except Exception as down_e:
-                    print(f"⚠️ Download failed: {down_e}")
-            return None
-
-        # Check generated_videos attribute (standard for this SDK)
-        if hasattr(response, "generated_videos"):
-            for vid in response.generated_videos:
-                if vid.video:
-                    video_data = get_video_bytes(vid.video)
-                    if video_data: break
-        
-        # Fallback inspection if structure differs
-        if not video_data and hasattr(response, "video"):
-             video_data = get_video_bytes(response.video)
-
-        if not video_data:
-             # Try checking top-level if result isn't nested as expected
-             if hasattr(operation, "response") and operation.response:
-                  response = operation.response
-                  if hasattr(response, "generated_videos"):
-                        for vid in response.generated_videos:
-                            if vid.video:
-                                video_data = get_video_bytes(vid.video)
-                                if video_data: break
-
-        if not video_data:
-             print(f"❌ No video data returned/downloaded. Result: {response}")
-             return None
-
-        # Save the video
-        video_filename = f"{slug}.mp4"
-        video_dir = os.path.join("public", "videos", "blog")
-        os.makedirs(video_dir, exist_ok=True)
-        video_path = os.path.join(video_dir, video_filename)
-        
-        with open(video_path, "wb") as f:
-            f.write(video_data)
-            
-        print(f"✅ Video saved to {video_path}")
-        return f"/videos/blog/{video_filename}"
-        
-    except Exception as e:
-        print(f"❌ Error generating video with Veo: {e}")
-        return None
 
 def generate_image(prompt, slug):
     """Generates an image using Gemini (Imagen 3) and saves it locally."""
@@ -370,58 +281,6 @@ def main():
 
     print(f"✨ Title: {content_json['title']}")
 
-
-    # 3.1 Generate Video (Veo) - Interactive Check
-    if "video_prompt" in content_json:
-        print(f"\n🎥 Proposition de vidéo : {content_json['video_prompt']}")
-        print("❓ Voulez-vous générer la vidéo ? (oui/non) [Défaut: Non dans 10s]")
-        
-        user_response = None
-        try:
-            # Windows-specific timeout input
-            import msvcrt
-            
-            start_time = time.time()
-            input_str = ""
-            print("> ", end="", flush=True)
-            
-            while True:
-                # Check for timeout
-                if time.time() - start_time > 10:
-                    print("\n⏱️ Délai écoulé. Pas de vidéo.")
-                    user_response = None
-                    break
-                
-                # Check for key press
-                if msvcrt.kbhit():
-                    char = msvcrt.getwche() # Get char and echo
-                    if char == '\r' or char == '\n': # Enter
-                        print() # Newline
-                        user_response = input_str.lower().strip()
-                        break
-                    elif char == '\x08': # Backspace handling
-                        if len(input_str) > 0:
-                            input_str = input_str[:-1]
-                            # Visual backspace is hard in raw CLI without libraries like readline
-                            # but getwche handles some echo. 
-                            # For simple "oui/non", let's trust the user types correctly or accepts re-typing.
-                            # Actually getwche backspace just prints weird char often.
-                            # Let's keep it simple.
-                            pass 
-                    else:
-                        input_str += char
-                
-                time.sleep(0.05)
-                
-        except ImportError:
-            # Fallback for non-Windows (or if msvcrt fails) - No timeout implemented for simplicity -> Default No
-            print("⚠️ msrvrt non disponible, passage automatique (Non).")
-            user_response = None
-
-        if user_response in ["oui", "yes", "y", "o"]:
-            generate_video_veo(content_json['video_prompt'], content_json['slug'])
-        else:
-            print("⏭️ Génération vidéo ignorée.")
 
     
     # 3. Generate Image
