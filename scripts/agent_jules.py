@@ -8,7 +8,8 @@ from datetime import datetime
 from dotenv import load_dotenv
 import io
 from PIL import Image
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 from openai import OpenAI
 
 # 1. Load Environment Variables
@@ -24,8 +25,16 @@ if not GEMINI_API_KEY or not OPENAI_API_KEY:
     # exit(1)
 
 # Configure APIs
-genai.configure(api_key=GEMINI_API_KEY)
-openai_client = OpenAI(api_key=OPENAI_API_KEY)
+# genai.configure(api_key=GEMINI_API_KEY) # Deprecated
+try:
+    if OPENAI_API_KEY:
+        openai_client = OpenAI(api_key=OPENAI_API_KEY)
+    else:
+        openai_client = None
+        print("⚠️ OpenAI API Key missing. OpenAI related features will be disabled.")
+except Exception as e:
+    openai_client = None
+    print(f"⚠️ Error initializing OpenAI client: {e}")
 
 # Configuration
 BLOG_DIR = "src/content/blog"
@@ -41,7 +50,7 @@ def get_existing_posts():
 
 def generate_content(existing_posts):
     """Generates blog post content using Google Gemini."""
-    model = genai.GenerativeModel('gemini-2.0-flash')
+    client = genai.Client(api_key=GEMINI_API_KEY)
 
     meta_prompt = f"""
 RÔLE :
@@ -90,15 +99,17 @@ Tu dois répondre UNIQUEMENT avec un objet JSON valide suivant cette structure e
 }}
 """
 
-    # Configure generation to output JSON
-    generation_config = genai.GenerationConfig(
-        response_mime_type="application/json"
-    )
 
     max_retries = 3
     for attempt in range(max_retries):
         try:
-            response = model.generate_content(meta_prompt, generation_config=generation_config)
+            response = client.models.generate_content(
+                model='gemini-2.0-flash',
+                contents=meta_prompt,
+                config=types.GenerateContentConfig(
+                    response_mime_type="application/json"
+                )
+            )
             text_response = response.text
             
             # Attempt to parse JSON
