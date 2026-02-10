@@ -3,38 +3,23 @@ import json
 import glob
 import time
 import subprocess
-import base64
 from datetime import datetime
 from dotenv import load_dotenv
 import io
 from PIL import Image
 from google import genai
 from google.genai import types
-from openai import OpenAI
 
 # 1. Load Environment Variables
 load_dotenv()
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-if not GEMINI_API_KEY or not OPENAI_API_KEY:
-    print("❌ Error: Missing API Keys in .env file.")
-    # In a real scenario, we might exit here, but for development/dry-run without keys,
-    # we'll let it fail gracefully later or check logic.
-    # exit(1)
+if not GEMINI_API_KEY:
+    print("❌ Error: Missing GEMINI_API_KEY in .env file.")
+    exit(1)
 
 # Configure APIs
-# genai.configure(api_key=GEMINI_API_KEY) # Deprecated
-try:
-    if OPENAI_API_KEY:
-        openai_client = OpenAI(api_key=OPENAI_API_KEY)
-    else:
-        openai_client = None
-        print("⚠️ OpenAI API Key missing. OpenAI related features will be disabled.")
-except Exception as e:
-    openai_client = None
-    print(f"⚠️ Error initializing OpenAI client: {e}")
 
 # Configuration
 BLOG_DIR = "src/content/blog"
@@ -289,9 +274,6 @@ def main():
     
     if not image_url:
         print("⚠️ Failed to generate image, using placeholder or skipping.")
-        # Create a placeholder if needed, or just fail.
-        # For now, let's assume we need an image.
-        # return
 
     # 4. Save Files
     save_markdown(content_json, image_url)
