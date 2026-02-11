@@ -1,0 +1,72 @@
+
+> app@0.0.1 build
+> astro build
+
+00:08:51 [types] Generated 341ms
+00:08:51 [build] output: "static"
+00:08:51 [build] directory: C:\Users\ncsra\OneDrive\Documents\My Web Sites\rayonis\dist\
+00:08:51 [build] Collecting build info...
+00:08:51 [build] ✓ Completed in 418ms.
+00:08:51 [build] Building static entrypoints...
+00:08:53 [vite] [32m✓ built in 2.12s[39m
+00:08:53 [build] ✓ Completed in 2.14s.
+
+ building client (vite) 
+00:08:53 [vite] transforming...
+00:08:53 [vite] [32m✓[39m 4 modules transformed.
+00:08:53 [vite] rendering chunks...
+00:08:53 [vite] computing gzip size...
+00:08:53 [vite] [2mdist/[22m[36m_astro/hoisted.Db0imLZy.js  [39m[1m[2m0.68 kB[22m[1m[22m[2m │ gzip: 0.33 kB[22m
+00:08:53 [vite] [2mdist/[22m[36m_astro/hoisted.CL7uBZ_x.js  [39m[1m[2m0.95 kB[22m[1m[22m[2m │ gzip: 0.45 kB[22m
+00:08:53 [vite] [32m✓ built in 15ms[39m
+
+ generating static routes 
+00:08:53 ▶ src/pages/academy.astro
+00:08:53   └─ /academy/index.html (+6ms)
+00:08:53 ▶ src/pages/blog/index.astro
+00:08:53   └─ /blog/index.html (+21ms)
+00:08:53 ▶ src/pages/blog/[...slug].astro
+00:08:53   ├─ /blog/astro-github-actions-cicd/index.html (+4ms)
+00:08:53   ├─ /blog/astro-gpt3-generer-articles-ia/index.html (+3ms)
+00:08:53   ├─ /blog/astro-ia-generation-contenu-automatisee/index.html (+3ms)
+00:08:53   ├─ /blog/astro-n8n-openai-articles-ia/index.html (+3ms)
+00:08:53   ├─ /blog/astro-n8n-supercharge-site-statique/index.html (+3ms)
+00:08:53   ├─ /blog/astro-supabase-architecture-hybride-ia-simplifiee/index.html (+3ms)
+00:08:53   ├─ /blog/automatisation-ia-n8n-github-actions-ollama/index.html (+4ms)
+00:08:53   ├─ /blog/automatisation-ia-n8n-google-sheets-crm/index.html (+3ms)
+00:08:53   ├─ /blog/context-engineering-bases-de-donnees-vectorielles/index.html (+3ms)
+00:08:53   ├─ /blog/crewai-langchain-orchestration-ia-avancee/index.html (+3ms)
+00:08:53   ├─ /blog/crewai-orchestration-agents-ia-developpeurs/index.html (+3ms)
+00:08:53   ├─ /blog/crewai-orchestration-agents-ia-recherche-autonome/index.html (+3ms)
+00:08:53   ├─ /blog/finops-workflows-ia-prompt-caching/index.html (+3ms)
+00:08:53   ├─ /blog/ia-context-engineering-rag-llamaindex/index.html (+3ms)
+00:08:53   ├─ /blog/ia-cybersecurite-automatisation-reponse-incidents-n8n/index.html (+3ms)
+00:08:53   ├─ /blog/ia-cybersecurite-detection-menaces-nemo-guardrails/index.html (+3ms)
+00:08:53   ├─ /blog/ia-finops-optimisation-couts-prompt-caching/index.html (+3ms)
+00:08:53   ├─ /blog/ia-no-code-automatisation-n8n-agents/index.html (+3ms)
+00:08:53   ├─ /blog/integration-ia-astro-generation-contenu-dynamique/index.html (+3ms)
+00:08:53   ├─ /blog/l-art-de-structurer-information-ia-vibe-context-engineering/index.html (+3ms)
+00:08:53   ├─ /blog/langchain-ollama-ia-locale-orchestration/index.html (+3ms)
+00:08:53   ├─ /blog/langgraph-neo4j-graphe-connaissances-ia/index.html (+3ms)
+00:08:53   ├─ /blog/langgraph-orchestration-agents-extraction-donnees/index.html (+3ms)
+00:08:53   ├─ /blog/langgraph-orchestration-agents-ia/index.html (+3ms)
+00:08:53   ├─ /blog/langgraph-orchestration-ia-workflows/index.html (+3ms)
+00:08:53   ├─ /blog/n8n-langchain-supercharge-workflows-ia/index.html (+3ms)
+00:08:53   ├─ /blog/n8n-ollama-ia-locale-automatisation/index.html (+72ms)
+00:08:54   ├─ /blog/nemo-guardrails-agents-ia-cybersecurite/index.html (+3ms)
+00:08:54   ├─ /blog/nemo-guardrails-securisation-agents-ia/index.html (+3ms)
+00:08:54   ├─ /blog/ollama-astro-ia-locale-jamstack/index.html (+3ms)
+00:08:54   ├─ /blog/prompt-caching-finops-optimisation-ia/index.html (+3ms)
+00:08:54   ├─ /blog/securiser-vibe-coding-audits-automatises-guardrails-ia/index.html (+3ms)
+00:08:54   └─ /blog/tailwind-css-astro-vite-stylez-vite/index.html (+3ms)
+00:08:54 ▶ src/pages/etude-de-cas-zero-touch.astro
+00:08:54   └─ /etude-de-cas-zero-touch/index.html (+1ms)
+00:08:55 ▶ src/pages/radio/index.astro
+00:08:55   └─ /radio/index.htmlUnable to render entry.Content because it is undefined!
+Did you forget to import the component or is it possible there is a typo?
+  Stack trace:
+    at renderFrameworkComponent (file:///C:/Users/ncsra/OneDrive/Documents/My%20Web%20Sites/rayonis/dist/chunks/astro/server_CrvFHp6a.mjs:1257:11)
+    at file:///C:/Users/ncsra/OneDrive/Documents/My%20Web%20Sites/rayonis/dist/pages/radio.astro.mjs?time=1770851334037:28:468
+    at file:///C:/Users/ncsra/OneDrive/Documents/My%20Web%20Sites/rayonis/dist/pages/radio.astro.mjs?time=1770851334037:26:127
+    at Object.default (file:///C:/Users/ncsra/OneDrive/Documents/My%20Web%20Sites/rayonis/dist/pages/radio.astro.mjs?time=1770851334037:25:49)
+    at createAstroComponentInstance (file:///C:/Users/ncsra/OneDrive/Documents/My%20Web%20Sites/rayonis/dist/chunks/astro/server_CrvFHp6a.mjs:1090:20)

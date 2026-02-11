@@ -36,7 +36,7 @@ const radioCollection = defineCollection({
 	type: 'content',
 	schema: z.object({
 		title: z.string(),
-		date: z.date(),
+		date: z.coerce.date(),
 		link: z.string(),
 		source: z.string().optional(),
 		category: z.string().optional(),

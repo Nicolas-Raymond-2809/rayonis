@@ -10,8 +10,13 @@ const radioEntries = await getCollection('radio');
 // Sort by date desc
 radioEntries.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
+const radioEntriesWithContent = await Promise.all(radioEntries.map(async (entry) => {
+  const { Content } = await entry.render();
+  return { ...entry, Content };
+}));
+
 // Group by date
-const groupedEntries = radioEntries.reduce((acc, entry) => {
+const groupedEntries = radioEntriesWithContent.reduce((acc, entry) => {
   const dateKey = format(entry.data.date, 'yyyy-MM-dd');
   if (!acc[dateKey]) {
     acc[dateKey] = [];

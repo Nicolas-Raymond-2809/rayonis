@@ -123,7 +123,7 @@ def save_radio_edition(article, analysis, date_obj):
 
     markdown = f"""---
 title: {safe_str(article.get("Titre de l'Article"))}
-date: "{date_str}"
+date: {date_str}
 link: {safe_str(article.get("Lien"))}
 source: {safe_str(article.get("Nom du Flux RSS"))}
 category: {safe_str(final_cat)}

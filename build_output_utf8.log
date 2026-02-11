@@ -1,0 +1,10 @@
+﻿
+> app@0.0.1 build
+> astro build
+
+00:07:31 [types] Generated 345ms
+00:07:31 [build] output: "static"
+00:07:31 [build] directory: C:\Users\ncsra\OneDrive\Documents\My Web Sites\rayonis\dist\
+00:07:31 [build] Collecting build info...
+00:07:31 [build] Ô£ô Completed in 422ms.
+00:07:31 [build] Building static entrypoints...

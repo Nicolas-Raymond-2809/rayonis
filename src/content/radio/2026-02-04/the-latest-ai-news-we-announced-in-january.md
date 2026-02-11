@@ -1,6 +1,6 @@
 ---
 title: "The latest AI news we announced in January"
-date: "2026-02-04"
+date: 2026-02-04
 link: "https://blog.google/innovation-and-ai/products/google-ai-updates-january-2026/"
 source: ""
 category: "Search"
