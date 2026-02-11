@@ -1,7 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
-import ContactModal from '../../components/ContactModal.astro';
 import { getCollection } from 'astro:content';
 
 const blogPosts = await getCollection('blog');
@@ -9,32 +9,7 @@ const sortedPosts = blogPosts.sort((a, b) => b.data.date.valueOf() - a.data.date
 ---
 
 <Layout title="Rayonis - Vibe Coding Blog">
-  <header class="sticky top-0 z-50 bg-rayonis-bg/95 backdrop-blur border-b-2 border-rayonis-text py-4 px-6">
-    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
-      <a href="/" class="hover:opacity-80 transition-opacity">
-        <img src="/images/logo_IA.png" alt="RAYONIS" class="h-[5.5rem] w-auto" />
-      </a>
-
-      <div class="flex flex-col sm:flex-row items-center gap-4 sm:gap-8">
-        <a href="/etude-de-cas-zero-touch/" class="font-mono font-bold text-sm text-gray-600 hover:text-black hover:underline uppercase text-center sm:text-left">
-          Architecture Zero Touch
-        </a>
-
-        <a href="/academy/" class="font-mono font-bold text-sm uppercase" style="background-color: black; padding: 0.5rem 1rem; transform: rotate(-5deg); color: #ffd100; letter-spacing: 2px; display: inline-block;">
-          Formation STIAM
-        </a>
-
-        <!-- Active link style for current page -->
-        <a href="/blog/" class="font-mono font-bold text-sm text-purple-800 underline uppercase text-center sm:text-left">
-          VIBE CODING BLOG
-        </a>
-
-        <a href="#" data-contact-modal class="hidden sm:block px-6 py-3 font-mono font-bold text-sm bg-white border-2 border-rayonis-text shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all active:bg-gray-50">
-          CONTACTER
-        </a>
-      </div>
-    </div>
-  </header>
+  <Header logo="/images/logo_IA.png" activeLink="blog" />
 
   <main class="max-w-7xl mx-auto px-4 py-12 min-h-screen">
       
@@ -150,5 +125,4 @@ const sortedPosts = blogPosts.sort((a, b) => b.data.date.valueOf() - a.data.date
     });
 </script>
 
-<ContactModal />
 </Layout>

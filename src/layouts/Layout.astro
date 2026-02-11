@@ -1,6 +1,7 @@
 ---
 import '@fontsource/space-grotesk';
 import '@fontsource/jetbrains-mono';
+import ContactModal from '../components/ContactModal.astro';
 
 interface Props {
 	title: string;
@@ -36,3 +37,60 @@ const { title } = Astro.props;
 		font-family: 'JetBrains Mono', monospace;
 	}
 </style>
+
+<script>
+  // Open modal
+  document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('contact-modal');
+    const closeButton = document.getElementById('close-modal');
+    // Use event delegation or re-query triggers if they are dynamically added, 
+    // but for static Astro, re-querying inside the listener or using a broad selector is fine.
+    // However, if we put this script in Layout, it runs once.
+    
+    function setupTriggers() {
+        const triggers = document.querySelectorAll('[data-contact-modal]');
+        triggers.forEach(trigger => {
+            trigger.addEventListener('click', (e) => {
+                e.preventDefault();
+                modal?.classList.remove('hidden');
+                setTimeout(() => {
+                    modal?.classList.add('show');
+                }, 10);
+                document.body.style.overflow = 'hidden';
+            });
+        });
+    }
+
+    setupTriggers();
+
+    // Close modal on close button
+    closeButton?.addEventListener('click', () => {
+      closeModal();
+    });
+
+    // Close modal on overlay click
+    modal?.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
+
+    // Close modal on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal?.classList.contains('show')) {
+        closeModal();
+      }
+    });
+
+    function closeModal() {
+      modal?.classList.remove('show');
+      setTimeout(() => {
+        modal?.classList.add('hidden');
+        document.body.style.overflow = '';
+      }, 300);
+    }
+  });
+</script>
+
+<ContactModal />
+

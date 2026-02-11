@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
 
 export async function getStaticPaths() {
   const blogPosts = await getCollection('blog');
@@ -15,19 +16,7 @@ const { Content } = await post.render();
 ---
 
 <Layout title={`${post.data.title} - Rayonis Blog`}>
-  <header class="sticky top-0 z-50 bg-rayonis-bg/95 backdrop-blur border-b-2 border-rayonis-text py-4 px-6">
-    <div class="max-w-4xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
-      <a href="/" class="hover:opacity-80 transition-opacity">
-        <img src="/images/logo_IA.png" alt="RAYONIS" class="h-[5.5rem] w-auto" />
-      </a>
-
-      <nav class="flex items-center gap-4 sm:gap-8 font-mono font-bold text-sm">
-          <a href="/" class="hover:underline">HOME</a>
-          <a href="/academy/" class="font-mono font-bold text-sm uppercase" style="background-color: black; padding: 0.5rem 1rem; transform: rotate(-5deg); color: #ffd100; letter-spacing: 2px; display: inline-block;">Formation STIAM</a>
-          <a href="/blog/" class="hover:underline text-purple-600">VIBE CODING BLOG</a>
-      </nav>
-    </div>
-  </header>
+  <Header logo="/images/logo_IA.png" activeLink="blog" />
 
   <main class="max-w-4xl mx-auto px-6 py-12 min-h-screen">
     

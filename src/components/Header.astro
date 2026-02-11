@@ -1,0 +1,61 @@
+---
+interface Props {
+  logo?: string;
+  activeLink?: 'zero-touch' | 'academy' | 'radio' | 'blog' | 'home';
+}
+
+const { logo = "/images/logo.png", activeLink } = Astro.props;
+---
+
+<header class="sticky top-0 z-50 bg-rayonis-bg/95 backdrop-blur border-b-2 border-rayonis-text py-4 px-6">
+  <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+    <a href="/" class="hover:opacity-80 transition-opacity">
+      <img src={logo} alt="RAYONIS" class="h-[5.5rem] w-auto" />
+    </a>
+
+    <div class="flex flex-col sm:flex-row items-center gap-4 sm:gap-8">
+      <a 
+        href="/etude-de-cas-zero-touch/" 
+        class:list={[
+          "font-mono font-bold text-sm uppercase text-center sm:text-left",
+          activeLink === 'zero-touch' ? "text-black underline" : "text-gray-600 hover:text-black hover:underline"
+        ]}
+      >
+        Architecture Zero Touch
+      </a>
+
+      <a href="/academy/" class:list={[
+          "font-mono font-bold text-sm uppercase inline-block",
+          activeLink === 'academy' ? "text-black" : ""
+        ]} 
+        style="background-color: black; padding: 0.5rem 1rem; transform: rotate(-5deg); color: #ffd100; letter-spacing: 2px;"
+      >
+        Formation STIAM
+      </a>
+
+      <a 
+        href="/radio/" 
+        class:list={[
+          "font-mono font-bold text-sm uppercase text-center sm:text-left",
+          activeLink === 'radio' ? "text-cyan-800 underline" : "text-cyan-600 hover:text-black hover:underline"
+        ]}
+      >
+        RADIO RAYONIS
+      </a>
+
+      <a 
+        href="/blog/" 
+        class:list={[
+          "font-mono font-bold text-sm uppercase text-center sm:text-left",
+          activeLink === 'blog' ? "text-purple-800 underline" : "text-purple-600 hover:underline"
+        ]}
+      >
+        VIBE CODING BLOG
+      </a>
+
+      <a href="#" data-contact-modal class="hidden sm:block px-6 py-3 font-mono font-bold text-sm bg-white border-2 border-rayonis-text shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all active:bg-gray-50">
+        CONTACTER
+      </a>
+    </div>
+  </div>
+</header>

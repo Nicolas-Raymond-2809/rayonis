@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
 import { getCollection } from 'astro:content';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
@@ -29,6 +30,7 @@ const dates = Object.keys(groupedEntries).sort((a, b) => new Date(b).getTime() -
 ---
 
 <Layout title="Radio Rayonis | Veille IA Automatisée">
+  <Header activeLink="radio" />
   <main class="container mx-auto px-4 py-8 max-w-4xl">
     <header class="mb-12 text-center">
       <h1 class="text-5xl font-black mb-4 uppercase tracking-tighter transform -rotate-1">
