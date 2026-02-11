@@ -27,8 +27,22 @@ const blogCollection = defineCollection({
 		description: z.string(),
 		date: z.date(),
 		tags: z.array(z.string()),
-		category: z.string().optional(), // Made optional for now to avoid breaking existing posts immediately
+		category: z.string().optional(),
 		image: z.string().optional(),
+	}),
+});
+
+const radioCollection = defineCollection({
+	type: 'content',
+	schema: z.object({
+		title: z.string(),
+		date: z.date(),
+		link: z.string(),
+		source: z.string().optional(),
+		category: z.string().optional(),
+		score: z.number().optional(),
+		emoji: z.string().optional(),
+		tags: z.array(z.string()).optional(),
 	}),
 });
 
@@ -36,4 +50,5 @@ export const collections = {
 	'pro': proCollection,
 	'academy': academyCollection,
 	'blog': blogCollection,
+	'radio': radioCollection,
 };
