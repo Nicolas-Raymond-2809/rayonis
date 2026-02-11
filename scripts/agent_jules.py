@@ -147,7 +147,7 @@ def generate_image(prompt, slug):
         from google import genai
         from google.genai import types
         
-        client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
+        client = genai.Client(api_key=os.getenv("GEMINI_IMAGE_API_KEY") or os.getenv("GEMINI_API_KEY"))
         
         model = "gemini-3-pro-image-preview" 
         
