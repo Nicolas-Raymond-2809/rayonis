@@ -103,22 +103,22 @@ def save_radio_edition(article, analysis, date_obj):
 
     # Helper to safe string for YAML
     def safe_str(val):
-        return json.dumps(val if val else "")
+        return json.dumps(str(val) if val else "")
 
     # Parse category if it looks like a list
     raw_cat = article.get("Catégorie", "")
+    final_cat = raw_cat
+    
     try:
-        if raw_cat.strip().startswith("["):
+        # Check if it looks like a JSON array
+        if raw_cat and isinstance(raw_cat, str) and raw_cat.strip().startswith("["):
              cat_list = json.loads(raw_cat)
-             # If it's a list, take the first item or join them, or just keep as string
-             # For frontmatter 'category' is usually a single string in this project schema
-             # But if schema allows array, we can use it. 
-             # Let's clean it to be a single string for now to match schema z.string().optional()
              if isinstance(cat_list, list) and cat_list:
-                 raw_cat = cat_list[0] 
+                 final_cat = cat_list[0] # Take first item
              else:
-                 raw_cat = str(cat_list)
-    except:
+                 final_cat = str(cat_list)
+    except Exception as e:
+        print(f"⚠️ Category parse warning: {e}")
         pass
 
     markdown = f"""---
@@ -126,7 +126,7 @@ title: {safe_str(article.get("Titre de l'Article"))}
 date: "{date_str}"
 link: {safe_str(article.get("Lien"))}
 source: {safe_str(article.get("Nom du Flux RSS"))}
-category: {safe_str(raw_cat)}
+category: {safe_str(final_cat)}
 score: {analysis.get('score', 50)}
 emoji: {safe_str(analysis.get('emoji', '📻'))}
 tags: {json.dumps(analysis.get('tags', []))}
