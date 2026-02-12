@@ -4,6 +4,7 @@ import io
 import requests
 import json
 import time
+import subprocess
 from datetime import datetime
 from email.utils import parsedate_to_datetime
 import re
@@ -21,14 +22,14 @@ if not GEMINI_API_KEY:
 # Configuration
 SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRKz4BkYgGWWMeHrvsX5ufRSuQeKP1A9CdsTQz8919kQr2YCQteDeG3-Pes77CDu4Z8DuSVUEd8V0rY/pub?output=tsv"
 RADIO_DIR = "src/content/radio"
-TARGET_START_DATE = datetime(2026, 2, 12).date() # The "Tomorrow" mentioned in prompt
 
 def get_slug(text):
-    """Simple slugify function."""
+    """Simple slugify function with truncation."""
     text = text.lower()
     text = re.sub(r'[^\w\s-]', '', text)
     text = re.sub(r'[\s_-]+', '-', text)
-    return text.strip("-")
+    slug = text.strip("-")
+    return slug[:50]  # Truncate to 50 chars for authorized filenames
 
 def fetch_rss_items():
     """Fetches and parses the TSV from Google Sheets."""
@@ -49,7 +50,7 @@ def parse_date(date_str):
         dt = parsedate_to_datetime(date_str)
         return dt
     except Exception as e:
-        print(f"⚠️ Date parse error '{date_str}': {e}")
+        # print(f"⚠️ Date parse error '{date_str}': {e}") # Reduce noise
         return None
 
 def analyze_article(article):
@@ -58,7 +59,7 @@ def analyze_article(article):
     
     prompt = f"""
 RÔLE: Tu es "Radio Rayonis", un analyste IA expert et incisif.
-TACHE: Analyse cet article pour une audience de développeurs/architectes techniques.
+TACHE: fetch et analyse cet article pour une audience de développeurs/architectes techniques.
 ARTICLE:
 - Titre: {article.get("Titre de l'Article")}
 - Résumé/Contenu: {article.get("Résumé de l'Article")}
@@ -118,7 +119,7 @@ def save_radio_edition(article, analysis, date_obj):
              else:
                  final_cat = str(cat_list)
     except Exception as e:
-        print(f"⚠️ Category parse warning: {e}")
+        # print(f"⚠️ Category parse warning: {e}")
         pass
 
     markdown = f"""---
@@ -145,6 +146,29 @@ tags: {json.dumps(analysis.get('tags', []))}
         f.write(markdown)
     print(f"✅ Saved analysis: {filepath}")
 
+def git_auto_push(date_str):
+    """Commits and pushes generated content."""
+    try:
+        print("💾 Git Auto-Push initiated...")
+        
+        # Add specifically the radio content
+        subprocess.run(["git", "add", "src/content/radio"], check=True)
+        
+        # Check if there are staged changes to commit
+        # git diff --cached --quiet returns 1 if there are changes, 0 if none
+        result = subprocess.run(["git", "diff", "--cached", "--quiet"], capture_output=True)
+        
+        if result.returncode == 0:
+            print("⏭️ No changes to commit.")
+            return
+
+        commit_msg = f"📻 Radio Rayonis {date_str}"
+        subprocess.run(["git", "commit", "-m", commit_msg], check=True)
+        subprocess.run(["git", "push"], check=True)
+        print("✅ Git Push successful.")
+    except subprocess.CalledProcessError as e:
+        print(f"⚠️ Git operation failed: {e}")
+
 def main():
     print("📻 Starting Radio Rayonis Agent...")
     
@@ -155,13 +179,11 @@ def main():
     today = datetime.now().date()
     
     # Logic:
-    # If Today < 2026-02-12: Fetch top 10 recent (Catch-up mode)
-    # If Today >= 2026-02-12: Fetch ONLY items where date == Today AND date >= 2026-02-12
-    
+    # Filter ONLY items where date == Today
+
     candidates = []
     
-    current_mode = "CATCH_UP" if today < TARGET_START_DATE else "DAILY"
-    print(f"📅 Date: {today} | Mode: {current_mode} (Target: {TARGET_START_DATE})")
+    print(f"📅 Date: {today} | Mode: DAILY (Filtering for today's articles)")
 
     for item in items:
         pub_date = parse_date(item.get('Date de Publication'))
@@ -170,22 +192,14 @@ def main():
             
         pub_date_date = pub_date.date()
         
-        if current_mode == "DAILY":
-            # Strict mode: Only valid if date IS today AND is >= Target
-            if pub_date_date == today and pub_date_date >= TARGET_START_DATE:
-                 candidates.append((pub_date, item))
-        else:
-            # Catch-up mode: Just collect them all, we'll sort and take top 10
-            candidates.append((pub_date, item))
+        # Strict mode: Only valid if date IS today
+        if pub_date_date == today:
+                candidates.append((pub_date, item))
 
     # Sort by date descending
     candidates.sort(key=lambda x: x[0], reverse=True)
     
-    if current_mode == "CATCH_UP":
-        candidates = candidates[:5] # Limit to 5 for initial test/catch-up to save tokens
-        print(f"🧪 Catch-up: variables selected {len(candidates)} recent articles.")
-    else:
-        print(f"🗞️ Daily Edition: Found {len(candidates)} articles for today.")
+    print(f"🗞️ Daily Edition: Found {len(candidates)} articles for today.")
 
     for pub_date, item in candidates:
         title = item.get("Titre de l'Article", "Unknown Title")
@@ -196,6 +210,9 @@ def main():
             time.sleep(2) # Rate limit politeness
 
     print("🎉 Radio Rayonis emission complete.")
+    
+    # Auto-push
+    git_auto_push(today.strftime("%Y-%m-%d"))
 
 if __name__ == "__main__":
     main()
