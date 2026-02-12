@@ -24,3 +24,7 @@ pnpm-debug.log*
 .idea/
 .env
 google_credentials.json
+
+# Scripts and Tools
+scripts/
+bandit_report.txt
