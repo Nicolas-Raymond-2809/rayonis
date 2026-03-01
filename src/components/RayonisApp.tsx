@@ -17,9 +17,21 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import CourseDetail, { type CourseData } from './CourseDetail';
+import ServiceDetail, { type ServiceData } from './ServiceDetail';
 import coursesData from '../data/courses.json';
+import servicesData from '../data/services.json';
 
-const ExpertiseCard = ({ icon: Icon, title, description }: { icon: any, title: string, description: string }) => (
+const ExpertiseCard = ({ 
+  icon: Icon, 
+  title, 
+  description, 
+  onDiscover 
+}: { 
+  icon: any, 
+  title: string, 
+  description: string, 
+  onDiscover: () => void 
+}) => (
   <motion.div 
     whileHover={{ x: -2, y: -2, boxShadow: '6px 6px 0px 0px #111718' }}
     className="flex flex-col bg-white border-2 border-border-dark p-6 shadow-neo transition-all h-full"
@@ -28,10 +40,13 @@ const ExpertiseCard = ({ icon: Icon, title, description }: { icon: any, title: s
       <Icon size={24} />
     </div>
     <h3 className="text-xl font-bold mb-3 font-mono uppercase tracking-tight">{title}</h3>
-    <p className="text-slate-600 text-sm mb-6 flex-grow leading-relaxed">{description}</p>
-    <a href="#" className="inline-flex items-center text-sm font-bold uppercase tracking-wider text-primary hover:underline decoration-2 underline-offset-4">
+    <p className="text-slate-600 text-sm mb-6 flex-grow leading-relaxed line-clamp-4">{description}</p>
+    <button 
+      onClick={onDiscover}
+      className="inline-flex items-center text-sm font-bold uppercase tracking-wider text-primary hover:underline decoration-2 underline-offset-4"
+    >
       En savoir plus <ArrowRight size={16} className="ml-1" />
-    </a>
+    </button>
   </motion.div>
 );
 
@@ -77,16 +92,26 @@ const AcademyCard = ({
 
 export default function RayonisApp() {
   const [selectedCourseId, setSelectedCourseId] = useState<string | null>(null);
+  const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
 
   const selectedCourse = coursesData.find(c => c.id === selectedCourseId) as CourseData | undefined;
+  const selectedService = servicesData.find(s => s.id === selectedServiceId) as ServiceData | undefined;
 
   const handleBackToHome = () => {
     setSelectedCourseId(null);
+    setSelectedServiceId(null);
     window.scrollTo(0, 0);
   };
 
   const handleSelectCourse = (id: string) => {
     setSelectedCourseId(id);
+    setSelectedServiceId(null);
+    window.scrollTo(0, 0);
+  };
+
+  const handleSelectService = (id: string) => {
+    setSelectedServiceId(id);
+    setSelectedCourseId(null);
     window.scrollTo(0, 0);
   };
   return (
@@ -121,6 +146,12 @@ export default function RayonisApp() {
           <CourseDetail 
             key="course-detail"
             course={selectedCourse} 
+            onBack={handleBackToHome} 
+          />
+        ) : selectedService ? (
+          <ServiceDetail 
+            key="service-detail"
+            service={selectedService} 
             onBack={handleBackToHome} 
           />
         ) : (
@@ -200,21 +231,25 @@ export default function RayonisApp() {
                   icon={Search}
                   title="GEO & E-Réputation"
                   description="Ne vous contentez plus d'être indexé, soyez cité. Nous optimisons votre présence digitale pour les moteurs de recherche nouvelle génération comme Perplexity, SearchGPT et Gemini. Notre approche de Generative Engine Optimization (GEO) garantit que l'IA ne se contente pas de vous trouver, mais qu'elle vous recommande avec précision et autorité."
+                  onDiscover={() => handleSelectService('geo-reputation')}
                 />
                 <ExpertiseCard 
                   icon={Cpu}
                   title="Automatisation IA"
                   description="Libérez votre talent des tâches répétitives. Nous concevons des flux de travail intelligents qui agissent comme un système nerveux pour votre entreprise. De la saisie de données complexe à la gestion client, nos automatisations créent une efficacité opérationnelle sans friction, vous permettant de passer de l'exécution à la stratégie en un clic."
+                  onDiscover={() => handleSelectService('automatisation-ia')}
                 />
                 <ExpertiseCard 
                   icon={Share2}
                   title="Orchestration IA & MCP"
                   description="Faites passer vos IA du stade d'outils isolés à celui d'équipe synchronisée. Grâce au protocole MCP (Model Context Protocol), nous orchestrons plusieurs modèles pour qu'ils travaillent de concert sur vos données réelles. C'est la gestion centralisée du contexte pour une cohérence parfaite : vos IA partagent enfin le même cerveau."
+                  onDiscover={() => handleSelectService('orchestration-mcp')}
                 />
                 <ExpertiseCard 
                   icon={ShieldCheck}
                   title="Architecture de solution"
                   description="Bâtissez sur des fondations solides et évolutives. Nous concevons l'ossature technique de vos projets digitaux en intégrant nativement la sécurité (Guardrails) et la rentabilité (FinOps). Une architecture signée Rayonis, c'est la garantie d'une solution robuste, capable de monter en charge tout en maîtrisant vos coûts d'infrastructure."
+                  onDiscover={() => handleSelectService('architecture-solution')}
                 />
               </div>
             </section>

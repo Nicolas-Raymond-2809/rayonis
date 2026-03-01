@@ -1,0 +1,142 @@
+[
+  {
+    "id": "geo-reputation",
+    "title": "GEO & E-Réputation",
+    "category": "Stratégie Croissance",
+    "promise": "Ne vous contentez plus d'être indexé, soyez cité.",
+    "technos": "Perplexity, SearchGPT, Gemini",
+    "deployment": "Standard",
+    "security": "Guardrails inclus",
+    "diagnostic": "Dans un écosystème où l'IA devient le premier point de contact, l'indexation classique ne suffit plus. L'inefficacité de votre visibilité sur les moteurs génératifs vous fait perdre des parts de marché critiques.",
+    "steps": [
+      {
+        "title": "Audit & Intention",
+        "description": "Analyse de votre empreinte digitale actuelle et définition de la stratégie de citation IA."
+      },
+      {
+        "title": "Optimisation Sémantique",
+        "description": "Restructuration de vos contenus pour répondre aux critères de recommandation des LLMs."
+      },
+      {
+        "title": "Autorité & Citations",
+        "description": "Mise en place de connecteurs et de signaux de confiance pour maximiser votre score d'autorité."
+      },
+      {
+        "title": "Monitoring GEO",
+        "description": "Suivi en temps réel de vos citations et ajustements continus des prompts d'indexation."
+      }
+    ],
+    "deliverables": [
+      "Audit complet de visibilité IA",
+      "Stratégie de contenu GEO optimisée",
+      "Dashboard de suivi des citations",
+      "Rapport d'autorité mensuel"
+    ],
+    "cta": "Lancer mon audit gratuit"
+  },
+  {
+    "id": "automatisation-ia",
+    "title": "Automatisation IA",
+    "category": "Solution Infrastructure",
+    "promise": "Zéro friction. Performance maximale.",
+    "technos": "n8n, Make, Python, OpenAI",
+    "deployment": "Rapide",
+    "security": "Guardrails inclus",
+    "diagnostic": "Les tâches répétitives sont les goulots d'étranglement de votre croissance. Nous intervenons pour transformer ces frictions en autoroutes numériques automatisées.",
+    "steps": [
+      {
+        "title": "Audit de Flux",
+        "description": "Identification des tâches à haute valeur ajoutée et des processus automatisables."
+      },
+      {
+        "title": "Architecture & Connecteurs",
+        "description": "Conception des workflows et intégration des APIs via n8n ou Make."
+      },
+      {
+        "title": "Tests & Validation",
+        "description": "Mise en situation réelle et ajustement de la logique node-based."
+      },
+      {
+        "title": "Déploiement & Formation",
+        "description": "Mise en production et transfert de compétences à vos équipes internes."
+      }
+    ],
+    "deliverables": [
+      "Workflows n8n/Make configurés",
+      "Documentation technique des processus",
+      "Système d'alerting en cas d'erreur",
+      "Formation utilisateur final"
+    ],
+    "cta": "Parler à un expert"
+  },
+  {
+    "id": "orchestration-mcp",
+    "title": "Orchestration IA & MCP",
+    "category": "Solution Infrastructure",
+    "promise": "Vos IA partagent enfin le même cerveau.",
+    "technos": "MCP, Claude, GPT-4o, Pinecone",
+    "deployment": "Standard",
+    "security": "Guardrails inclus",
+    "diagnostic": "Les outils d'IA isolés créent de la confusion et des hallucinations. L'orchestration centralisée est la seule réponse pour une cohérence parfaite sur vos données réelles.",
+    "steps": [
+      {
+        "title": "Analyse de Contexte",
+        "description": "Cartographie de vos sources de données et définition des besoins d'orchestration."
+      },
+      {
+        "title": "Configuration MCP",
+        "description": "Mise en place du Model Context Protocol pour synchroniser vos modèles."
+      },
+      {
+        "title": "Intégration RAG",
+        "description": "Connexion de vos bases de connaissances via des bases de données vectorielles."
+      },
+      {
+        "title": "Optimisation & Sync",
+        "description": "Ajustement de la latence et garantie de la fraîcheur des données partagées."
+      }
+    ],
+    "deliverables": [
+      "Serveur MCP configuré et prêt",
+      "Base de données vectorielle optimisée",
+      "Interface d'orchestration centralisée",
+      "Guide de gestion du contexte"
+    ],
+    "cta": "Lancer mon audit gratuit"
+  },
+  {
+    "id": "architecture-solution",
+    "title": "Architecture de solution",
+    "category": "Solution Infrastructure",
+    "promise": "Bâtissez sur des fondations solides et évolutives.",
+    "technos": "FinOps, Docker, AWS/Vercel",
+    "deployment": "Standard",
+    "security": "Guardrails inclus",
+    "diagnostic": "Une solution mal architecturée coûte cher en maintenance et en infrastructure. Nous concevons l'ossature qui supporte votre montée en charge.",
+    "steps": [
+      {
+        "title": "Audit Technique",
+        "description": "Analyse de vos besoins de scalabilité et de vos contraintes budgétaires."
+      },
+      {
+        "title": "Design d'Architecture",
+        "description": "Conception de l'ossature technique intégrant nativement la sécurité."
+      },
+      {
+        "title": "Implémentation FinOps",
+        "description": "Mise en place des outils de contrôle et d'optimisation des coûts cloud."
+      },
+      {
+        "title": "Validation & Scalabilité",
+        "description": "Tests de charge et validation de la robustesse du système."
+      }
+    ],
+    "deliverables": [
+      "Schéma d'architecture complet",
+      "Rapport d'optimisation FinOps",
+      "Configuration Guardrails active",
+      "Plan de montée en charge"
+    ],
+    "cta": "Parler à un expert"
+  }
+]
