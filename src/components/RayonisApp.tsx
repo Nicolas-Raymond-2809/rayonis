@@ -146,28 +146,28 @@ export default function RayonisApp() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <AcademyCard 
-              title="Vibe Coding"
-              description="Apprenez à coder avec l'IA comme copilote."
-              features={["Prompt Engineering avancé", "Débogage assisté"]}
+              title="Programmation et vibe coding"
+              description="apprenez à coder avec l'IA comme copilote"
+              features={["HTML", "CSS", "JavaScript", "GitHub", "Prompt Engineering avancé", "Débogage assisté"]}
               icon={Code}
               badge="Populaire"
             />
             <AcademyCard 
-              title="IA Générative"
-              description="Maîtrisez la création de contenu par IA."
-              features={["Images & Vidéos", "Cohérence de style"]}
+              title="Ia générative"
+              description="maîtrisez la création de contenu par l'IA"
+              features={["Image & vidéo", "design systéme", "présentation visuel", "copywriting"]}
               icon={Sparkles}
             />
             <AcademyCard 
-              title="Vibe Marketing"
-              description="L'IA au service de votre croissance."
-              features={["Copywriting scale", "Personnalisation"]}
+              title="Vibe marketing"
+              description="L'IA au service de la croissance"
+              features={["UX design", "personae", "strategie marketing", "copywriting"]}
               icon={Megaphone}
             />
             <AcademyCard 
               title="Automatisation n8n"
-              description="Créez des workflows complexes."
-              features={["Logique node-based", "Intégration API", "Workflows avancés"]}
+              description="Crées des workflows complexes"
+              features={["Logique node-based", "intégration API", "Workflows Avancés"]}
               icon={Network}
               badge="Expert"
               badgeColor="bg-slate-900"
