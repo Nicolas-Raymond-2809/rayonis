@@ -1,0 +1,110 @@
+[
+  {
+    "id": "vibe-coding",
+    "title": "Programmation et vibe coding",
+    "slug": "programmation-vibe-coding",
+    "badge": "Formation Certifiante",
+    "accroche": "Apprenez à coder avec l'IA comme copilote",
+    "duration": "24 heures",
+    "level": "Débutant / Intermédiaire",
+    "format": "Live & E-learning",
+    "intention": "Ici, on ne mémorise pas la syntaxe. On apprend à diriger l'IA pour qu'elle devienne vos mains, pendant que vous restez l'architecte. Le Vibe Coding est l'art de transformer une intention en code fonctionnel sans friction.",
+    "modules": [
+      {
+        "title": "Module 1 : Les Fondamentaux",
+        "content": "Comprendre le Prompt Engineering pour le code, configurer son environnement (VS Code, Cursor), et maîtriser les bases du HTML/CSS assisté."
+      },
+      {
+        "title": "Module 2 : Pratique Augmentée",
+        "content": "Développement de composants complexes, gestion du JavaScript moderne, et utilisation de GitHub pour le versioning avec l'aide de l'IA."
+      },
+      {
+        "title": "Module 3 : Maîtrise & Déploiement",
+        "content": "Débogage avancé, optimisation des performances et déploiement continu sur des plateformes comme Vercel ou Netlify."
+      }
+    ],
+    "stack": ["HTML", "CSS", "JavaScript", "GitHub", "Cursor", "Claude 3.5 Sonnet", "GPT-4o"],
+    "cta": "Réserver ma place"
+  },
+  {
+    "id": "ia-generative",
+    "title": "Ia générative",
+    "slug": "ia-generative",
+    "badge": "Workshop Intensif",
+    "accroche": "Maîtrisez la création de contenu par l'IA",
+    "duration": "16 heures",
+    "level": "Tous niveaux",
+    "format": "Live",
+    "intention": "La création n'a plus de limites techniques. Apprenez à orchestrer les meilleurs modèles génératifs pour produire des visuels, des vidéos et des designs de niveau professionnel en un temps record.",
+    "modules": [
+      {
+        "title": "Module 1 : Image & Design",
+        "content": "Maîtrise de Midjourney, DALL-E 3 et Adobe Firefly. Création de systèmes de design cohérents et de chartes graphiques."
+      },
+      {
+        "title": "Module 2 : Vidéo & Animation",
+        "content": "Génération de vidéos avec Runway Gen-2, Pika Labs et HeyGen. Montage assisté et synchronisation labiale."
+      },
+      {
+        "title": "Module 3 : Flux de Production",
+        "content": "Intégration de l'IA dans votre workflow créatif existant et automatisation de la production de contenu visuel."
+      }
+    ],
+    "stack": ["Midjourney", "Runway", "HeyGen", "Adobe Firefly", "Canva Magic Edit"],
+    "cta": "Télécharger le syllabus"
+  },
+  {
+    "id": "vibe-marketing",
+    "title": "Vibe marketing",
+    "slug": "vibe-marketing",
+    "badge": "Formation Certifiante",
+    "accroche": "L'IA au service de la croissance",
+    "duration": "20 heures",
+    "level": "Intermédiaire",
+    "format": "E-learning",
+    "intention": "Le marketing de demain est hybride. Nous vous apprenons à utiliser l'IA pour comprendre vos clients mieux qu'ils ne se comprennent eux-mêmes et à créer des campagnes qui résonnent vraiment.",
+    "modules": [
+      {
+        "title": "Module 1 : Stratégie & Personae",
+        "content": "Utilisation de l'IA pour l'analyse de marché, la création de personae ultra-détaillés et la définition de la proposition de valeur."
+      },
+      {
+        "title": "Module 2 : Copywriting & Contenu",
+        "content": "Maîtrise du copywriting émotionnel assisté par IA, création de calendriers éditoriaux et optimisation SEO sémantique."
+      },
+      {
+        "title": "Module 3 : Growth & Analytics",
+        "content": "Mise en place de tests A/B automatisés, analyse prédictive des performances et optimisation du tunnel de conversion."
+      }
+    ],
+    "stack": ["ChatGPT", "Claude", "Jasper", "SurferSEO", "Make.com"],
+    "cta": "Réserver ma place"
+  },
+  {
+    "id": "automatisation-n8n",
+    "title": "Automatisation n8n",
+    "slug": "automatisation-n8n",
+    "badge": "Formation Certifiante",
+    "accroche": "Crées des workflows complexes",
+    "duration": "30 heures",
+    "level": "Avancé",
+    "format": "Live & Workshop",
+    "intention": "Ne soyez plus limité par les intégrations natives. Apprenez à construire votre propre infrastructure d'automatisation avec n8n, l'outil le plus puissant pour connecter vos applications sans limites.",
+    "modules": [
+      {
+        "title": "Module 1 : Logique Node-based",
+        "content": "Comprendre les concepts de base de n8n, la manipulation de données JSON et la logique conditionnelle avancée."
+      },
+      {
+        "title": "Module 2 : Intégrations API",
+        "content": "Se connecter à n'importe quelle API via HTTP Request, gérer l'authentification OAuth2 et les Webhooks."
+      },
+      {
+        "title": "Module 3 : Workflows Avancés",
+        "content": "Création d'agents autonomes, gestion des erreurs, déploiement sur serveur privé et optimisation des ressources."
+      }
+    ],
+    "stack": ["n8n", "Docker", "PostgreSQL", "OpenAI API", "Pinecone"],
+    "cta": "S'inscrire au workshop"
+  }
+]
