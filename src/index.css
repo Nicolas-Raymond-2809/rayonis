@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  
+  --color-primary: #05b7d6;
+  --color-secondary: #8b5cf6;
+  --color-border-dark: #111718;
+  
+  --shadow-neo: 4px 4px 0px 0px #111718;
+  --shadow-neo-hover: 2px 2px 0px 0px #111718;
+  --shadow-neo-sm: 2px 2px 0px 0px #111718;
+  --shadow-neo-lg: 6px 6px 0px 0px #111718;
+}
+
+@layer base {
+  body {
+    @apply font-display antialiased bg-[#F8FAFC] text-[#111718];
+  }
+}
