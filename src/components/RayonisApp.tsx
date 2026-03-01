@@ -163,23 +163,23 @@ export default function RayonisApp() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <ExpertiseCard 
               icon={Search}
-              title="GEO IA"
-              description="Optimisation de la visibilité sur les moteurs de recherche nouvelle génération basés sur l'IA."
+              title="GEO & E-Réputation"
+              description="Ne vous contentez plus d'être indexé, soyez cité. Nous optimisons votre présence digitale pour les moteurs de recherche nouvelle génération comme Perplexity, SearchGPT et Gemini. Notre approche de Generative Engine Optimization (GEO) garantit que l'IA ne se contente pas de vous trouver, mais qu'elle vous recommande avec précision et autorité."
             />
             <ExpertiseCard 
               icon={Cpu}
               title="Automatisation IA"
-              description="Flux de travail automatisés pour une efficacité opérationnelle maximale et sans friction."
+              description="Libérez votre talent des tâches répétitives. Nous concevons des flux de travail intelligents qui agissent comme un système nerveux pour votre entreprise. De la saisie de données complexe à la gestion client, nos automatisations créent une efficacité opérationnelle sans friction, vous permettant de passer de l'exécution à la stratégie en un clic."
             />
             <ExpertiseCard 
               icon={Share2}
-              title="Orchestration MCP"
-              description="Gestion centralisée des modèles de contexte pour une cohérence parfaite de vos systèmes."
+              title="Orchestration IA & MCP"
+              description="Faites passer vos IA du stade d'outils isolés à celui d'équipe synchronisée. Grâce au protocole MCP (Model Context Protocol), nous orchestrons plusieurs modèles pour qu'ils travaillent de concert sur vos données réelles. C'est la gestion centralisée du contexte pour une cohérence parfaite : vos IA partagent enfin le même cerveau."
             />
             <ExpertiseCard 
               icon={ShieldCheck}
-              title="Architecture & Guardrails"
-              description="Sécurité, éthique et conformité rigoureuse de vos systèmes d'intelligence artificielle."
+              title="Architecture de solution"
+              description="Bâtissez sur des fondations solides et évolutives. Nous concevons l'ossature technique de vos projets digitaux en intégrant nativement la sécurité (Guardrails) et la rentabilité (FinOps). Une architecture signée Rayonis, c'est la garantie d'une solution robuste, capable de monter en charge tout en maîtrisant vos coûts d'infrastructure."
             />
           </div>
         </section>
@@ -194,26 +194,26 @@ export default function RayonisApp() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <AcademyCard 
               title="Programmation et vibe coding"
-              description="apprenez à coder avec l'IA comme copilote"
+              description="Apprenez à coder avec l'IA comme copilote"
               features={["HTML", "CSS", "JavaScript", "GitHub", "Prompt Engineering avancé", "Débogage assisté"]}
               icon={Code}
             />
             <AcademyCard 
               title="Ia générative"
-              description="maîtrisez la création de contenu par l'IA"
-              features={["Image & vidéo", "design systéme", "présentation visuel", "copywriting"]}
+              description="Maîtrisez la création de contenu par l'IA"
+              features={["Image & Vidéo", "Design systéme", "Présentation visuel", "Copywriting"]}
               icon={Sparkles}
             />
             <AcademyCard 
               title="Vibe marketing"
               description="L'IA au service de la croissance"
-              features={["UX design", "personae", "strategie marketing", "copywriting"]}
+              features={["UX design", "Personae", "Strategie marketing", "Copywriting"]}
               icon={Megaphone}
             />
             <AcademyCard 
               title="Automatisation n8n"
               description="Crées des workflows complexes"
-              features={["Logique node-based", "intégration API", "Workflows Avancés"]}
+              features={["Logique node-based", "Intégration API", "Workflows Avancés"]}
               icon={Network}
             />
           </div>
@@ -233,10 +233,8 @@ export default function RayonisApp() {
           </div>
 
           <div className="flex gap-4">
-            <a href="#" className="w-10 h-10 border-2 border-border-dark bg-white flex items-center justify-center hover:bg-slate-100 transition-colors shadow-neo-sm">
-              <Twitter size={20} />
-            </a>
-            <a href="#" className="w-10 h-10 border-2 border-border-dark bg-white flex items-center justify-center hover:bg-slate-100 transition-colors shadow-neo-sm">
+          
+            <a href="https://www.linkedin.com/in/nicolas-raymond-consultant-digital/" className="w-10 h-10 border-2 border-border-dark bg-white flex items-center justify-center hover:bg-slate-100 transition-colors shadow-neo-sm">
               <Linkedin size={20} />
             </a>
           </div>
