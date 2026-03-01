@@ -37,25 +37,16 @@ const AcademyCard = ({
   description, 
   features, 
   icon: Icon, 
-  badge, 
-  badgeColor = "bg-secondary" 
 }: { 
   title: string, 
   description: string, 
   features: string[], 
   icon: any, 
-  badge?: string,
-  badgeColor?: string
 }) => (
   <motion.div 
     whileHover={{ boxShadow: '6px 6px 0px 0px #111718' }}
     className="relative flex flex-col bg-white border-2 border-border-dark p-6 shadow-neo transition-all h-full"
   >
-    {badge && (
-      <div className={`absolute top-0 right-0 ${badgeColor} text-white text-[10px] font-mono px-2 py-1 border-l-2 border-b-2 border-border-dark font-bold uppercase z-10`}>
-        {badge}
-      </div>
-    )}
     <div className="w-full aspect-video bg-secondary/20 mb-4 border-2 border-border-dark overflow-hidden relative flex items-center justify-center">
       <div className="absolute inset-0 bg-gradient-to-br from-secondary/10 to-secondary/40" />
       <Icon size={48} className="text-secondary" />
@@ -83,10 +74,9 @@ export default function RayonisApp() {
       <header className="sticky top-0 z-50 w-full border-b-2 border-border-dark bg-white">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-primary border-2 border-border-dark flex items-center justify-center shadow-neo-sm">
-              <Bot className="text-white" size={24} />
-            </div>
-            <h1 className="text-2xl font-bold tracking-tighter text-slate-900 uppercase">Rayonis</h1>
+            <a href="/" className="flex items-center gap-3 hover:opacity-90 transition-opacity">
+              <img src="/logo.svg" alt="Rayonis Logo" className="h-12 w-auto" referrerPolicy="no-referrer" />
+            </a>
           </div>
           
           <nav className="hidden md:flex items-center gap-8">
@@ -105,7 +95,64 @@ export default function RayonisApp() {
         </div>
       </header>
 
-      <main className="flex-grow w-full max-w-7xl mx-auto px-6 py-12 flex flex-col gap-20">
+      <main className="flex-grow w-full max-w-7xl mx-auto px-6 py-12 flex flex-col gap-24">
+        {/* Hero Section */}
+        <section className="relative py-12 md:py-20 overflow-hidden">
+          <div className="absolute inset-0 -z-10 opacity-[0.03]" 
+               style={{ backgroundImage: 'radial-gradient(#111718 1px, transparent 1px)', backgroundSize: '24px 24px' }}></div>
+          
+          <div className="flex flex-col items-start gap-8 max-w-4xl">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="inline-flex items-center gap-2 px-3 py-1 bg-white border-2 border-primary shadow-neo-sm text-primary font-mono text-[10px] font-bold uppercase tracking-widest"
+            >
+              <Sparkles size={14} />
+              Solutions IA Avancées
+            </motion.div>
+
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="text-5xl md:text-7xl font-bold tracking-tighter text-slate-900 leading-[1.1]"
+            >
+              Transformez votre futur avec <br className="hidden md:block" />
+              <span className="relative inline-block px-4 py-1 bg-primary text-white border-2 border-border-dark shadow-neo mt-2 md:mt-0">
+                l'Intelligence
+              </span> <br className="md:hidden" />
+              <span className="relative inline-block px-4 py-1 bg-primary text-white border-2 border-border-dark shadow-neo mt-2">
+                Artificielle
+              </span>
+            </motion.h1>
+
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="flex items-start gap-6 border-l-4 border-primary pl-6 py-2"
+            >
+              <p className="text-lg md:text-xl text-slate-600 leading-relaxed font-medium max-w-2xl">
+                Découvrez comment nous transformons votre entreprise avec des solutions IA de pointe, sécurisées et performantes. Une approche pragmatique pour des résultats concrets.
+              </p>
+            </motion.div>
+
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="flex flex-wrap gap-4 mt-4"
+            >
+              <button className="h-14 px-8 bg-slate-900 border-2 border-border-dark text-white font-mono font-bold uppercase tracking-wider shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-neo-hover transition-all">
+                Découvrir nos services
+              </button>
+              <button className="h-14 px-8 bg-white border-2 border-border-dark text-slate-900 font-mono font-bold uppercase tracking-wider shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-neo-hover transition-all">
+                Parlons de votre projet
+              </button>
+            </motion.div>
+          </div>
+        </section>
+
         {/* Expertise Section */}
         <section className="flex flex-col gap-8">
           <div className="flex items-center gap-4">
@@ -150,7 +197,6 @@ export default function RayonisApp() {
               description="apprenez à coder avec l'IA comme copilote"
               features={["HTML", "CSS", "JavaScript", "GitHub", "Prompt Engineering avancé", "Débogage assisté"]}
               icon={Code}
-              badge="Populaire"
             />
             <AcademyCard 
               title="Ia générative"
@@ -169,8 +215,6 @@ export default function RayonisApp() {
               description="Crées des workflows complexes"
               features={["Logique node-based", "intégration API", "Workflows Avancés"]}
               icon={Network}
-              badge="Expert"
-              badgeColor="bg-slate-900"
             />
           </div>
         </section>
@@ -181,10 +225,7 @@ export default function RayonisApp() {
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="flex flex-col gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-slate-900 flex items-center justify-center border border-slate-700">
-                <Bot className="text-white" size={18} />
-              </div>
-              <h2 className="text-xl font-bold tracking-tighter text-slate-900 uppercase">Rayonis</h2>
+              <img src="/logo.svg" alt="Rayonis Logo" className="h-8 w-auto" referrerPolicy="no-referrer" />
             </div>
             <p className="text-sm text-slate-500 max-w-xs">
               Pionnier de l'intégration IA et de la formation technique nouvelle génération.
