@@ -10,6 +10,7 @@ import {
   Zap
 } from 'lucide-react';
 import { motion } from 'motion/react';
+import { Button } from "@/components/ui/button";
 
 export interface ServiceStep {
   title: string;
@@ -41,100 +42,103 @@ const ServiceDetail: React.FC<ServiceDetailProps> = ({ service, onBack }) => {
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -20 }}
-      className="max-w-4xl mx-auto px-6 py-12"
+      className="flex-grow w-full max-w-7xl mx-auto px-6 py-12 flex flex-col gap-12"
     >
       {/* Back Button */}
-      <button 
+      <Button 
+        variant="outline"
         onClick={onBack}
-        className="group mb-12 flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-slate-500 hover:text-primary transition-colors"
+        className="w-fit"
       >
-        <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
+        <ArrowLeft size={18} className="mr-2" />
         Retour aux solutions
-      </button>
+      </Button>
 
       {/* Header Technique (Hero Service) */}
-      <header className="mb-16">
-        <div className="inline-block px-3 py-1 bg-[#06B6D4] text-white font-mono text-[10px] font-bold uppercase tracking-widest mb-6 border border-slate-700 shadow-neo-sm">
+      <header className="flex flex-col gap-6">
+        <div className="inline-flex w-fit px-3 py-1 bg-main/10 border-2 border-main text-main font-heading text-xs uppercase rounded-base">
           [ {service.category} ]
         </div>
         
-        <h1 className="text-4xl md:text-6xl font-bold tracking-tighter text-slate-900 mb-6 leading-tight">
-          <span className="relative inline-block">
+        <h1 className="text-5xl md:text-7xl font-heading tracking-tighter text-foreground leading-none">
+          <span className="bg-main text-main-foreground px-4 py-1 border-2 border-border rounded-base">
             {service.title}
-            <div className="absolute bottom-1 left-0 w-full h-3 bg-[#06B6D4]/30 -z-10" />
           </span>
         </h1>
 
-        <p className="text-xl md:text-2xl font-medium text-slate-600 mb-10">
+        <p className="text-xl md:text-2xl text-foreground/70 font-heading italic">
           {service.promise}
         </p>
 
         {/* Barre de statut (Bento) */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="flex items-center gap-4 p-4 bg-white border-2 border-border-dark shadow-neo-sm">
-            <div className="w-10 h-10 bg-primary/10 flex items-center justify-center border border-primary/20">
-              <Wrench size={20} className="text-primary" />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+          <div className="bg-secondary-background border-2 border-border p-6 rounded-base flex items-center gap-4">
+            <div className="p-3 bg-main/20 text-main border-2 border-main rounded-base">
+              <Wrench size={24} />
             </div>
             <div>
-              <p className="text-[10px] font-mono uppercase text-slate-400 font-bold">🛠 Technos</p>
-              <p className="font-bold text-slate-900 text-sm">{service.technos}</p>
+              <p className="text-xs uppercase font-heading text-foreground/50">🛠 Technos</p>
+              <p className="text-lg font-heading">{service.technos}</p>
             </div>
           </div>
-          <div className="flex items-center gap-4 p-4 bg-white border-2 border-border-dark shadow-neo-sm">
-            <div className="w-10 h-10 bg-secondary/10 flex items-center justify-center border border-secondary/20">
-              <Clock size={20} className="text-secondary" />
+          <div className="bg-secondary-background border-2 border-border p-6 rounded-base flex items-center gap-4">
+            <div className="p-3 bg-main/20 text-main border-2 border-main rounded-base">
+              <Clock size={24} />
             </div>
             <div>
-              <p className="text-[10px] font-mono uppercase text-slate-400 font-bold">⏱ Déploiement</p>
-              <p className="font-bold text-slate-900">{service.deployment}</p>
+              <p className="text-xs uppercase font-heading text-foreground/50">⏱ Déploiement</p>
+              <p className="text-lg font-heading">{service.deployment}</p>
             </div>
           </div>
-          <div className="flex items-center gap-4 p-4 bg-white border-2 border-border-dark shadow-neo-sm">
-            <div className="w-10 h-10 bg-emerald-100 flex items-center justify-center border border-emerald-200">
-              <ShieldCheck size={20} className="text-emerald-600" />
+          <div className="bg-secondary-background border-2 border-border p-6 rounded-base flex items-center gap-4">
+            <div className="p-3 bg-main/20 text-main border-2 border-main rounded-base">
+              <ShieldCheck size={24} />
             </div>
             <div>
-              <p className="text-[10px] font-mono uppercase text-slate-400 font-bold">🔒 Sécurité</p>
-              <p className="font-bold text-slate-900">{service.security}</p>
+              <p className="text-xs uppercase font-heading text-foreground/50">🔒 Sécurité</p>
+              <p className="text-lg font-heading">{service.security}</p>
             </div>
           </div>
         </div>
       </header>
 
       {/* Section "Le Diagnostic" */}
-      <section className="mb-16">
-        <div className="bg-white border-[4px] border-border-dark p-8 shadow-neo relative">
-          <div className="absolute -top-4 -left-4 bg-primary text-white p-2 border-2 border-border-dark">
-            <Zap size={20} />
-          </div>
-          <p className="text-xl font-medium text-slate-800 leading-relaxed italic">
-            "{service.diagnostic}"
-          </p>
+      <section className="bg-main border-2 border-border p-8 rounded-base flex items-start gap-6">
+        <div className="p-4 bg-main-foreground text-main border-2 border-border rounded-base shrink-0">
+          <Zap size={32} />
         </div>
+        <p className="text-2xl text-main-foreground font-heading italic leading-tight">
+          "{service.diagnostic}"
+        </p>
       </section>
 
       {/* Méthodologie "Step-by-Step" */}
-      <section className="mb-16">
-        <div className="flex items-center gap-4 mb-10">
-          <div className="h-1 w-12 bg-primary"></div>
-          <h2 className="text-2xl font-bold uppercase tracking-tighter text-slate-900">Méthodologie Step-by-Step</h2>
+      <section className="flex flex-col gap-8">
+        <div className="flex items-center gap-4">
+          <div className="h-1 w-12 bg-main"></div>
+          <h2 className="text-3xl font-heading uppercase">Méthodologie Step-by-Step</h2>
         </div>
         
-        <div className="relative pl-8 md:pl-12">
+        <div className="relative pl-8 md:pl-0">
           {/* Vertical Line */}
-          <div className="absolute left-[15px] md:left-[28px] top-0 bottom-0 w-1 bg-border-dark" />
+          <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-1 bg-border -translate-x-1/2 hidden md:block"></div>
           
-          <div className="space-y-12">
+          <div className="flex flex-col gap-12">
             {service.steps.map((step, index) => (
-              <div key={index} className="relative">
+              <div key={index} className={`flex flex-col md:flex-row items-center gap-8 ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
+                <div className="flex-1 w-full">
+                  <div className="bg-secondary-background border-2 border-border p-6 rounded-base">
+                    <h3 className="text-xl font-heading mb-2">{step.title}</h3>
+                    <p className="text-foreground/70 text-sm">{step.description}</p>
+                  </div>
+                </div>
+                
                 {/* Numbered Circle */}
-                <div className="absolute -left-[32px] md:-left-[40px] top-0 w-8 h-8 md:w-10 md:h-10 bg-white border-2 border-border-dark rounded-full flex items-center justify-center font-mono font-bold text-sm md:text-base shadow-neo-sm z-10">
+                <div className="relative z-10 w-12 h-12 bg-main text-main-foreground border-2 border-border rounded-base flex items-center justify-center font-heading text-xl shrink-0">
                   0{index + 1}
                 </div>
-                <div className="bg-white border-2 border-border-dark p-6 shadow-neo-sm ml-4">
-                  <h3 className="text-lg font-bold text-slate-900 mb-2 uppercase tracking-tight">{step.title}</h3>
-                  <p className="text-slate-600 text-sm leading-relaxed">{step.description}</p>
-                </div>
+                
+                <div className="flex-1 hidden md:block"></div>
               </div>
             ))}
           </div>
@@ -142,18 +146,18 @@ const ServiceDetail: React.FC<ServiceDetailProps> = ({ service, onBack }) => {
       </section>
 
       {/* Le Livrable */}
-      <section className="mb-16">
-        <div className="flex items-center gap-4 mb-6">
-          <div className="h-1 w-12 bg-secondary"></div>
-          <h2 className="text-2xl font-bold uppercase tracking-tighter text-slate-900">Le Livrable</h2>
+      <section className="flex flex-col gap-8">
+        <div className="flex items-center gap-4">
+          <div className="h-1 w-12 bg-main"></div>
+          <h2 className="text-3xl font-heading uppercase">Le Livrable</h2>
         </div>
-        <div className="bg-white border-2 border-border-dark p-8 shadow-neo">
-          <h3 className="text-lg font-bold text-slate-900 mb-6 uppercase tracking-widest font-mono">Checklist technique :</h3>
+        <div className="bg-secondary-background border-2 border-border p-8 rounded-base">
+          <h3 className="text-xl font-heading mb-6">Checklist technique :</h3>
           <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {service.deliverables.map((item, index) => (
-              <li key={index} className="flex items-center gap-3 text-slate-700 font-medium">
-                <div className="flex-shrink-0 w-6 h-6 bg-emerald-100 border border-emerald-200 flex items-center justify-center">
-                  <CheckCircle2 size={14} className="text-emerald-600" />
+              <li key={index} className="flex items-center gap-3 text-foreground/80 font-heading">
+                <div className="text-main">
+                  <CheckCircle2 size={18} />
                 </div>
                 {item}
               </li>
@@ -163,18 +167,18 @@ const ServiceDetail: React.FC<ServiceDetailProps> = ({ service, onBack }) => {
       </section>
 
       {/* CTA de Consultation */}
-      <section className="bg-primary border-2 border-border-dark p-10 shadow-neo text-center">
-        <h2 className="text-3xl font-bold text-white mb-4 uppercase tracking-tighter">Prêt à optimiser votre infrastructure ?</h2>
-        <p className="text-white/80 mb-8 max-w-xl mx-auto font-medium">
+      <section className="bg-foreground text-background p-12 border-2 border-border shadow-shadow rounded-base text-center flex flex-col items-center gap-8 mt-12">
+        <h2 className="text-4xl md:text-5xl font-heading uppercase tracking-tighter">Prêt à optimiser votre infrastructure ?</h2>
+        <p className="text-xl text-background/80 max-w-2xl font-base">
           Nos experts sont prêts à analyser vos besoins et à concevoir une solution sur mesure pour votre entreprise.
         </p>
-        <div className="flex flex-col md:flex-row items-center justify-center gap-4">
-          <button className="h-14 px-10 bg-slate-900 border-2 border-border-dark text-white font-mono font-bold uppercase tracking-wider shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-neo-hover transition-all flex items-center gap-2">
-            {service.cta} <ChevronRight size={20} />
-          </button>
-          <button className="h-14 px-10 bg-white border-2 border-border-dark text-slate-900 font-mono font-bold uppercase tracking-wider shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-neo-hover transition-all flex items-center gap-2">
-            <MessageSquare size={20} /> Parlons de votre projet
-          </button>
+        <div className="flex flex-wrap justify-center gap-6">
+          <Button size="lg" className="bg-main text-main-foreground border-border">
+            {service.cta} <ChevronRight size={24} className="ml-2" />
+          </Button>
+          <Button size="lg" variant="outline" className="bg-transparent text-background border-background hover:bg-background hover:text-foreground">
+            <MessageSquare size={24} className="mr-2" /> Parlons de votre projet
+          </Button>
         </div>
       </section>
     </motion.div>

@@ -16,6 +16,16 @@ import {
   Linkedin
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { Button } from "@/components/ui/button";
+import {
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarSeparator,
+  MenubarShortcut,
+  MenubarTrigger,
+} from "@/components/ui/menubar";
 import CourseDetail, { type CourseData } from './CourseDetail';
 import ServiceDetail, { type ServiceData } from './ServiceDetail';
 import coursesData from '../data/courses.json';
@@ -32,22 +42,20 @@ const ExpertiseCard = ({
   description: string, 
   onDiscover: () => void 
 }) => (
-  <motion.div 
-    whileHover={{ x: -2, y: -2, boxShadow: '6px 6px 0px 0px #111718' }}
-    className="flex flex-col bg-white border-2 border-border-dark p-6 shadow-neo transition-all h-full"
-  >
-    <div className="w-12 h-12 mb-6 bg-primary/10 border-2 border-border-dark flex items-center justify-center rounded-full text-primary">
+  <div className="flex flex-col bg-secondary-background border-2 border-border p-6 shadow-shadow transition-all duration-300 h-full rounded-none">
+    <div className="w-12 h-12 mb-6 bg-main border-2 border-border flex items-center justify-center rounded-none text-main-foreground">
       <Icon size={24} />
     </div>
-    <h3 className="text-xl font-bold mb-3 font-mono uppercase tracking-tight">{title}</h3>
-    <p className="text-slate-600 text-sm mb-6 flex-grow leading-relaxed line-clamp-4">{description}</p>
-    <button 
+    <h3 className="text-xl font-heading mb-3 uppercase tracking-tight text-foreground">{title}</h3>
+    <p className="text-foreground/70 text-sm mb-6 flex-grow leading-relaxed line-clamp-4 font-base">{description}</p>
+    <Button 
+      variant="default"
       onClick={onDiscover}
-      className="inline-flex items-center text-sm font-bold uppercase tracking-wider text-primary hover:underline decoration-2 underline-offset-4"
+      className="w-full"
     >
-      En savoir plus <ArrowRight size={16} className="ml-1" />
-    </button>
-  </motion.div>
+      En savoir plus <ArrowRight size={16} className="ml-2" />
+    </Button>
+  </div>
 );
 
 const AcademyCard = ({ 
@@ -63,31 +71,29 @@ const AcademyCard = ({
   icon: any, 
   onDiscover: () => void
 }) => (
-  <motion.div 
-    whileHover={{ boxShadow: '6px 6px 0px 0px #111718' }}
-    className="relative flex flex-col bg-white border-2 border-border-dark p-6 shadow-neo transition-all h-full"
-  >
-    <div className="w-full aspect-video bg-secondary/20 mb-4 border-2 border-border-dark overflow-hidden relative flex items-center justify-center">
-      <div className="absolute inset-0 bg-gradient-to-br from-secondary/10 to-secondary/40" />
-      <Icon size={48} className="text-secondary" />
+  <div className="relative flex flex-col bg-secondary-background border-2 border-border p-6 shadow-shadow transition-all duration-300 h-full rounded-none">
+    <div className="w-full aspect-video bg-main/10 mb-4 border-2 border-border overflow-hidden relative flex items-center justify-center rounded-none">
+      <div className="absolute inset-0 bg-gradient-to-br from-main/5 to-main/20" />
+      <Icon size={48} className="text-main relative z-10" />
     </div>
-    <h3 className="text-xl font-bold mb-2 font-mono text-slate-900 uppercase tracking-tight">{title}</h3>
-    <p className="text-slate-600 text-xs mb-4">{description}</p>
+    <h3 className="text-xl font-heading mb-2 text-foreground uppercase tracking-tight">{title}</h3>
+    <p className="text-foreground/60 text-xs mb-4 font-heading">{description}</p>
     <ul className="space-y-2 mb-6 flex-grow">
       {features.map((feature, i) => (
-        <li key={i} className="flex items-start gap-2 text-xs text-slate-700">
-          <Check size={14} className="text-secondary shrink-0" />
+        <li key={i} className="flex items-start gap-2 text-xs text-foreground/80 font-base">
+          <Check size={14} className="text-main shrink-0 stroke-[3px]" />
           <span>{feature}</span>
         </li>
       ))}
     </ul>
-    <button 
+    <Button 
       onClick={onDiscover}
-      className="w-full py-2 border-2 border-border-dark bg-secondary/10 hover:bg-secondary hover:text-white transition-all text-xs font-bold uppercase font-mono tracking-wider text-slate-900"
+      variant="default"
+      className="w-full"
     >
       Découvrir
-    </button>
-  </motion.div>
+    </Button>
+  </div>
 );
 
 export default function RayonisApp() {
@@ -114,30 +120,83 @@ export default function RayonisApp() {
     setSelectedCourseId(null);
     window.scrollTo(0, 0);
   };
+
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-background text-foreground font-base">
       {/* Navbar */}
-      <header className="sticky top-0 z-50 w-full border-b-2 border-border-dark bg-white">
+      <header className="sticky top-0 z-50 w-full border-b-2 border-border bg-secondary-background">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <a href="/" className="flex items-center gap-3 hover:opacity-90 transition-opacity">
-              <img src="/logo.svg" alt="Rayonis Logo" className="h-12 w-auto" referrerPolicy="no-referrer" />
-            </a>
+            <Button variant="ghost" asChild className="p-0 h-auto">
+              <a href="/" className="p-[0.5em]" style={{ border: 'solid 2px black' }}>
+                <img src="/logo.svg" alt="Rayonis Logo" className="h-12 w-auto" referrerPolicy="no-referrer" />
+              </a>
+            </Button>
           </div>
           
-          <nav className="hidden md:flex items-center gap-8">
-            <a href="#" className="text-sm font-bold uppercase tracking-wide hover:text-primary transition-colors">Expertise</a>
-            <a href="#" className="text-sm font-bold uppercase tracking-wide hover:text-secondary transition-colors">Académie</a>
-            <a href="#" className="text-sm font-bold uppercase tracking-wide hover:text-primary transition-colors">À propos</a>
-          </nav>
+          <div className="hidden md:flex">
+            <Menubar>
+              <MenubarMenu>
+                <MenubarTrigger>Expertise</MenubarTrigger>
+                <MenubarContent>
+                  <MenubarItem onClick={() => handleSelectService('geo-reputation')}>
+                    GEO & E-Réputation
+                  </MenubarItem>
+                  <MenubarItem onClick={() => handleSelectService('automatisation-ia')}>
+                    Automatisation IA
+                  </MenubarItem>
+                  <MenubarItem onClick={() => handleSelectService('orchestration-mcp')}>
+                    Orchestration IA & MCP
+                  </MenubarItem>
+                  <MenubarItem onClick={() => handleSelectService('architecture-solution')}>
+                    Architecture de solution
+                  </MenubarItem>
+                </MenubarContent>
+              </MenubarMenu>
+              
+              <MenubarMenu>
+                <MenubarTrigger>Académie</MenubarTrigger>
+                <MenubarContent>
+                  <MenubarItem onClick={() => handleSelectCourse('vibe-coding')}>
+                    Programmation et vibe coding
+                  </MenubarItem>
+                  <MenubarItem onClick={() => handleSelectCourse('ia-generative')}>
+                    Ia générative
+                  </MenubarItem>
+                  <MenubarItem onClick={() => handleSelectCourse('vibe-marketing')}>
+                    Vibe marketing
+                  </MenubarItem>
+                  <MenubarItem onClick={() => handleSelectCourse('automatisation-n8n')}>
+                    Automatisation n8n
+                  </MenubarItem>
+                </MenubarContent>
+              </MenubarMenu>
 
-          <button className="hidden md:flex items-center justify-center h-10 px-6 bg-primary border-2 border-border-dark text-white font-mono text-sm font-bold uppercase tracking-wider shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-neo-hover transition-all">
+              <MenubarMenu>
+                <MenubarTrigger>À propos</MenubarTrigger>
+                <MenubarContent>
+                  <MenubarItem>
+                    L'équipe
+                  </MenubarItem>
+                  <MenubarItem>
+                    Notre mission
+                  </MenubarItem>
+                  <MenubarSeparator />
+                  <MenubarItem>
+                    Contact
+                  </MenubarItem>
+                </MenubarContent>
+              </MenubarMenu>
+            </Menubar>
+          </div>
+
+          <Button className="hidden md:flex">
             Réserver un appel
-          </button>
+          </Button>
 
-          <button className="md:hidden p-2">
+          <Button variant="ghost" size="icon" className="md:hidden">
             <Menu size={24} />
-          </button>
+          </Button>
         </div>
       </header>
 
@@ -163,31 +222,31 @@ export default function RayonisApp() {
             className="flex-grow w-full max-w-7xl mx-auto px-6 py-12 flex flex-col gap-24"
           >
             {/* Hero Section */}
-            <section className="relative py-12 md:py-20 overflow-hidden">
-              <div className="absolute inset-0 -z-10 opacity-[0.03]" 
-                   style={{ backgroundImage: 'radial-gradient(#111718 1px, transparent 1px)', backgroundSize: '24px 24px' }}></div>
+            <section className="relative py-12 md:py-24">
+              <div className="absolute inset-0 -z-10 opacity-[0.05]" 
+                   style={{ backgroundImage: 'radial-gradient(var(--color-foreground) 2px, transparent 2px)', backgroundSize: '32px 32px' }}></div>
               
               <div className="flex flex-col items-start gap-8 max-w-4xl">
                 <motion.div 
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="inline-flex items-center gap-2 px-3 py-1 bg-white border-2 border-primary shadow-neo-sm text-primary font-mono text-[10px] font-bold uppercase tracking-widest"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-secondary-background border-2 border-main text-main font-heading text-xs uppercase tracking-widest rounded-base"
                 >
-                  <Sparkles size={14} />
+                  <Sparkles size={16} />
                   Solutions IA Avancées
                 </motion.div>
 
                 <motion.h1 
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 }}
-                  className="text-5xl md:text-7xl font-bold tracking-tighter text-slate-900 leading-[1.1]"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.6 }}
+                  className="text-6xl md:text-8xl font-heading tracking-tighter text-foreground leading-[0.9]"
                 >
                   Transformez votre futur avec <br className="hidden md:block" />
-                  <span className="relative inline-block px-4 py-1 bg-primary text-white border-2 border-border-dark shadow-neo mt-2 md:mt-0">
+                  <span className="relative inline-block px-6 py-2 bg-main text-main-foreground border-2 border-border mt-4 md:mt-2 rounded-base">
                     l'Intelligence
                   </span> <br className="md:hidden" />
-                  <span className="relative inline-block px-4 py-1 bg-primary text-white border-2 border-border-dark shadow-neo mt-2">
+                  <span className="relative inline-block px-6 py-2 bg-main text-main-foreground border-2 border-border mt-4 rounded-base">
                     Artificielle
                   </span>
                 </motion.h1>
@@ -196,34 +255,29 @@ export default function RayonisApp() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 }}
-                  className="flex items-start gap-6 border-l-4 border-primary pl-6 py-2"
+                  className="flex items-start gap-6 border-l-4 border-main pl-8 py-4"
                 >
-                  <p className="text-lg md:text-xl text-slate-600 leading-relaxed font-medium max-w-2xl">
+                  <p className="text-xl md:text-2xl text-foreground/80 leading-tight font-heading max-w-2xl">
                     Découvrez comment nous transformons votre entreprise avec des solutions IA de pointe, sécurisées et performantes. Une approche pragmatique pour des résultats concrets.
                   </p>
                 </motion.div>
 
-                <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
-                  className="flex flex-wrap gap-4 mt-4"
-                >
-                  <button className="h-14 px-8 bg-slate-900 border-2 border-border-dark text-white font-mono font-bold uppercase tracking-wider shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-neo-hover transition-all">
+                <div>
+                  <Button size="lg" variant="dark">
                     Découvrir nos services
-                  </button>
-                  <button className="h-14 px-8 bg-white border-2 border-border-dark text-slate-900 font-mono font-bold uppercase tracking-wider shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-neo-hover transition-all">
+                  </Button>
+                  <Button size="lg" variant="outline" className="ml-4">
                     Parlons de votre projet
-                  </button>
-                </motion.div>
+                  </Button>
+                </div>
               </div>
             </section>
 
             {/* Expertise Section */}
-            <section className="flex flex-col gap-8">
-              <div className="flex items-center gap-4">
-                <div className="h-1 w-12 bg-primary"></div>
-                <h2 className="text-3xl font-bold uppercase tracking-tighter text-slate-900">Expertise & Solutions</h2>
+            <section className="flex flex-col gap-12">
+              <div className="flex items-center gap-6">
+                <div className="h-2 w-16 bg-main"></div>
+                <h2 className="text-4xl md:text-5xl font-heading uppercase tracking-tighter text-foreground">Expertise & Solutions</h2>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -255,10 +309,10 @@ export default function RayonisApp() {
             </section>
 
             {/* Academy Section */}
-            <section className="flex flex-col gap-8">
-              <div className="flex items-center gap-4">
-                <div className="h-1 w-12 bg-secondary"></div>
-                <h2 className="text-3xl font-bold uppercase tracking-tighter text-slate-900">Académie Rayonis</h2>
+            <section className="flex flex-col gap-12">
+              <div className="flex items-center gap-6">
+                <div className="h-2 w-16 bg-main"></div>
+                <h2 className="text-4xl md:text-5xl font-heading uppercase tracking-tighter text-foreground">Académie Rayonis</h2>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -297,37 +351,43 @@ export default function RayonisApp() {
       </AnimatePresence>
 
       {/* Footer */}
-      <footer className="bg-white border-t-4 border-[#0F172A] p-10 font-mono">
+      <footer className="bg-secondary-background border-t-4 border-border p-10 mt-auto">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
             
             <div className="space-y-2">
-              <h2 className="text-3xl font-black uppercase tracking-tighter text-[#0F172A]">
+              <h2 className="text-3xl font-heading uppercase tracking-tighter text-foreground">
                 Rayonis
               </h2>
               <div className="text-sm space-y-1">
-                <p className="font-bold">SIREN : 101 871 424</p>
-                <p className="text-gray-600">27200 Vernon</p>
+                <p className="font-heading">SIREN : 101 871 424</p>
+                <p className="text-foreground/60">27200 Vernon</p>
               </div>
             </div>
 
             <div className="flex flex-wrap gap-4">
-              <div className="bg-[#06B6D4] border-2 border-[#0F172A] px-4 py-2 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] font-bold text-white">
+              <div className="bg-main border-2 border-border px-4 py-2 font-heading text-main-foreground rounded-base">
                 ORCHESTRATION IA
               </div>
-              <div className="bg-[#A78BFA] border-2 border-[#0F172A] px-4 py-2 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] font-bold text-white">
+              <div className="bg-main/50 border-2 border-border px-4 py-2 font-heading text-foreground rounded-base">
                 VIBE CODING
               </div>
             </div>
 
           </div>
 
-          <div className="border-t-2 border-[#0F172A] mt-10 pt-6 flex flex-col md:flex-row justify-between text-xs font-bold uppercase">
+          <div className="border-t-2 border-border mt-10 pt-6 flex flex-col md:flex-row justify-between text-xs font-heading uppercase">
             <p>© 2026 Rayonis — L'intention au centre du projet</p>
-            <div className="flex gap-6 mt-4 md:mt-0">
-              <a href="#" className="hover:underline underline-offset-4">Mentions Légales</a>
-              <a href="#" className="hover:underline underline-offset-4">CGV / CGU</a>
-              <a href="#" className="hover:underline underline-offset-4">Contact</a>
+            <div className="flex gap-4 mt-4 md:mt-0">
+              <Button variant="secondary" asChild className="text-xs font-heading uppercase">
+                <a href="#">Mentions Légales</a>
+              </Button>
+              <Button variant="secondary" asChild className="text-xs font-heading uppercase">
+                <a href="#">CGV / CGU</a>
+              </Button>
+              <Button variant="secondary" asChild className="text-xs font-heading uppercase">
+                <a href="#">Contact</a>
+              </Button>
             </div>
           </div>
         </div>

@@ -10,6 +10,7 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { motion } from 'motion/react';
+import { Button } from "@/components/ui/button";
 
 export interface CourseModule {
   title: string;
@@ -39,100 +40,99 @@ interface CourseDetailProps {
 const CourseDetail: React.FC<CourseDetailProps> = ({ course, onBack }) => {
   return (
     <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      className="max-w-4xl mx-auto px-6 py-12"
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -20 }}
+      className="flex-grow w-full max-w-7xl mx-auto px-6 py-12 flex flex-col gap-12"
     >
       {/* Back Button */}
-      <button 
+      <Button 
+        variant="outline"
         onClick={onBack}
-        className="group mb-12 flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-slate-500 hover:text-primary transition-colors"
+        className="w-fit"
       >
-        <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
+        <ArrowLeft size={18} className="mr-2" />
         Retour à l'académie
-      </button>
+      </Button>
 
       {/* Header / Hero */}
-      <header className="mb-16">
-        <div className="inline-block px-3 py-1 bg-slate-900 text-white font-mono text-[10px] font-bold uppercase tracking-widest mb-6 border border-slate-700">
-          [ {course.badge} ]
+      <header className="flex flex-col gap-6">
+        <div className="inline-flex w-fit px-3 py-1 bg-main/10 border-2 border-main text-main font-heading text-xs uppercase rounded-base">
+          [ {course.badge || "Formation"} ]
         </div>
         
-        <h1 className="text-4xl md:text-6xl font-bold tracking-tighter text-slate-900 mb-6 leading-tight">
-          <span className="relative inline-block">
+        <h1 className="text-5xl md:text-7xl font-heading tracking-tighter text-foreground leading-none">
+          <span className="bg-main text-main-foreground px-4 py-1 border-2 border-border rounded-base">
             {course.title}
-            <div className="absolute bottom-1 left-0 w-full h-3 bg-[#A78BFA]/30 -z-10" />
           </span>
         </h1>
 
-        <p className="text-xl md:text-2xl font-medium text-slate-600 italic mb-10">
+        <p className="text-xl md:text-2xl text-foreground/70 font-heading italic">
           "{course.accroche}"
         </p>
 
         {/* Bento Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="flex items-center gap-4 p-4 bg-white border-2 border-border-dark shadow-neo-sm">
-            <div className="w-10 h-10 bg-primary/10 flex items-center justify-center border border-primary/20">
-              <Clock size={20} className="text-primary" />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+          <div className="bg-secondary-background border-2 border-border p-6 rounded-base flex items-center gap-4">
+            <div className="p-3 bg-main/20 text-main border-2 border-main rounded-base">
+              <Clock size={24} />
             </div>
             <div>
-              <p className="text-[10px] font-mono uppercase text-slate-400 font-bold">Durée</p>
-              <p className="font-bold text-slate-900">{course.duration}</p>
+              <p className="text-xs uppercase font-heading text-foreground/50">Durée</p>
+              <p className="text-lg font-heading">{course.duration}</p>
             </div>
           </div>
-          <div className="flex items-center gap-4 p-4 bg-white border-2 border-border-dark shadow-neo-sm">
-            <div className="w-10 h-10 bg-secondary/10 flex items-center justify-center border border-secondary/20">
-              <Target size={20} className="text-secondary" />
+          <div className="bg-secondary-background border-2 border-border p-6 rounded-base flex items-center gap-4">
+            <div className="p-3 bg-main/20 text-main border-2 border-main rounded-base">
+              <Target size={24} />
             </div>
             <div>
-              <p className="text-[10px] font-mono uppercase text-slate-400 font-bold">Niveau</p>
-              <p className="font-bold text-slate-900">{course.level}</p>
+              <p className="text-xs uppercase font-heading text-foreground/50">Niveau</p>
+              <p className="text-lg font-heading">{course.level}</p>
             </div>
           </div>
-          <div className="flex items-center gap-4 p-4 bg-white border-2 border-border-dark shadow-neo-sm">
-            <div className="w-10 h-10 bg-slate-100 flex items-center justify-center border border-slate-200">
-              <Users size={20} className="text-slate-600" />
+          <div className="bg-secondary-background border-2 border-border p-6 rounded-base flex items-center gap-4">
+            <div className="p-3 bg-main/20 text-main border-2 border-main rounded-base">
+              <Users size={24} />
             </div>
             <div>
-              <p className="text-[10px] font-mono uppercase text-slate-400 font-bold">Format</p>
-              <p className="font-bold text-slate-900">{course.format}</p>
+              <p className="text-xs uppercase font-heading text-foreground/50">Format</p>
+              <p className="text-lg font-heading">{course.format}</p>
             </div>
           </div>
         </div>
       </header>
 
       {/* L'Intention */}
-      <section className="mb-16">
+      <section className="bg-main border-2 border-border p-8 rounded-base">
         <div className="flex items-center gap-4 mb-6">
-          <div className="h-1 w-12 bg-primary"></div>
-          <h2 className="text-2xl font-bold uppercase tracking-tighter text-slate-900">L'Intention (Le Vibe)</h2>
+          <div className="h-1 w-12 bg-main-foreground"></div>
+          <h2 className="text-2xl font-heading uppercase text-main-foreground">L'Intention (Le Vibe)</h2>
         </div>
-        <div className="bg-white border-2 border-border-dark p-8 shadow-neo relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full -mr-12 -mt-12" />
-          <p className="text-lg text-slate-700 leading-relaxed relative z-10">
+        <div className="max-w-4xl">
+          <p className="text-xl text-main-foreground/90 leading-relaxed font-heading">
             {course.intention}
           </p>
         </div>
       </section>
 
       {/* Le Programme */}
-      <section className="mb-16">
-        <div className="flex items-center gap-4 mb-6">
-          <div className="h-1 w-12 bg-secondary"></div>
-          <h2 className="text-2xl font-bold uppercase tracking-tighter text-slate-900">Le Programme</h2>
+      <section className="flex flex-col gap-8">
+        <div className="flex items-center gap-4">
+          <div className="h-1 w-12 bg-main"></div>
+          <h2 className="text-3xl font-heading uppercase">Le Programme</h2>
         </div>
-        <div className="bg-white border-2 border-border-dark shadow-neo overflow-hidden">
-          <div className="divide-y-2 divide-slate-100">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="space-y-6">
             {course.modules.map((module, index) => (
-              <div key={index} className="p-6 md:p-8 hover:bg-slate-50 transition-colors">
-                <h3 className="text-lg font-bold text-slate-900 mb-3 flex items-center gap-3">
-                  <span className="w-8 h-8 bg-secondary text-white text-xs font-mono flex items-center justify-center border border-border-dark">
+              <div key={index} className="bg-secondary-background border-2 border-border p-6 rounded-base">
+                <h3 className="text-xl font-heading mb-3 flex items-center gap-3">
+                  <span className="bg-main text-main-foreground w-8 h-8 flex items-center justify-center text-sm border-2 border-border rounded-base">
                     0{index + 1}
                   </span>
                   {module.title}
                 </h3>
-                <p className="text-slate-600 pl-11">
+                <p className="text-foreground/70 text-sm leading-relaxed">
                   {module.content}
                 </p>
               </div>
@@ -142,17 +142,14 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ course, onBack }) => {
       </section>
 
       {/* Stack Technique */}
-      <section className="mb-16">
-        <div className="flex items-center gap-4 mb-6">
-          <div className="h-1 w-12 bg-slate-900"></div>
-          <h2 className="text-2xl font-bold uppercase tracking-tighter text-slate-900">Stack Technique</h2>
+      <section className="flex flex-col gap-8">
+        <div className="flex items-center gap-4">
+          <div className="h-1 w-12 bg-main"></div>
+          <h2 className="text-3xl font-heading uppercase">Stack Technique</h2>
         </div>
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap gap-4">
           {course.stack.map((tool, index) => (
-            <span 
-              key={index}
-              className="px-4 py-2 bg-white border-2 border-border-dark font-mono text-xs font-bold uppercase tracking-wider shadow-neo-sm"
-            >
+            <span key={index} className="px-4 py-2 bg-secondary-background border-2 border-border font-heading text-sm rounded-base">
               {tool}
             </span>
           ))}
@@ -160,18 +157,18 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ course, onBack }) => {
       </section>
 
       {/* CTA */}
-      <section className="bg-slate-900 border-2 border-border-dark p-10 shadow-neo text-center">
-        <h2 className="text-3xl font-bold text-white mb-4 uppercase tracking-tighter">Prêt à passer au niveau supérieur ?</h2>
-        <p className="text-slate-400 mb-8 max-w-xl mx-auto">
+      <section className="bg-foreground text-background p-12 border-2 border-border shadow-shadow rounded-base text-center flex flex-col items-center gap-8 mt-12">
+        <h2 className="text-4xl md:text-5xl font-heading uppercase tracking-tighter">Prêt à passer au niveau supérieur ?</h2>
+        <p className="text-xl text-background/80 max-w-2xl font-base">
           Rejoignez une communauté d'experts et maîtrisez les outils qui façonnent le futur de votre industrie.
         </p>
-        <div className="flex flex-col md:flex-row items-center justify-center gap-4">
-          <button className="h-14 px-10 bg-primary border-2 border-border-dark text-white font-mono font-bold uppercase tracking-wider shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-neo-hover transition-all flex items-center gap-2">
-            {course.cta} <ChevronRight size={20} />
-          </button>
-          <button className="h-14 px-10 bg-white border-2 border-border-dark text-slate-900 font-mono font-bold uppercase tracking-wider shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-neo-hover transition-all flex items-center gap-2">
-            <Download size={20} /> Syllabus complet
-          </button>
+        <div className="flex flex-wrap justify-center gap-6">
+          <Button size="lg" className="bg-main text-main-foreground border-border">
+            Suivre une formation <ChevronRight size={24} className="ml-2" />
+          </Button>
+          <Button size="lg" variant="outline" className="bg-transparent text-background border-background hover:bg-background hover:text-foreground">
+            <Download size={24} className="mr-2" /> Télécharger la fiche
+          </Button>
         </div>
       </section>
     </motion.div>
