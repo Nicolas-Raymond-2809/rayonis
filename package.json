@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@astrojs/react": "^4.4.2",
-    "@astrojs/tailwind": "^6.0.2",
     "@google/genai": "^1.29.0",
     "@radix-ui/react-menubar": "^1.1.16",
     "@radix-ui/react-slot": "^1.2.4",
