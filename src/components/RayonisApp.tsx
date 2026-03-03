@@ -297,26 +297,39 @@ export default function RayonisApp() {
       </AnimatePresence>
 
       {/* Footer */}
-      <footer className="w-full border-t-2 border-border-dark bg-white py-12">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
-          <div className="flex flex-col gap-4">
-            <div className="flex items-center gap-3">
-              <img src="/logo.svg" alt="Rayonis Logo" className="h-8 w-auto" referrerPolicy="no-referrer" />
+      <footer className="bg-white border-t-4 border-[#0F172A] p-10 font-mono">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+            
+            <div className="space-y-2">
+              <h2 className="text-3xl font-black uppercase tracking-tighter text-[#0F172A]">
+                Rayonis
+              </h2>
+              <div className="text-sm space-y-1">
+                <p className="font-bold">SIREN : 101 871 424</p>
+                <p className="text-gray-600">27200 Vernon</p>
+              </div>
             </div>
-            <p className="text-sm text-slate-500 max-w-xs">
-              Pionnier de l'intégration IA et de la formation technique nouvelle génération.
-            </p>
+
+            <div className="flex flex-wrap gap-4">
+              <div className="bg-[#06B6D4] border-2 border-[#0F172A] px-4 py-2 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] font-bold text-white">
+                ORCHESTRATION IA
+              </div>
+              <div className="bg-[#A78BFA] border-2 border-[#0F172A] px-4 py-2 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] font-bold text-white">
+                VIBE CODING
+              </div>
+            </div>
+
           </div>
 
-          <div className="flex gap-4">
-          
-            <a href="https://www.linkedin.com/in/nicolas-raymond-consultant-digital/" className="w-10 h-10 border-2 border-border-dark bg-white flex items-center justify-center hover:bg-slate-100 transition-colors shadow-neo-sm">
-              <Linkedin size={20} />
-            </a>
+          <div className="border-t-2 border-[#0F172A] mt-10 pt-6 flex flex-col md:flex-row justify-between text-xs font-bold uppercase">
+            <p>© 2026 Rayonis — L'intention au centre du projet</p>
+            <div className="flex gap-6 mt-4 md:mt-0">
+              <a href="#" className="hover:underline underline-offset-4">Mentions Légales</a>
+              <a href="#" className="hover:underline underline-offset-4">CGV / CGU</a>
+              <a href="#" className="hover:underline underline-offset-4">Contact</a>
+            </div>
           </div>
-        </div>
-        <div className="max-w-7xl mx-auto px-6 mt-12 pt-8 border-t border-slate-200 text-center text-[10px] font-mono uppercase tracking-widest text-slate-400">
-          © 2024 Rayonis. Tous droits réservés.
         </div>
       </footer>
     </div>

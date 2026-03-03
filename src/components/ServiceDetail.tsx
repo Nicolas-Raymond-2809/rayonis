@@ -122,7 +122,7 @@ const ServiceDetail: React.FC<ServiceDetailProps> = ({ service, onBack }) => {
         
         <div className="relative pl-8 md:pl-12">
           {/* Vertical Line */}
-          <div className="absolute left-[15px] md:left-[19px] top-0 bottom-0 w-1 bg-border-dark" />
+          <div className="absolute left-[15px] md:left-[28px] top-0 bottom-0 w-1 bg-border-dark" />
           
           <div className="space-y-12">
             {service.steps.map((step, index) => (
