@@ -13,7 +13,9 @@ import {
   Check,
   Menu,
   Twitter,
-  Linkedin
+  Linkedin,
+  X,
+  ChevronDown
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Button } from "@/components/ui/button";
@@ -96,9 +98,13 @@ const AcademyCard = ({
   </div>
 );
 
+import ContactForm from './ContactForm';
+
 export default function RayonisApp() {
   const [selectedCourseId, setSelectedCourseId] = useState<string | null>(null);
   const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isContactFormOpen, setIsContactFormOpen] = useState(false);
 
   const selectedCourse = coursesData.find(c => c.id === selectedCourseId) as CourseData | undefined;
   const selectedService = servicesData.find(s => s.id === selectedServiceId) as ServiceData | undefined;
@@ -106,25 +112,42 @@ export default function RayonisApp() {
   const handleBackToHome = () => {
     setSelectedCourseId(null);
     setSelectedServiceId(null);
+    setIsMobileMenuOpen(false);
     window.scrollTo(0, 0);
   };
 
   const handleSelectCourse = (id: string) => {
     setSelectedCourseId(id);
     setSelectedServiceId(null);
+    setIsMobileMenuOpen(false);
     window.scrollTo(0, 0);
   };
 
   const handleSelectService = (id: string) => {
     setSelectedServiceId(id);
     setSelectedCourseId(null);
+    setIsMobileMenuOpen(false);
     window.scrollTo(0, 0);
   };
 
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const handleOpenContact = (subject?: string) => {
+    setIsContactFormOpen(true);
+    setIsMobileMenuOpen(false);
+  };
+
   return (
-    <div className="min-h-screen flex flex-col bg-background text-foreground font-base overflow-x-hidden">
+    <div className="min-h-screen flex flex-col bg-background text-foreground font-base overflow-x-hidden pt-20">
+      <AnimatePresence>
+        {isContactFormOpen && (
+          <ContactForm onClose={() => setIsContactFormOpen(false)} />
+        )}
+      </AnimatePresence>
       {/* Navbar */}
-      <header className="sticky top-0 z-50 w-full border-b-2 border-border bg-secondary-background">
+      <header className="fixed top-0 z-50 w-full border-b-2 border-border bg-secondary-background">
         <div className="max-w-7xl mx-auto px-4 md:px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Button variant="ghost" asChild className="p-0 h-auto">
@@ -176,13 +199,10 @@ export default function RayonisApp() {
                 <MenubarTrigger>À propos</MenubarTrigger>
                 <MenubarContent>
                   <MenubarItem>
-                    L'équipe
-                  </MenubarItem>
-                  <MenubarItem>
                     Notre mission
                   </MenubarItem>
                   <MenubarSeparator />
-                  <MenubarItem>
+                  <MenubarItem onClick={() => handleOpenContact("Contact")}>
                     Contact
                   </MenubarItem>
                 </MenubarContent>
@@ -190,14 +210,59 @@ export default function RayonisApp() {
             </Menubar>
           </div>
 
-          <Button className="hidden md:flex">
+          <Button className="hidden md:flex" onClick={() => handleOpenContact("Réserver un appel")}>
             Réserver un appel
           </Button>
 
-          <Button variant="ghost" size="icon" className="md:hidden">
-            <Menu size={24} />
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="md:hidden border-2 border-border rounded-none"
+            onClick={toggleMobileMenu}
+          >
+            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </Button>
         </div>
+
+        {/* Mobile Menu Overlay */}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="md:hidden border-t-2 border-border bg-secondary-background overflow-hidden"
+            >
+              <div className="flex flex-col p-6 gap-6">
+                <div className="space-y-4">
+                  <p className="text-xs font-heading uppercase text-foreground/50 tracking-widest">Expertise</p>
+                  <div className="flex flex-col gap-2">
+                    <button onClick={() => handleSelectService('geo-reputation')} className="text-left py-2 font-heading uppercase text-sm hover:text-main transition-colors">GEO & E-Réputation</button>
+                    <button onClick={() => handleSelectService('automatisation-ia')} className="text-left py-2 font-heading uppercase text-sm hover:text-main transition-colors">Automatisation IA</button>
+                    <button onClick={() => handleSelectService('orchestration-mcp')} className="text-left py-2 font-heading uppercase text-sm hover:text-main transition-colors">Orchestration IA & MCP</button>
+                    <button onClick={() => handleSelectService('architecture-solution')} className="text-left py-2 font-heading uppercase text-sm hover:text-main transition-colors">Architecture de solution</button>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <p className="text-xs font-heading uppercase text-foreground/50 tracking-widest">Académie</p>
+                  <div className="flex flex-col gap-2">
+                    <button onClick={() => handleSelectCourse('vibe-coding')} className="text-left py-2 font-heading uppercase text-sm hover:text-main transition-colors">Programmation et vibe coding</button>
+                    <button onClick={() => handleSelectCourse('ia-generative')} className="text-left py-2 font-heading uppercase text-sm hover:text-main transition-colors">Ia générative</button>
+                    <button onClick={() => handleSelectCourse('vibe-marketing')} className="text-left py-2 font-heading uppercase text-sm hover:text-main transition-colors">Vibe marketing</button>
+                    <button onClick={() => handleSelectCourse('automatisation-n8n')} className="text-left py-2 font-heading uppercase text-sm hover:text-main transition-colors">Automatisation n8n</button>
+                  </div>
+                </div>
+
+                <div className="pt-4 border-t-2 border-border/10">
+                  <Button className="w-full" onClick={() => handleOpenContact("Réserver un appel")}>
+                    Réserver un appel
+                  </Button>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </header>
 
       <AnimatePresence mode="wait">
@@ -205,13 +270,15 @@ export default function RayonisApp() {
           <CourseDetail 
             key="course-detail"
             course={selectedCourse} 
-            onBack={handleBackToHome} 
+            onBack={handleBackToHome}
+            onContact={() => handleOpenContact("Formation : " + selectedCourse.title)}
           />
         ) : selectedService ? (
           <ServiceDetail 
             key="service-detail"
             service={selectedService} 
-            onBack={handleBackToHome} 
+            onBack={handleBackToHome}
+            onContact={() => handleOpenContact("Projet : " + selectedService.title)}
           />
         ) : (
           <motion.main 
@@ -261,15 +328,6 @@ export default function RayonisApp() {
                     Découvrez comment nous transformons votre entreprise avec des solutions IA de pointe, sécurisées et performantes. Une approche pragmatique pour des résultats concrets.
                   </p>
                 </motion.div>
-
-                <div>
-                  <Button size="lg" variant="dark">
-                    Découvrir nos services
-                  </Button>
-                  <Button size="lg" variant="outline" className="ml-4">
-                    Parlons de votre projet
-                  </Button>
-                </div>
               </div>
             </section>
 
@@ -378,15 +436,12 @@ export default function RayonisApp() {
 
           <div className="border-t-2 border-border mt-10 pt-6 flex flex-col md:flex-row justify-between text-xs font-heading uppercase">
             <p>© 2026 Rayonis — L'intention au centre du projet</p>
-            <div className="flex gap-4 mt-4 md:mt-0">
-              <Button variant="secondary" asChild className="text-xs font-heading uppercase">
+            <div className="flex flex-col md:flex-row gap-4 mt-4 md:mt-0">
+              <Button variant="secondary" asChild className="text-xs font-heading uppercase w-full md:w-auto">
                 <a href="#">Mentions Légales</a>
               </Button>
-              <Button variant="secondary" asChild className="text-xs font-heading uppercase">
-                <a href="#">CGV / CGU</a>
-              </Button>
-              <Button variant="secondary" asChild className="text-xs font-heading uppercase">
-                <a href="#">Contact</a>
+              <Button variant="secondary" className="text-xs font-heading uppercase w-full md:w-auto" onClick={() => handleOpenContact("Contact")}>
+                Contact
               </Button>
             </div>
           </div>

@@ -34,9 +34,10 @@ export interface ServiceData {
 interface ServiceDetailProps {
   service: ServiceData;
   onBack: () => void;
+  onContact: () => void;
 }
 
-const ServiceDetail: React.FC<ServiceDetailProps> = ({ service, onBack }) => {
+const ServiceDetail: React.FC<ServiceDetailProps> = ({ service, onBack, onContact }) => {
   return (
     <motion.div 
       initial={{ opacity: 0, x: 20 }}
@@ -173,10 +174,7 @@ const ServiceDetail: React.FC<ServiceDetailProps> = ({ service, onBack }) => {
           Nos experts sont prêts à analyser vos besoins et à concevoir une solution sur mesure pour votre entreprise.
         </p>
         <div className="flex flex-wrap justify-center gap-6">
-          <Button size="lg" className="bg-main text-main-foreground border-border">
-            {service.cta} <ChevronRight size={24} className="ml-2" />
-          </Button>
-          <Button size="lg" variant="outline" className="bg-transparent text-background border-background hover:bg-background hover:text-foreground">
+          <Button size="lg" variant="outline" className="bg-transparent text-background border-background hover:bg-background hover:text-foreground" onClick={onContact}>
             <MessageSquare size={24} className="mr-2" /> Parlons de votre projet
           </Button>
         </div>

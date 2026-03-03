@@ -35,9 +35,10 @@ export interface CourseData {
 interface CourseDetailProps {
   course: CourseData;
   onBack: () => void;
+  onContact: () => void;
 }
 
-const CourseDetail: React.FC<CourseDetailProps> = ({ course, onBack }) => {
+const CourseDetail: React.FC<CourseDetailProps> = ({ course, onBack, onContact }) => {
   return (
     <motion.div 
       initial={{ opacity: 0, x: 20 }}
@@ -163,7 +164,7 @@ const CourseDetail: React.FC<CourseDetailProps> = ({ course, onBack }) => {
           Rejoignez une communauté d'experts et maîtrisez les outils qui façonnent le futur de votre industrie.
         </p>
         <div className="flex flex-wrap justify-center gap-6">
-          <Button size="lg" className="bg-main text-main-foreground border-border">
+          <Button size="lg" className="bg-main text-main-foreground border-border" onClick={onContact}>
             Suivre une formation <ChevronRight size={24} className="ml-2" />
           </Button>
           <Button size="lg" variant="outline" className="bg-transparent text-background border-background hover:bg-background hover:text-foreground">
