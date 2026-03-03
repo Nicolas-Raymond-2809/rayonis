@@ -42,7 +42,7 @@ const ServiceDetail: React.FC<ServiceDetailProps> = ({ service, onBack }) => {
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -20 }}
-      className="flex-grow w-full max-w-7xl mx-auto px-6 py-12 flex flex-col gap-12"
+      className="flex-grow w-full max-w-7xl mx-auto px-4 md:px-6 py-12 flex flex-col gap-12"
     >
       {/* Back Button */}
       <Button 
@@ -56,12 +56,12 @@ const ServiceDetail: React.FC<ServiceDetailProps> = ({ service, onBack }) => {
 
       {/* Header Technique (Hero Service) */}
       <header className="flex flex-col gap-6">
-        <div className="inline-flex w-fit px-3 py-1 bg-main/10 border-2 border-main text-main font-heading text-xs uppercase rounded-base">
+        <div className="inline-flex w-fit px-3 py-1 bg-main/10 border-2 border-main text-main font-heading text-xs uppercase rounded-none">
           [ {service.category} ]
         </div>
         
         <h1 className="text-5xl md:text-7xl font-heading tracking-tighter text-foreground leading-none">
-          <span className="bg-main text-main-foreground px-4 py-1 border-2 border-border rounded-base">
+          <span className="bg-main text-main-foreground px-4 py-1 border-2 border-border rounded-none">
             {service.title}
           </span>
         </h1>
@@ -72,8 +72,8 @@ const ServiceDetail: React.FC<ServiceDetailProps> = ({ service, onBack }) => {
 
         {/* Barre de statut (Bento) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-          <div className="bg-secondary-background border-2 border-border p-6 rounded-base flex items-center gap-4">
-            <div className="p-3 bg-main/20 text-main border-2 border-main rounded-base">
+          <div className="bg-secondary-background border-2 border-border p-6 rounded-none flex items-center gap-4">
+            <div className="p-3 bg-main/20 text-main border-2 border-main rounded-none">
               <Wrench size={24} />
             </div>
             <div>
@@ -81,8 +81,8 @@ const ServiceDetail: React.FC<ServiceDetailProps> = ({ service, onBack }) => {
               <p className="text-lg font-heading">{service.technos}</p>
             </div>
           </div>
-          <div className="bg-secondary-background border-2 border-border p-6 rounded-base flex items-center gap-4">
-            <div className="p-3 bg-main/20 text-main border-2 border-main rounded-base">
+          <div className="bg-secondary-background border-2 border-border p-6 rounded-none flex items-center gap-4">
+            <div className="p-3 bg-main/20 text-main border-2 border-main rounded-none">
               <Clock size={24} />
             </div>
             <div>
@@ -90,8 +90,8 @@ const ServiceDetail: React.FC<ServiceDetailProps> = ({ service, onBack }) => {
               <p className="text-lg font-heading">{service.deployment}</p>
             </div>
           </div>
-          <div className="bg-secondary-background border-2 border-border p-6 rounded-base flex items-center gap-4">
-            <div className="p-3 bg-main/20 text-main border-2 border-main rounded-base">
+          <div className="bg-secondary-background border-2 border-border p-6 rounded-none flex items-center gap-4">
+            <div className="p-3 bg-main/20 text-main border-2 border-main rounded-none">
               <ShieldCheck size={24} />
             </div>
             <div>
@@ -103,8 +103,8 @@ const ServiceDetail: React.FC<ServiceDetailProps> = ({ service, onBack }) => {
       </header>
 
       {/* Section "Le Diagnostic" */}
-      <section className="bg-main border-2 border-border p-8 rounded-base flex items-start gap-6">
-        <div className="p-4 bg-main-foreground text-main border-2 border-border rounded-base shrink-0">
+      <section className="bg-main border-2 border-border p-8 rounded-none flex items-start gap-6">
+        <div className="p-4 bg-main-foreground text-main border-2 border-border rounded-none shrink-0">
           <Zap size={32} />
         </div>
         <p className="text-2xl text-main-foreground font-heading italic leading-tight">
@@ -127,14 +127,14 @@ const ServiceDetail: React.FC<ServiceDetailProps> = ({ service, onBack }) => {
             {service.steps.map((step, index) => (
               <div key={index} className={`flex flex-col md:flex-row items-center gap-8 ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
                 <div className="flex-1 w-full">
-                  <div className="bg-secondary-background border-2 border-border p-6 rounded-base">
+                  <div className="bg-secondary-background border-2 border-border p-6 rounded-none">
                     <h3 className="text-xl font-heading mb-2">{step.title}</h3>
                     <p className="text-foreground/70 text-sm">{step.description}</p>
                   </div>
                 </div>
                 
                 {/* Numbered Circle */}
-                <div className="relative z-10 w-12 h-12 bg-main text-main-foreground border-2 border-border rounded-base flex items-center justify-center font-heading text-xl shrink-0">
+                <div className="relative z-10 w-12 h-12 bg-main text-main-foreground border-2 border-border rounded-none flex items-center justify-center font-heading text-xl shrink-0">
                   0{index + 1}
                 </div>
                 
@@ -151,7 +151,7 @@ const ServiceDetail: React.FC<ServiceDetailProps> = ({ service, onBack }) => {
           <div className="h-1 w-12 bg-main"></div>
           <h2 className="text-3xl font-heading uppercase">Le Livrable</h2>
         </div>
-        <div className="bg-secondary-background border-2 border-border p-8 rounded-base">
+        <div className="bg-secondary-background border-2 border-border p-8 rounded-none">
           <h3 className="text-xl font-heading mb-6">Checklist technique :</h3>
           <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {service.deliverables.map((item, index) => (
@@ -167,7 +167,7 @@ const ServiceDetail: React.FC<ServiceDetailProps> = ({ service, onBack }) => {
       </section>
 
       {/* CTA de Consultation */}
-      <section className="bg-foreground text-background p-12 border-2 border-border shadow-shadow rounded-base text-center flex flex-col items-center gap-8 mt-12">
+      <section className="bg-foreground text-background p-12 border-2 border-border shadow-shadow rounded-none text-center flex flex-col items-center gap-8 mt-12">
         <h2 className="text-4xl md:text-5xl font-heading uppercase tracking-tighter">Prêt à optimiser votre infrastructure ?</h2>
         <p className="text-xl text-background/80 max-w-2xl font-base">
           Nos experts sont prêts à analyser vos besoins et à concevoir une solution sur mesure pour votre entreprise.

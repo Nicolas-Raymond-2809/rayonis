@@ -122,10 +122,10 @@ export default function RayonisApp() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-background text-foreground font-base">
+    <div className="min-h-screen flex flex-col bg-background text-foreground font-base overflow-x-hidden">
       {/* Navbar */}
       <header className="sticky top-0 z-50 w-full border-b-2 border-border bg-secondary-background">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Button variant="ghost" asChild className="p-0 h-auto">
               <a href="/" className="p-[0.5em]" style={{ border: 'solid 2px black' }}>
@@ -219,7 +219,7 @@ export default function RayonisApp() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="flex-grow w-full max-w-7xl mx-auto px-6 py-12 flex flex-col gap-24"
+            className="flex-grow w-full max-w-7xl mx-auto px-4 md:px-6 py-12 flex flex-col gap-24"
           >
             {/* Hero Section */}
             <section className="relative py-12 md:py-24">
@@ -230,7 +230,7 @@ export default function RayonisApp() {
                 <motion.div 
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-secondary-background border-2 border-main text-main font-heading text-xs uppercase tracking-widest rounded-base"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-secondary-background border-2 border-main text-main font-heading text-xs uppercase tracking-widest rounded-none"
                 >
                   <Sparkles size={16} />
                   Solutions IA Avancées
@@ -240,13 +240,13 @@ export default function RayonisApp() {
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.6 }}
-                  className="text-6xl md:text-8xl font-heading tracking-tighter text-foreground leading-[0.9]"
+                  className="text-4xl sm:text-5xl md:text-8xl font-heading tracking-tighter text-foreground leading-[0.9]"
                 >
                   Transformez votre futur avec <br className="hidden md:block" />
-                  <span className="relative inline-block px-6 py-2 bg-main text-main-foreground border-2 border-border mt-4 md:mt-2 rounded-base">
+                  <span className="relative inline-block px-3 sm:px-6 py-2 bg-main text-main-foreground border-2 border-border mt-4 md:mt-2 rounded-none">
                     l'Intelligence
                   </span> <br className="md:hidden" />
-                  <span className="relative inline-block px-6 py-2 bg-main text-main-foreground border-2 border-border mt-4 rounded-base">
+                  <span className="relative inline-block px-3 sm:px-6 py-2 bg-main text-main-foreground border-2 border-border mt-4 rounded-none">
                     Artificielle
                   </span>
                 </motion.h1>
@@ -351,7 +351,7 @@ export default function RayonisApp() {
       </AnimatePresence>
 
       {/* Footer */}
-      <footer className="bg-secondary-background border-t-4 border-border p-10 mt-auto">
+      <footer className="bg-secondary-background border-t-4 border-border p-6 md:p-10 mt-auto">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
             
@@ -366,10 +366,10 @@ export default function RayonisApp() {
             </div>
 
             <div className="flex flex-wrap gap-4">
-              <div className="bg-main border-2 border-border px-4 py-2 font-heading text-main-foreground rounded-base">
+              <div className="bg-main border-2 border-border px-4 py-2 font-heading text-main-foreground rounded-none">
                 ORCHESTRATION IA
               </div>
-              <div className="bg-main/50 border-2 border-border px-4 py-2 font-heading text-foreground rounded-base">
+              <div className="bg-main/50 border-2 border-border px-4 py-2 font-heading text-foreground rounded-none">
                 VIBE CODING
               </div>
             </div>
