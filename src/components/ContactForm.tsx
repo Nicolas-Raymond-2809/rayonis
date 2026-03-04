@@ -24,6 +24,41 @@ const ContactForm: React.FC<ContactFormProps> = ({ onClose, initialSubject = '' 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Render Turnstile widget when component mounts
+    const renderTurnstile = () => {
+      // @ts-ignore
+      if (window.turnstile) {
+        // @ts-ignore
+        window.turnstile.render('#cf-turnstile', {
+          sitekey: '0x4AAAAAACl3tUPuodmYxkyO',
+          callback: (token: string) => setTurnstileToken(token),
+        });
+      }
+    };
+
+    // If turnstile is already loaded
+    // @ts-ignore
+    if (window.turnstile) {
+      renderTurnstile();
+    } else {
+      // If script hasn't loaded yet, we could wait for it, but since it's in head async, 
+      // it might load after. However, standard implementation usually relies on window.onload callback 
+      // or similar. For this modal, it's likely loaded.
+      // We can check periodically or just rely on the user having loaded the page.
+      // A simple fallback is to retry a few times.
+      const interval = setInterval(() => {
+        // @ts-ignore
+        if (window.turnstile) {
+          renderTurnstile();
+          clearInterval(interval);
+        }
+      }, 100);
+      setTimeout(() => clearInterval(interval), 5000);
+    }
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -32,6 +67,12 @@ const ContactForm: React.FC<ContactFormProps> = ({ onClose, initialSubject = '' 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!turnstileToken) {
+      setError('Veuillez valider le captcha.');
+      return;
+    }
+
     setIsSubmitting(true);
     setError(null);
 
@@ -43,6 +84,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ onClose, initialSubject = '' 
         },
         body: JSON.stringify({
           ...formData,
+          'cf-turnstile-response': turnstileToken,
           submittedAt: new Date().toISOString(),
           source: window.location.href
         }),
@@ -200,6 +242,8 @@ const ContactForm: React.FC<ContactFormProps> = ({ onClose, initialSubject = '' 
                   className="min-h-[120px] rounded-none border-2 border-border focus-visible:ring-main resize-none"
                 />
               </div>
+
+              <div id="cf-turnstile" className="cf-turnstile" data-sitekey="0x4AAAAAACl3tUPuodmYxkyO" data-theme="light" data-size="normal"></div>
 
               {error && (
                 <p className="text-red-500 text-sm font-medium">{error}</p>
