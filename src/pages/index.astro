@@ -1,5 +1,6 @@
 ---
 import RayonisApp from '../components/RayonisApp';
+import CookieConsent from '../components/CookieConsent.astro';
 import '../index.css';
 ---
 
@@ -12,6 +13,21 @@ import '../index.css';
 		'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 		})(window,document,'script','dataLayer','GTM-NWTW7ND7');</script>
 		<!-- End Google Tag Manager -->
+
+		<!-- Google Analytics (Auto-blocking) -->
+		<script 
+			type="text/plain" 
+			data-category="analytics" 
+			src="https://www.googletagmanager.com/gtag/js?id=GTM-NWTW7ND7"></script>
+
+		<script type="text/plain" data-category="analytics">
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', 'GTM-NWTW7ND7');
+		</script>
+		<!-- End Google Analytics -->
+
 		<meta charset="utf-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width" />
@@ -24,5 +40,6 @@ import '../index.css';
 		height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 		<!-- End Google Tag Manager (noscript) -->
 		<RayonisApp client:load />
+		<CookieConsent />
 	</body>
 </html>

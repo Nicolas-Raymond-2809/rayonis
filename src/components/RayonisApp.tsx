@@ -438,7 +438,7 @@ export default function RayonisApp() {
             <p>© 2026 Rayonis — L'intention au centre du projet</p>
             <div className="flex flex-col md:flex-row gap-4 mt-4 md:mt-0">
               <Button variant="secondary" asChild className="text-xs font-heading uppercase w-full md:w-auto">
-                <a href="#">Mentions Légales</a>
+                <a href="/mentions-legales">Mentions Légales</a>
               </Button>
               <Button variant="secondary" className="text-xs font-heading uppercase w-full md:w-auto" onClick={() => handleOpenContact("Contact")}>
                 Contact

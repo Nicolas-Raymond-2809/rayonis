@@ -1,0 +1,119 @@
+---
+import CookieConsent from '../components/CookieConsent.astro';
+import '../index.css';
+---
+
+<html lang="fr">
+	<head>
+		<!-- Google Tag Manager -->
+		<script is:inline>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+		new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+		j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+		'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+		})(window,document,'script','dataLayer','GTM-NWTW7ND7');</script>
+		<!-- End Google Tag Manager -->
+
+		<!-- Google Analytics (Auto-blocking) -->
+		<script 
+			type="text/plain" 
+			data-category="analytics" 
+			src="https://www.googletagmanager.com/gtag/js?id=GTM-NWTW7ND7"></script>
+
+		<script type="text/plain" data-category="analytics">
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', 'GTM-NWTW7ND7');
+		</script>
+		<!-- End Google Analytics -->
+
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Mentions Légales - Rayonis</title>
+	</head>
+	<body class="bg-background text-foreground font-sans">
+		<!-- Google Tag Manager (noscript) -->
+		<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NWTW7ND7"
+		height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+		<!-- End Google Tag Manager (noscript) -->
+
+        <main class="container mx-auto px-4 py-12 max-w-4xl">
+            <a href="/" class="inline-flex items-center mb-8 px-4 py-2 bg-secondary-background border-2 border-border shadow-[4px_4px_0px_0px_var(--border)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_var(--border)] transition-all font-bold uppercase text-sm">
+                ← Retour à l'accueil
+            </a>
+
+            <h1 class="text-4xl font-bold mb-12 border-b-4 border-main pb-4">Mentions Légales & Politique de Confidentialité</h1>
+
+            <section class="mb-12 space-y-8">
+                <h2 class="text-2xl font-bold bg-main text-main-foreground inline-block px-4 py-2 border-2 border-border shadow-[4px_4px_0px_0px_var(--border)]">Mentions Légales</h2>
+                
+                <div class="bg-secondary-background border-2 border-border p-6 shadow-[4px_4px_0px_0px_var(--border)]">
+                    <h3 class="text-xl font-bold mb-4">1. Éditeur du site</h3>
+                    <p class="mb-2">Le site <strong>rayonis.fr</strong> est édité par l'Entreprise Individuelle (EI) Nicolas Raymond, opérant sous le nom commercial <strong>Rayonis</strong>.</p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li><strong>Siège social :</strong> 42 COURS de la Futaie, 27200 Vernon, France</li>
+                        <li><strong>SIREN :</strong> 101 871 424</li>
+                        <li><strong>Directeur de la publication :</strong> Nicolas Raymond</li>
+                        <li><strong>Contact :</strong> <a href="mailto:mondcolas@gmail.com" class="underline hover:text-main">mondcolas@gmail.com</a> | 06 50 64 92 41</li>
+                    </ul>
+                </div>
+
+                <div class="bg-secondary-background border-2 border-border p-6 shadow-[4px_4px_0px_0px_var(--border)]">
+                    <h3 class="text-xl font-bold mb-4">2. Hébergement</h3>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li><strong>Hébergeur du nom de domaine :</strong> Hostinger International Ltd. (61 Lordou Vironos Street, 6023 Larnaca, Chypre).</li>
+                        <li><strong>Hébergeur du site (GitHub Pages) :</strong> GitHub Inc. (88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis).</li>
+                        <li><strong>Contact :</strong> <a href="https://support.github.com" target="_blank" rel="noopener noreferrer" class="underline hover:text-main">https://support.github.com</a></li>
+                    </ul>
+                </div>
+
+                <div class="bg-secondary-background border-2 border-border p-6 shadow-[4px_4px_0px_0px_var(--border)]">
+                    <h3 class="text-xl font-bold mb-4">3. Propriété intellectuelle</h3>
+                    <p>L'ensemble des contenus (textes, graphismes, logos, design system néo-brutaliste) est la propriété exclusive de Rayonis, sauf mention contraire. Toute reproduction est interdite sans autorisation préalable.</p>
+                </div>
+            </section>
+
+            <section class="mb-12 space-y-8" id="privacy-policy">
+                <h2 class="text-2xl font-bold bg-main text-main-foreground inline-block px-4 py-2 border-2 border-border shadow-[4px_4px_0px_0px_var(--border)]">Politique de Confidentialité (RGPD)</h2>
+
+                <div class="bg-secondary-background border-2 border-border p-6 shadow-[4px_4px_0px_0px_var(--border)]">
+                    <h3 class="text-xl font-bold mb-4">1. Collecte des données</h3>
+                    <p class="mb-2">Via notre formulaire de contact, nous collectons les données suivantes avec votre consentement :</p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li><strong>Obligatoires :</strong> Nom, Prénom, Email.</li>
+                        <li><strong>Facultatifs :</strong> Numéro de téléphone.</li>
+                    </ul>
+                </div>
+
+                <div class="bg-secondary-background border-2 border-border p-6 shadow-[4px_4px_0px_0px_var(--border)]">
+                    <h3 class="text-xl font-bold mb-4">2. Finalité du traitement</h3>
+                    <p class="mb-2">Ces données sont utilisées exclusivement pour :</p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>Répondre à vos demandes de renseignements.</li>
+                        <li>Établir des propositions commerciales (prestations d'orchestration IA, architecture).</li>
+                        <li>Gérer les inscriptions aux formations Rayonis.</li>
+                    </ul>
+                </div>
+
+                <div class="bg-secondary-background border-2 border-border p-6 shadow-[4px_4px_0px_0px_var(--border)]">
+                    <h3 class="text-xl font-bold mb-4">3. Analyse d'audience (Cookies)</h3>
+                    <p>Ce site utilise Google Analytics pour analyser le comportement des visiteurs. Cet outil peut collecter des données via des cookies (adresse IP anonymisée, type de navigateur, temps de session). Vous pouvez vous opposer à ce suivi via les réglages de votre navigateur ou le bandeau de cookies.</p>
+                </div>
+
+                <div class="bg-secondary-background border-2 border-border p-6 shadow-[4px_4px_0px_0px_var(--border)]">
+                    <h3 class="text-xl font-bold mb-4">4. Vos droits</h3>
+                    <p>Conformément au RGPD, vous disposez d'un droit d'accès, de rectification et de suppression de vos données. Pour l'exercer, contactez-nous à : <a href="mailto:mondcolas@gmail.com" class="underline hover:text-main">mondcolas@gmail.com</a>.</p>
+                </div>
+
+                <div class="bg-secondary-background border-2 border-border p-6 shadow-[4px_4px_0px_0px_var(--border)]">
+                    <h3 class="text-xl font-bold mb-4">5. TVA</h3>
+                    <p>TVA non applicable, art. 293 B du CGI.</p>
+                </div>
+            </section>
+        </main>
+
+		<CookieConsent />
+	</body>
+</html>

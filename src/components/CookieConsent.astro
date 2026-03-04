@@ -1,0 +1,133 @@
+---
+import 'vanilla-cookieconsent/dist/cookieconsent.css';
+---
+
+<style is:global>
+    :root {
+        --cc-bg: var(--background);
+        --cc-text: var(--foreground);
+        --cc-btn-primary-bg: var(--main);
+        --cc-btn-primary-text: var(--main-foreground);
+        --cc-btn-primary-hover-bg: var(--main);
+        --cc-btn-secondary-bg: var(--secondary-background);
+        --cc-btn-secondary-text: var(--foreground);
+        --cc-btn-secondary-hover-bg: var(--secondary-background);
+        --cc-toggle-bg-on: var(--main);
+        --cc-toggle-bg-off: var(--secondary-background);
+        --cc-toggle-knob-bg: var(--foreground);
+        --cc-toggle-knob-icon-color: var(--background);
+        --cc-block-text: var(--foreground);
+        --cc-cookie-category-block-bg: var(--secondary-background);
+        --cc-cookie-category-block-bg-hover: var(--secondary-background);
+        --cc-section-category-border: var(--border);
+        --cc-cookie-table-border: var(--border);
+        --cc-overlay-bg: var(--overlay);
+        --cc-webkit-scrollbar-bg: var(--secondary-background);
+        --cc-webkit-scrollbar-bg-hover: var(--main);
+        --cc-font-family: inherit;
+    }
+
+    #cc-main .cm, #cc-main .pm {
+        border: 2px solid var(--border);
+        box-shadow: var(--shadow);
+        border-radius: var(--radius-base);
+        font-family: var(--font-sans);
+    }
+
+    #cc-main .cm__btn, #cc-main .pm__btn {
+        border: 2px solid var(--border);
+        box-shadow: 2px 2px 0px 0px var(--border);
+        border-radius: 0px;
+        transition: all 0.2s ease;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        letter-spacing: 0.05em;
+    }
+
+    #cc-main .cm__btn:hover, #cc-main .pm__btn:hover {
+        transform: translate(1px, 1px);
+        box-shadow: 0px 0px 0px 0px var(--border);
+        border-color: #000;
+    }
+
+    #cc-main .cm__btn--accept, #cc-main .pm__btn--accept {
+        background-color: var(--main);
+        color: var(--main-foreground);
+    }
+
+    #cc-main .cm__btn--secondary, #cc-main .pm__btn--secondary {
+        background-color: var(--secondary-background);
+        color: var(--foreground);
+    }
+    
+    /* Dark mode overrides if needed, though variables handle most */
+    .dark #cc-main .cm, .dark #cc-main .pm {
+        border-color: var(--border);
+    }
+</style>
+
+<script>
+    import * as CookieConsent from 'vanilla-cookieconsent';
+
+    CookieConsent.run({
+        guiOptions: {
+            consentModal: {
+                layout: "box",
+                position: "bottom left",
+                equalWeightButtons: true,
+                flipButtons: false
+            },
+            preferencesModal: {
+                layout: "box",
+                position: "right",
+                equalWeightButtons: true,
+                flipButtons: false
+            }
+        },
+        categories: {
+            necessary: {
+                readOnly: true
+            },
+            analytics: {}
+        },
+        language: {
+            default: "fr",
+            translations: {
+                fr: {
+                    consentModal: {
+                        title: "Nous utilisons des cookies",
+                        description: "Ce site utilise des cookies pour améliorer votre expérience.",
+                        acceptAllBtn: "Tout accepter",
+                        acceptNecessaryBtn: "Tout refuser",
+                        showPreferencesBtn: "Gérer les préférences",
+                        footer: "<a href=\"/mentions-legales#privacy-policy\">Politique de confidentialité</a>\n<a href=\"/mentions-legales\">Mentions Légales</a>"
+                    },
+                    preferencesModal: {
+                        title: "Préférences de cookies",
+                        acceptAllBtn: "Tout accepter",
+                        acceptNecessaryBtn: "Tout refuser",
+                        savePreferencesBtn: "Sauvegarder les préférences",
+                        closeIconLabel: "Fermer",
+                        sections: [
+                            {
+                                title: "Utilisation des cookies",
+                                description: "Nous utilisons des cookies pour assurer le bon fonctionnement du site et analyser notre trafic."
+                            },
+                            {
+                                title: "Cookies strictement nécessaires",
+                                description: "Ces cookies sont essentiels au fonctionnement du site.",
+                                linkedCategory: "necessary"
+                            },
+                            {
+                                title: "Cookies analytiques",
+                                description: "Ces cookies nous permettent d'analyser l'utilisation du site pour en améliorer les performances.",
+                                linkedCategory: "analytics"
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    });
+</script>
