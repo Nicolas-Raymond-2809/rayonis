@@ -5,14 +5,14 @@
     "slug": "programmation-vibe-coding",
     "badge": "",
     "accroche": "Apprenez à coder avec l'IA comme copilote",
-    "duration": "24 heures",
+    "duration": "21 heures",
     "level": "Débutant / Intermédiaire",
     "format": "Live & E-learning",
     "intention": "Ici, on ne mémorise pas la syntaxe. On apprend à diriger l'IA pour qu'elle devienne vos mains, pendant que vous restez l'architecte. Le Vibe Coding est l'art de transformer une intention en code fonctionnel sans friction.",
     "modules": [
       {
         "title": "Module 1 : Les Fondamentaux",
-        "content": "Comprendre le Prompt Engineering pour le code, configurer son environnement (VS Code, Cursor), et maîtriser les bases du HTML/CSS assisté."
+        "content": "Comprendre le Prompt Engineering pour le code, configurer son environnement (VS Code, Cursor, Antigravity, Google AI Studio), et maîtriser les bases du HTML/CSS assisté."
       },
       {
         "title": "Module 2 : Pratique Augmentée",
@@ -59,7 +59,7 @@
     "slug": "vibe-marketing",
     "badge": "",
     "accroche": "L'IA au service de la croissance",
-    "duration": "20 heures",
+    "duration": "21 heures",
     "level": "Intermédiaire",
     "format": "E-learning",
     "intention": "Le marketing de demain est hybride. Nous vous apprenons à utiliser l'IA pour comprendre vos clients mieux qu'ils ne se comprennent eux-mêmes et à créer des campagnes qui résonnent vraiment.",
@@ -85,8 +85,8 @@
     "title": "Automatisation n8n",
     "slug": "automatisation-n8n",
     "badge": "",
-    "accroche": "Crées des workflows complexes",
-    "duration": "30 heures",
+    "accroche": "Créez des workflows complexes",
+    "duration": "21 heures",
     "level": "Avancé",
     "format": "Live & Workshop",
     "intention": "Ne soyez plus limité par les intégrations natives. Apprenez à construire votre propre infrastructure d'automatisation avec n8n, l'outil le plus puissant pour connecter vos applications sans limites.",
@@ -104,7 +104,7 @@
         "content": "Création d'agents autonomes, gestion des erreurs, déploiement sur serveur privé et optimisation des ressources."
       }
     ],
-    "stack": ["n8n", "Docker", "PostgreSQL", "OpenAI API", "Pinecone"],
+    "stack": ["n8n", "JavaSCipt", "Json", "API", "Webhooks", "Workflow"],
     "cta": "S'inscrire au workshop"
   }
 ]
