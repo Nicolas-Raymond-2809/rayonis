@@ -21,10 +21,12 @@ Intégration de l'IA dans votre workflow créatif existant et automatisation de 
 
 ## Stack Technologique
 - Midjourney
-- Runway
-- HeyGen
+- Google Gemini
+- Google Banana
+- Google AI studio
+- DALL-E 
+- VEO
 - Adobe Firefly
 - Canva Magic Edit
 
----
-*Action :* **Télécharger le syllabus**
+

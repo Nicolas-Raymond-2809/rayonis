@@ -26,5 +26,4 @@ Création d'agents autonomes, gestion des erreurs, déploiement sur serveur priv
 - OpenAI API
 - Pinecone
 
----
-*Action :* **S'inscrire au workshop**
+

@@ -17,7 +17,7 @@ Comprendre le Prompt Engineering pour le code, configurer son environnement (VS 
 Développement de composants complexes, gestion du JavaScript moderne, et utilisation de GitHub pour le versioning avec l'aide de l'IA.
 
 ### Module 3 : Maîtrise & Déploiement
-Débogage avancé, optimisation des performances et déploiement continu sur des plateformes comme Vercel ou Netlify ou autre.
+Débogage avancé, optimisation des performances et déploiement continu sur des plateformes comme Vercel.
 
 ## Stack Technologique
 - HTML
@@ -25,8 +25,7 @@ Débogage avancé, optimisation des performances et déploiement continu sur des
 - JavaScript
 - GitHub
 - Cursor
+- Antigravity
 - Claude 3.5 Sonnet
 - GPT-4o
 
----
-*Action :* **Réserver ma place**

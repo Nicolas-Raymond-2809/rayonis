@@ -22,9 +22,7 @@ Mise en place de tests A/B automatisés, analyse prédictive des performances et
 ## Stack Technologique
 - ChatGPT
 - Claude
-- Jasper
-- SurferSEO
-- Make.com
+- Gemini
+- GA4
+- n8n
 
----
-*Action :* **Réserver ma place**
