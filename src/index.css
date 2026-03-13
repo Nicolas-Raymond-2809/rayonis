@@ -71,3 +71,49 @@
     @apply font-heading;
   }
 }
+
+.glossary-term {
+  border-bottom: 2px dashed var(--main);
+  cursor: help;
+  position: relative;
+  text-decoration: none;
+}
+
+.glossary-term::after {
+  content: attr(data-definition);
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--secondary-background);
+  color: var(--foreground);
+  padding: 12px;
+  border: 2px solid var(--border);
+  box-shadow: 4px 4px 0px 0px var(--border);
+  width: 280px;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease-in-out;
+  pointer-events: none;
+  text-transform: none;
+  font-weight: 500;
+  font-family: var(--font-base);
+  text-align: left;
+}
+
+.glossary-term:hover::after {
+  opacity: 1;
+  visibility: visible;
+  bottom: 140%;
+}
+
+@media (max-width: 768px) {
+  .glossary-term::after {
+    width: 200px;
+    left: 0;
+    transform: none;
+  }
+}

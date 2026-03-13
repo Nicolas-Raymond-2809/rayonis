@@ -1,0 +1,122 @@
+[
+  {
+    "term": "IA (Intelligence Artificielle)",
+    "definition": "Ensemble de techniques permettant à des machines de simuler l'intelligence humaine, comme l'apprentissage, le raisonnement et la résolution de problèmes."
+  },
+  {
+    "term": "IA Générative",
+    "definition": "Sous-domaine de l'IA capable de créer de nouveaux contenus (textes, images, vidéos, code) à partir de données existantes."
+  },
+  {
+    "term": "Vibe Coding",
+    "definition": "Approche moderne du développement où l'on utilise l'IA pour générer du code en se concentrant sur l'intention et le résultat souhaité plutôt que sur la syntaxe pure."
+  },
+  {
+    "term": "Prompt Engineering",
+    "definition": "L'art de concevoir et d'optimiser les instructions (prompts) données à une IA pour obtenir le résultat le plus précis et pertinent possible."
+  },
+  {
+    "term": "GEO (Generative Engine Optimization)",
+    "definition": "Nouvelle discipline du SEO visant à optimiser la visibilité d'une marque ou d'un contenu pour qu'il soit cité par les moteurs de recherche génératifs (Perplexity, SearchGPT, etc.)."
+  },
+  {
+    "term": "MCP (Model Context Protocol)",
+    "definition": "Protocole permettant de standardiser et de faciliter l'échange de contexte et de données entre différents modèles d'IA et outils tiers."
+  },
+  {
+    "term": "RAG (Retrieval-Augmented Generation)",
+    "definition": "Technique qui combine la génération de texte par IA avec la récupération d'informations provenant de sources de données externes fiables pour réduire les hallucinations."
+  },
+  {
+    "term": "LLM (Large Language Model)",
+    "definition": "Modèle de langage de grande taille (comme GPT-4 ou Claude) entraîné sur d'immenses quantités de texte pour comprendre et générer du langage humain."
+  },
+  {
+    "term": "n8n",
+    "definition": "Outil d'automatisation de flux de travail (workflow) open-source et node-based, permettant de connecter diverses applications et APIs de manière complexe."
+  },
+  {
+    "term": "Workflow",
+    "definition": "Enchaînement automatisé de tâches ou d'étapes permettant d'accomplir un processus métier de bout en bout."
+  },
+  {
+    "term": "API (Application Programming Interface)",
+    "definition": "Interface permettant à deux logiciels ou services de communiquer entre eux et d'échanger des données de manière structurée."
+  },
+  {
+    "term": "Webhook",
+    "definition": "Méthode permettant à une application d'envoyer des informations en temps réel à une autre application dès qu'un événement spécifique se produit."
+  },
+  {
+    "term": "Base de données vectorielle",
+    "definition": "Type de base de données (comme Pinecone) optimisée pour stocker et rechercher des vecteurs (représentations numériques de données), essentielle pour les systèmes de recommandation et le RAG."
+  },
+  {
+    "term": "FinOps",
+    "definition": "Pratique de gestion financière du cloud visant à optimiser les coûts d'infrastructure tout en maximisant la valeur métier."
+  },
+  {
+    "term": "Guardrails",
+    "definition": "Systèmes de sécurité et de contrôle mis en place pour encadrer les réponses d'une IA, évitant ainsi les contenus inappropriés ou les erreurs critiques."
+  },
+  {
+    "term": "Docker",
+    "definition": "Plateforme permettant de lancer des applications dans des conteneurs isolés, garantissant qu'elles fonctionnent de la même manière quel que soit l'environnement."
+  },
+  {
+    "term": "Scalabilité",
+    "definition": "Capacité d'un système, d'un réseau ou d'un processus à gérer une charge croissante de travail en augmentant ses ressources."
+  },
+  {
+    "term": "SEO (Search Engine Optimization)",
+    "definition": "Ensemble de techniques visant à améliorer la position d'un site web dans les résultats des moteurs de recherche."
+  },
+  {
+    "term": "Copywriting",
+    "definition": "L'art de rédiger des textes persuasifs destinés à inciter le lecteur à entreprendre une action spécifique (achat, inscription, etc.)."
+  },
+  {
+    "term": "Analytics",
+    "definition": "Collecte et analyse de données (souvent via des outils comme GA4) pour comprendre le comportement des utilisateurs et mesurer la performance d'un site ou d'une campagne."
+  },
+  {
+    "term": "Node-based",
+    "definition": "Système de conception visuelle utilisant des 'nœuds' connectés entre eux pour représenter une logique de programmation ou un flux de données."
+  },
+  {
+    "term": "OAuth2",
+    "definition": "Protocole standard de délégation d'autorisation utilisé pour permettre à des applications d'accéder aux données d'un utilisateur sans partager son mot de passe."
+  },
+  {
+    "term": "JSON (JavaScript Object Notation)",
+    "definition": "Format de données léger et facile à lire, utilisé pour échanger des informations entre un serveur et une application web."
+  },
+  {
+    "term": "Versioning",
+    "definition": "Pratique consistant à conserver différentes versions d'un code source ou d'un document pour suivre les modifications et pouvoir revenir en arrière si nécessaire."
+  },
+  {
+    "term": "Débogage (Debugging)",
+    "definition": "Processus d'identification et de correction des erreurs (bugs) dans un programme informatique."
+  },
+  {
+    "term": "Vibe Marketing",
+    "definition": "Concept marketing intégrant l'IA pour créer des campagnes plus humaines et émotionnelles, basées sur l'analyse profonde des personae."
+  },
+  {
+    "term": "Sitemap",
+    "definition": "Fichier XML qui liste toutes les pages d'un site web pour aider les moteurs de recherche à l'explorer et à l'indexer plus efficacement."
+  },
+  {
+    "term": "Turnstile",
+    "definition": "Alternative de Cloudflare aux CAPTCHAs traditionnels, permettant de vérifier qu'un utilisateur est humain sans friction et en respectant sa vie privée."
+  },
+  {
+    "term": "PostgreSQL",
+    "definition": "Système de gestion de base de données relationnelle puissant et open-source, réputé pour sa fiabilité et sa robustesse."
+  },
+  {
+    "term": "Pinecone",
+    "definition": "Service de base de données vectorielle managé, conçu pour faciliter la recherche de similarité à grande échelle pour les applications d'IA."
+  }
+]
