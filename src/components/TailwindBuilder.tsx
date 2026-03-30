@@ -11,7 +11,9 @@ import {
   ChevronDown,
   Settings2,
   Code2,
-  Eye
+  Eye,
+  Edit3,
+  RefreshCw
 } from 'lucide-react';
 
 type ElementType = 'h1' | 'h2' | 'h3' | 'p' | 'span' | 'button' | 'a' | 'div';
@@ -206,6 +208,8 @@ export default function TailwindBuilder() {
     shadow: 'shadow-shadow',
   });
   const [copied, setCopied] = useState(false);
+  const [isManualMode, setIsManualMode] = useState(false);
+  const [manualHtml, setManualHtml] = useState('');
 
   const toggleGroup = (label: string) => {
     setExpandedGroups(prev => ({ ...prev, [label]: !prev[label] }));
@@ -213,6 +217,7 @@ export default function TailwindBuilder() {
 
   const handlePropertyChange = (prop: string, value: string) => {
     setConfig(prev => ({ ...prev, [prop]: value }));
+    if (isManualMode) setIsManualMode(false);
   };
 
   const tailwindClasses = useMemo(() => {
@@ -220,7 +225,7 @@ export default function TailwindBuilder() {
     return props.map(p => config[p]).filter(Boolean).join(' ');
   }, [selectedElement, config]);
 
-  const htmlCode = useMemo(() => {
+  const generatedHtml = useMemo(() => {
     const content = selectedElement === 'button' || selectedElement === 'a' ? 'Cliquez ici' : 
                    selectedElement.startsWith('h') ? 'Titre de niveau ' + selectedElement.slice(1) :
                    selectedElement === 'p' ? 'Ceci est un paragraphe de texte.' :
@@ -229,10 +234,19 @@ export default function TailwindBuilder() {
     return `<${selectedElement} class="${tailwindClasses}">${content}</${selectedElement}>`;
   }, [selectedElement, tailwindClasses]);
 
+  const currentHtml = isManualMode ? manualHtml : generatedHtml;
+
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(htmlCode);
+    navigator.clipboard.writeText(currentHtml);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleManualToggle = () => {
+    if (!isManualMode) {
+      setManualHtml(generatedHtml);
+    }
+    setIsManualMode(!isManualMode);
   };
 
   return (
@@ -340,17 +354,42 @@ export default function TailwindBuilder() {
               <Code2 className="w-5 h-5" />
               <h2 className="text-xl font-heading uppercase tracking-tight">Code HTML</h2>
             </div>
-            <button 
-              onClick={copyToClipboard}
-              className="p-2 bg-main border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all"
-              title="Copier le code"
-            >
-              {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-            </button>
+            <div className="flex items-center gap-2">
+              <button 
+                onClick={handleManualToggle}
+                className={`p-2 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all ${isManualMode ? 'bg-main' : 'bg-white'}`}
+                title={isManualMode ? "Revenir au mode automatique" : "Passer en mode manuel"}
+              >
+                {isManualMode ? <RefreshCw className="w-4 h-4" /> : <Edit3 className="w-4 h-4" />}
+              </button>
+              <button 
+                onClick={copyToClipboard}
+                className="p-2 bg-main border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all"
+                title="Copier le code"
+              >
+                {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+              </button>
+            </div>
           </div>
-          <div className="flex-1 bg-black text-green-400 p-4 rounded font-mono text-sm overflow-auto break-all">
-            {htmlCode}
-          </div>
+          
+          {isManualMode ? (
+            <textarea
+              value={manualHtml}
+              onChange={(e) => setManualHtml(e.target.value)}
+              className="flex-1 bg-black text-green-400 p-4 rounded font-mono text-sm outline-none border-2 border-transparent focus:border-main resize-none"
+              placeholder="Collez votre code HTML ici..."
+            />
+          ) : (
+            <div className="flex-1 bg-black text-green-400 p-4 rounded font-mono text-sm overflow-auto break-all">
+              {generatedHtml}
+            </div>
+          )}
+          
+          {isManualMode && (
+            <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">
+              Mode Manuel Actif : Le générateur est désactivé.
+            </p>
+          )}
         </div>
       </div>
 
@@ -362,19 +401,25 @@ export default function TailwindBuilder() {
         </div>
         
         <div className="w-full h-full flex items-center justify-center p-12 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]">
-          {selectedElement === 'h1' && <h1 className={tailwindClasses}>Titre de niveau 1</h1>}
-          {selectedElement === 'h2' && <h2 className={tailwindClasses}>Titre de niveau 2</h2>}
-          {selectedElement === 'h3' && <h3 className={tailwindClasses}>Titre de niveau 3</h3>}
-          {selectedElement === 'p' && <p className={tailwindClasses}>Ceci est un paragraphe de texte pour tester le rendu visuel de vos classes Tailwind CSS.</p>}
-          {selectedElement === 'span' && <span className={tailwindClasses}>Texte inline</span>}
-          {selectedElement === 'button' && <button className={tailwindClasses}>Cliquez ici</button>}
-          {selectedElement === 'a' && <a href="#" className={tailwindClasses}>Lien interactif</a>}
-          {selectedElement === 'div' && (
-            <div className={tailwindClasses}>
-              <div className="w-24 h-24 bg-gray-200 border-2 border-dashed border-gray-400 flex items-center justify-center text-xs text-gray-500">
-                Contenu
-              </div>
-            </div>
+          {isManualMode ? (
+            <div dangerouslySetInnerHTML={{ __html: manualHtml }} />
+          ) : (
+            <>
+              {selectedElement === 'h1' && <h1 className={tailwindClasses}>Titre de niveau 1</h1>}
+              {selectedElement === 'h2' && <h2 className={tailwindClasses}>Titre de niveau 2</h2>}
+              {selectedElement === 'h3' && <h3 className={tailwindClasses}>Titre de niveau 3</h3>}
+              {selectedElement === 'p' && <p className={tailwindClasses}>Ceci est un paragraphe de texte pour tester le rendu visuel de vos classes Tailwind CSS.</p>}
+              {selectedElement === 'span' && <span className={tailwindClasses}>Texte inline</span>}
+              {selectedElement === 'button' && <button className={tailwindClasses}>Cliquez ici</button>}
+              {selectedElement === 'a' && <a href="#" className={tailwindClasses}>Lien interactif</a>}
+              {selectedElement === 'div' && (
+                <div className={tailwindClasses}>
+                  <div className="w-24 h-24 bg-gray-200 border-2 border-dashed border-gray-400 flex items-center justify-center text-xs text-gray-500">
+                    Contenu
+                  </div>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
