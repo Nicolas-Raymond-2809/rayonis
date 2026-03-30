@@ -1,0 +1,43 @@
+---
+import TailwindBuilder from '../components/TailwindBuilder';
+import CookieConsent from '../components/CookieConsent.astro';
+import '../index.css';
+---
+
+<html lang="fr">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Tailwind Component Builder - Rayonis</title>
+	</head>
+	<body className="bg-background text-foreground font-base min-h-screen flex flex-col">
+        <header className="border-b-2 border-black bg-secondary-background p-4 md:p-6">
+            <div className="max-w-7xl mx-auto flex items-center justify-between">
+                <a href="/" className="flex items-center gap-3 p-2 border-2 border-black bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all">
+                    <img src="/logo.svg" alt="Rayonis Logo" className="h-8 w-auto" referrerPolicy="no-referrer" />
+                    <span className="font-heading uppercase tracking-tight hidden sm:inline">Rayonis</span>
+                </a>
+                <h1 className="text-xl md:text-2xl font-heading uppercase tracking-tighter">Tailwind Builder</h1>
+                <div className="hidden md:block">
+                    <a href="/" className="font-heading uppercase text-sm hover:text-main transition-colors">Retour à l'accueil</a>
+                </div>
+            </div>
+        </header>
+
+        <main className="flex-grow py-12">
+            <TailwindBuilder client:load />
+        </main>
+
+        <footer className="border-t-2 border-black bg-secondary-background p-6 text-center text-xs font-heading uppercase">
+            <p>© 2026 Rayonis — Outil de prototypage rapide</p>
+        </footer>
+
+		<CookieConsent />
+		<script>
+			import { initGlossary } from '../scripts/glossary';
+			initGlossary();
+		</script>
+	</body>
+</html>

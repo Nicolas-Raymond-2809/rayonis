@@ -207,6 +207,15 @@ export default function RayonisApp() {
                   </MenubarItem>
                 </MenubarContent>
               </MenubarMenu>
+
+              <MenubarMenu>
+                <MenubarTrigger>Outils</MenubarTrigger>
+                <MenubarContent>
+                  <MenubarItem asChild>
+                    <a href="/tailwind-builder" className="w-full">Tailwind Builder</a>
+                  </MenubarItem>
+                </MenubarContent>
+              </MenubarMenu>
             </Menubar>
           </div>
 
@@ -251,6 +260,13 @@ export default function RayonisApp() {
                     <button onClick={() => handleSelectCourse('ia-generative')} className="text-left py-2 font-heading uppercase text-sm hover:text-main transition-colors">Ia générative</button>
                     <button onClick={() => handleSelectCourse('vibe-marketing')} className="text-left py-2 font-heading uppercase text-sm hover:text-main transition-colors">Vibe marketing</button>
                     <button onClick={() => handleSelectCourse('automatisation-n8n')} className="text-left py-2 font-heading uppercase text-sm hover:text-main transition-colors">Automatisation n8n</button>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <p className="text-xs font-heading uppercase text-foreground/50 tracking-widest">Outils</p>
+                  <div className="flex flex-col gap-2">
+                    <a href="/tailwind-builder" className="text-left py-2 font-heading uppercase text-sm hover:text-main transition-colors">Tailwind Builder</a>
                   </div>
                 </div>
 
