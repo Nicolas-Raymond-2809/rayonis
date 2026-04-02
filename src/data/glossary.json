@@ -4,6 +4,10 @@
     "definition": "Ensemble de techniques permettant à des machines de simuler l'intelligence humaine, comme l'apprentissage, le raisonnement et la résolution de problèmes."
   },
   {
+    "term": "IA",
+    "definition": "Intelligence Artificielle : Ensemble de techniques permettant à des machines de simuler l'intelligence humaine."
+  },
+  {
     "term": "IA Générative",
     "definition": "Sous-domaine de l'IA capable de créer de nouveaux contenus (textes, images, vidéos, code) à partir de données existantes."
   },
@@ -24,12 +28,24 @@
     "definition": "Protocole permettant de standardiser et de faciliter l'échange de contexte et de données entre différents modèles d'IA et outils tiers."
   },
   {
+    "term": "MCP",
+    "definition": "Model Context Protocol : Protocole de standardisation des échanges de contexte entre modèles d'IA et outils."
+  },
+  {
     "term": "RAG (Retrieval-Augmented Generation)",
     "definition": "Technique qui combine la génération de texte par IA avec la récupération d'informations provenant de sources de données externes fiables pour réduire les hallucinations."
   },
   {
+    "term": "RAG",
+    "definition": "Retrieval-Augmented Generation : Technique d'IA utilisant des données externes pour améliorer la précision des réponses."
+  },
+  {
     "term": "LLM (Large Language Model)",
     "definition": "Modèle de langage de grande taille (comme GPT-4 ou Claude) entraîné sur d'immenses quantités de texte pour comprendre et générer du langage humain."
+  },
+  {
+    "term": "LLM",
+    "definition": "Large Language Model : Modèle de langage de grande taille entraîné sur d'immenses quantités de texte."
   },
   {
     "term": "n8n",
@@ -42,6 +58,10 @@
   {
     "term": "API (Application Programming Interface)",
     "definition": "Interface permettant à deux logiciels ou services de communiquer entre eux et d'échanger des données de manière structurée."
+  },
+  {
+    "term": "API",
+    "definition": "Application Programming Interface : Interface de communication entre logiciels."
   },
   {
     "term": "Webhook",
@@ -72,6 +92,10 @@
     "definition": "Ensemble de techniques visant à améliorer la position d'un site web dans les résultats des moteurs de recherche."
   },
   {
+    "term": "SEO",
+    "definition": "Search Engine Optimization : Optimisation pour les moteurs de recherche."
+  },
+  {
     "term": "Copywriting",
     "definition": "L'art de rédiger des textes persuasifs destinés à inciter le lecteur à entreprendre une action spécifique (achat, inscription, etc.)."
   },
@@ -90,6 +114,10 @@
   {
     "term": "JSON (JavaScript Object Notation)",
     "definition": "Format de données léger et facile à lire, utilisé pour échanger des informations entre un serveur et une application web."
+  },
+  {
+    "term": "JSON",
+    "definition": "JavaScript Object Notation : Format d'échange de données léger et lisible."
   },
   {
     "term": "Versioning",

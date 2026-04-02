@@ -49,7 +49,7 @@ const ExpertiseCard = ({
       <Icon size={24} />
     </div>
     <h3 className="text-xl font-heading mb-3 uppercase tracking-tight text-foreground">{title}</h3>
-    <p className="text-foreground/70 text-sm mb-6 flex-grow leading-relaxed line-clamp-4 font-base">{description}</p>
+    <p className="text-foreground/70 text-sm mb-6 flex-grow leading-relaxed font-base">{description}</p>
     <Button 
       variant="default"
       onClick={onDiscover}
